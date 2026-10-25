@@ -842,3 +842,11 @@ html body #app .v152-story-track .v152-story-photo{height:min(68vh,620px)}
 .install-offer .v152-install-perks li{position:relative;padding-left:20px;color:#3a3a3c;font-size:14px;line-height:1.35}
 .install-offer .v152-install-perks li::before{content:"";position:absolute;left:2px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--apple-blue,#0071e3) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3.2 6.2 5 8 8.8 4.2' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat}
 .v152-push-nudge .sub{font-size:14px;line-height:1.4}
+
+/* 20.1 — Telegram profile photo in the compact header account control. */
+#accBtn.has-avatar{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:3px!important;overflow:hidden;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important}
+#accBtn.has-avatar>.icon{display:none!important}
+#accBtn .header-account-avatar{display:block;width:38px;height:38px;min-width:38px;max-width:none;aspect-ratio:1;border:0;border-radius:50%;clip-path:circle(50%);object-fit:cover;object-position:center;background:transparent;box-shadow:none;flex:0 0 38px}
+
+.staff-search{max-width:460px}.staff-list{display:grid;margin-top:14px}.staff-row{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(190px,240px);gap:14px;align-items:center;padding:14px 2px;border-top:1px solid var(--line,#e5e5e8)}.staff-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:#eeeef2;display:grid;place-items:center;font-weight:800}.staff-avatar img{width:100%;height:100%;object-fit:cover}.staff-person,.staff-role{display:grid;gap:2px;min-width:0}.staff-person span,.staff-person small,.staff-role small{color:var(--muted,#777);overflow:hidden;text-overflow:ellipsis}.staff-role small{min-height:1.2em}.staff-observer .order-manager-editor,.staff-observer .order-clarification-editor{opacity:.65}
+@media(max-width:600px){.staff-row{grid-template-columns:44px minmax(0,1fr);gap:10px}.staff-role{grid-column:1/-1}.staff-role .input{width:100%}}
