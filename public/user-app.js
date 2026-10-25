@@ -3263,6 +3263,12 @@ SITE_CHANGELOG.push({version:'18.9',date:'2026-10-25',author:'Руслан',titl
 SITE_CHANGELOG.push({version:'19.2',date:'2026-10-25',author:'Руслан',title:'Лента дат в записи на экскурсию',description:'Ближайшие свободные даты идут лентой «Сегодня / Завтра / Послезавтра», а полный календарь открывается кнопкой «Другая дата». Город выезда и число участников собраны в ровные строки, итог и кнопка «Забронировать» на телефоне всегда под рукой внизу экрана.',type:'improvement',priority:'normal'});
 SITE_CHANGELOG.push({version:'19.3',date:'2026-10-25',author:'Руслан',title:'Ровные строки в форме трансфера',description:'Маршрут, дата, время, адрес и контакты — ровные строки «подпись слева, значение справа» без обрезанных подписей; на самых узких экранах подпись встаёт над значением. Автомобиль выбирается плитками с отметкой выбора, детское кресло включается переключателем, способ связи — одним касанием.',type:'improvement',priority:'normal'});
 SITE_CHANGELOG.push({version:'19.4',date:'2026-10-25',author:'Руслан',title:'Личный кабинет одним списком',description:'«Мои бронирования», отзывы и истории собраны в один аккуратный список, бронирования первыми. Если имя в профиле не заполнено, приветствие просто «Здравствуйте», а в формы не подставляется лишний знак. В каталоге «Сбросить фильтры» стал небольшой ссылкой рядом с количеством экскурсий.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'19.5',date:'2026-10-25',author:'Руслан',title:'Просмотры и рейтинг в историях на главной',description:'В ленте «Истории из дневника» у каждой истории видно число просмотров и средняя оценка; если оценок ещё нет, рейтинг не показывается. Длинные названия аккуратно переносятся в две строки.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'19.6',date:'2026-10-25',author:'Руслан',title:'Новая страница истории',description:'Заголовок, автор, просмотры и рейтинг собраны в одну строку. Фото показываются целиком со скруглёнными углами, несколько фото листаются, по нажатию открываются на весь экран. Текст стал крупнее, цитаты выделены. Оценка — пять звёзд в одну строку, комментарии — единый список с временем, поле комментария растёт по мере ввода.',type:'improvement',priority:'important'});
+SITE_CHANGELOG.push({version:'19.7',date:'2026-10-25',author:'Руслан',title:'«Куда поехать» без прокрутки',description:'Все направления помещаются целиком: на компьютере — в один ряд, на телефоне — сеткой в две колонки. На каждой плитке показано, сколько экскурсий в категории; число обновляется само при добавлении или снятии экскурсий.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'19.8',date:'2026-10-25',author:'Руслан',title:'Форма трансфера во всю ширину карточки',description:'На телефоне поля трансфера, переключатель «Встреча / Отъезд» и выбор автомобиля стали шире: отступы карточки такие же, как у поиска экскурсий.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'19.9',date:'2026-10-25',author:'Руслан',title:'Низ страницы не прячется под меню',description:'На телефоне в конце каждой страницы, включая админку, остаётся место под нижним меню с учётом полоски «Домой» на iPhone — последние кнопки и строки видны целиком.',type:'fix',priority:'important'});
+SITE_CHANGELOG.push({version:'20.0',date:'2026-10-25',author:'Руслан',title:'Предложение установить приложение и включить уведомления',description:'При первом заходе с телефона сразу предлагается установить приложение и перечислено, что оно даёт. «Позже» скрывает предложение только до следующего захода. В установленном приложении предлагается включить уведомления, пока они не будут разрешены; если они запрещены в системе, показано, где их включить.',type:'feature',priority:'important'});
 SITE_CHANGELOG.push({version:'17.8',date:'2026-10-25',author:'Руслан',title:'Официальные соцсети и регулярные напоминания',description:'В подвале сразу доступны официальные страницы Апсуа Тур во ВКонтакте и Instagram. Сервер проверяет поездки каждые 15 минут, чтобы напоминание накануне не зависело от посещений сайта.',type:'improvement',priority:'normal'});
 
 /* ==========================================================================
@@ -3327,6 +3333,99 @@ function v152EnhanceAccount(){const grid=document.querySelector('.acc-grid');if(
  if(grid.querySelector('.v152-account-list'))return;const sections=[$('#myTripOrders'),...grid.querySelectorAll(':scope > details.account-section:not(#myTripOrders)')].filter(Boolean);if(!sections.length)return;const list=v152Group(sections,'v152-account-list');list?.classList.remove('v152-group')}
 const accountBeforeV152=accountView;accountView=function(...a){const r=accountBeforeV152.apply(this,a);v152EnhanceAccount();return r};
 SITE_CHANGELOG.push({version:'19.0',date:'2026-10-25',author:'Руслан',title:'Обновление иконки на iPhone',type:'fix',priority:'minor',description:'Для повторной установки на экран «Домой» используется отдельный адрес иконки Apple с отпечатком содержимого; добавлен стандартный резервный адрес. Изображение и данные приложения сохранены.'});
+
+/* ==========================================================================
+   Build 152 · stories and destinations. Ratings, comments, views and the catalog
+   filter keep their data and handlers; only the presentation changes.
+   ========================================================================== */
+const V152_EYE='<svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.8 10S4.8 4.2 10 4.2 18.2 10 18.2 10 15.2 15.8 10 15.8 1.8 10 1.8 10Z"/><circle cx="10" cy="10" r="2.6"/></svg>';
+const V152_STAR='<svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.9l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.52 5.06 17.11 6 11.61l-4-3.9 5.53-.8L10 1.9Z"/></svg>';
+function v152Number(n){return Math.max(0,Math.round(Number(n)||0)).toLocaleString('ru-RU').replace(/ /g,' ')}
+function v152Score(s){const r=storyScore(s);return r.count?r.average.toFixed(1).replace('.',','):''}
+function v152StoryStats(s){const views=Math.max(0,Number(s.views)||0),r=storyScore(s),score=v152Score(s);
+ return `<span class="v152-stats"><span title="${views} ${plural(views,'просмотр','просмотра','просмотров')}">${V152_EYE}${v152Number(views)}</span>${score?`<span title="Средняя оценка ${score} из 5, ${r.count} ${plural(r.count,'оценка','оценки','оценок')}">${V152_STAR}${score}</span>`:''}</span>`}
+function v152StoryPhotos(s){return [...new Set([s.img||s.photo,...(s.photos||[])].filter(Boolean).map(p=>src(p)).filter(Boolean))]}
+function v152When(value){const d=new Date(value);if(!value||Number.isNaN(d.getTime()))return '';const now=new Date(),day=86400000,start=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime(),time=d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+ if(d.getTime()>=start)return 'сегодня, '+time;if(d.getTime()>=start-day)return 'вчера, '+time;return d.toLocaleDateString('ru-RU',d.getFullYear()===now.getFullYear()?{day:'numeric',month:'long'}:{day:'numeric',month:'long',year:'numeric'})}
+function v152Quote(line){return /^\s*[«"“„]/.test(line)}
+
+/* Home: destinations fit without scrolling and show how many trips each holds */
+function v152CategoryCount(cat){return C.tours.map(t=>tourPublic(t)).filter(t=>t&&(t.cat===cat||tripStyles(t).includes(cat))).length}
+function v152EnhanceHome(){
+ const places=$('#v4Places');if(places&&typeof places.querySelectorAll==='function'){const tiles=[...places.querySelectorAll('.v4-place')];places.classList.add('v152-places');places.style.setProperty('--v152-n',String(Math.max(1,Math.min(6,tiles.length))));places.classList.toggle('is-odd',tiles.length%2===1);
+  for(const tile of tiles){const cat=new URLSearchParams((tile.getAttribute('href')||'').split('?')[1]||'').get('cat');if(!cat)continue;const n=v152CategoryCount(cat),title=tile.querySelector('strong')?.textContent||'';let badge=tile.querySelector('.v152-count');if(!badge){badge=document.createElement('span');badge.className='v152-count';tile.appendChild(badge)}badge.textContent=String(n);badge.title=n+' '+plural(n,'направление','направления','направлений');tile.setAttribute('aria-label',title+', '+badge.title)}}
+ const stories=$('#v4Stories');if(stories&&typeof stories.querySelectorAll==='function')for(const card of stories.querySelectorAll('.v4-story')){if(card.querySelector('.v152-stats'))continue;const id=decodeURIComponent((card.getAttribute('href')||'').split('/').pop()||''),s=findStory(id);if(!s)continue;card.querySelector('small')?.insertAdjacentHTML('afterend',v152StoryStats(s))}
+}
+const homeBeforeV152=homeView;homeView=function(...a){const r=homeBeforeV152.apply(this,a);v152EnhanceHome();return r};
+
+/* Story page */
+storyView=function(id){const s=findStory(id);if(!s){app.innerHTML='<div class="wrap section"><h1>История не найдена</h1><a class="btn btn-sea" href="#/diary">Все истории</a></div>';return}
+ if(!sess.get('view:'+id)){const views=(Number(s.views)||0)+1;updateStoredStory(id,x=>x.views=views);sess.set('view:'+id,'1');s.views=views}
+ const own=Number(s.ratings?.[storyVoteKey()]||0),photos=v152StoryPhotos(s),comments=s.comments||[],user=store.get('user',null),author=s.authorName||s.a||'Путешественник',views=Math.max(0,Number(s.views)||0),r=storyScore(s),score=v152Score(s);
+ const gallery=photos.length?`<div class="v152-story-media${photos.length>1?' is-many':''}" data-v152-gallery>${photos.length>1?`<div class="v152-story-track" tabindex="0" aria-label="Фото истории, ${photos.length}">`:''}${photos.map((p,i)=>`<button type="button" class="v152-story-photo" data-v152-photo="${i}" aria-label="Открыть фото ${i+1} из ${photos.length}"><img src="${esc(p)}" alt="Фото поездки ${i+1}" ${i?'loading="lazy"':'fetchpriority="high"'}></button>`).join('')}${photos.length>1?`</div><span class="v152-story-count" aria-hidden="true">1 / ${photos.length}</span><button type="button" class="v152-story-arrow prev" data-v152-slide="-1" aria-label="Предыдущее фото">${ICON.left}</button><button type="button" class="v152-story-arrow next" data-v152-slide="1" aria-label="Следующее фото">${ICON.right}</button>`:''}</div>`:'';
+ const text=lines(s.x).map(x=>v152Quote(x)?`<blockquote>${esc(x)}</blockquote>`:`<p>${esc(x)}</p>`).join('');
+ const video=`${s.videoUrl?`<video class="v152-story-video" src="${src(s.videoUrl)}" controls playsinline preload="metadata"></video>`:''}${s.videoKey?`<video class="v152-story-video" data-story-media="${esc(s.videoKey)}" controls playsinline preload="metadata"></video>`:''}`;
+ const commentList=comments.length?`<ul class="v152-comments">${comments.map(c=>{const mine=user&&c.uid===user.id,name=mine?user.name:c.author||'Путешественник',avatar=mine?user.avatar:c.avatar,initial=(meaningfulName(name)||'П').trim()[0];return `<li class="v152-comment"><span class="v152-avatar" ${profileTarget(c.uid)}>${avatar?`<img src="${src(avatar)}" alt="" loading="lazy">`:esc(initial.toUpperCase())}</span><div><p class="v152-comment-head"><b ${profileTarget(c.uid)}>${esc(name)}</b>${v152When(c.created)?`<time datetime="${esc(c.created)}">${esc(v152When(c.created))}</time>`:''}</p><p class="v152-comment-text">${esc(c.text)}</p></div></li>`}).join('')}</ul>`:'<p class="v152-empty">Пока никто не написал. Будьте первым.</p>';
+ const form=user?`<form id="storyComment" class="v152-compose" data-id="${esc(id)}"><label class="v152-visually-hidden" for="storyCommentText">Комментарий</label><textarea id="storyCommentText" name="text" rows="1" required maxlength="2000" placeholder="Напишите комментарий" data-v152-autosize></textarea><button class="v152-send" type="submit" disabled>Отправить</button></form>`:`<a class="v152-signin" href="#/account">Войти, чтобы написать комментарий</a>`;
+ app.innerHTML=`<article class="wrap story-detail v152-story"><a href="#/diary" class="btn btn-ghost small v152-story-back">← Все истории</a>
+<header class="v152-story-head"><p class="v152-story-eyebrow">Дневник путешественников</p><h1>${esc(s.t||'История путешествия')}</h1><p class="v152-story-meta"><span class="v152-story-author" ${profileTarget(s.uid)}>${esc(author)}</span><span>${V152_EYE}${v152Number(views)} ${plural(views,'просмотр','просмотра','просмотров')}</span>${score?`<span>${V152_STAR}${score}<small> · ${r.count} ${plural(r.count,'оценка','оценки','оценок')}</small></span>`:''}</p></header>
+${gallery}<div class="v152-prose">${text}</div>${video}
+<section class="v152-story-card v152-rate-card" aria-labelledby="storyRateTitle"><h2 id="storyRateTitle">Оцените историю</h2><div class="v152-rate" role="radiogroup" aria-label="Оценка истории">${[1,2,3,4,5].map(n=>`<button type="button" role="radio" aria-checked="${own===n}" data-story-rate="${n}" data-story-id="${esc(id)}" class="${n<=own?'on':''}" aria-label="${n} из 5">${V152_STAR}</button>`).join('')}</div><p class="v152-rate-hint">${own?`Ваша оценка — ${own}. Можно изменить.`:'Нажмите на звезду'}</p></section>
+<section class="v152-story-card v152-discussion" aria-labelledby="storyTalkTitle"><h2 id="storyTalkTitle">Обсуждение${comments.length?` <span>${comments.length}</span>`:''}</h2>${commentList}${form}</section></article>`;
+ loadStoryMedia()};
+function v152SyncGallery(track){const box=track.closest('[data-v152-gallery]'),count=box?.querySelector('.v152-story-count'),n=track.children.length;if(!n)return;const i=Math.max(0,Math.min(n-1,Math.round(track.scrollLeft/Math.max(1,track.clientWidth))));if(count)count.textContent=(i+1)+' / '+n;box.querySelector('.v152-story-arrow.prev')?.toggleAttribute('disabled',i===0);box.querySelector('.v152-story-arrow.next')?.toggleAttribute('disabled',i===n-1)}
+document.addEventListener('scroll',e=>{const track=e.target?.closest?.('.v152-story-track');if(track)v152SyncGallery(track)},true);
+document.addEventListener('click',e=>{const slide=e.target.closest('[data-v152-slide]');if(slide){const track=slide.closest('[data-v152-gallery]')?.querySelector('.v152-story-track');if(track)track.scrollBy({left:Number(slide.dataset.v152Slide)*track.clientWidth,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});return}
+ const photo=e.target.closest('[data-v152-photo]');if(photo){const pics=[...photo.closest('[data-v152-gallery]').querySelectorAll('[data-v152-photo] img')].map(img=>img.getAttribute('src'));lightbox(pics,Number(photo.dataset.v152Photo))}});
+function v152Autosize(area){area.style.height='auto';area.style.height=Math.min(area.scrollHeight,240)+'px';const send=area.form?.querySelector('.v152-send');if(send)send.disabled=!area.value.trim()}
+document.addEventListener('input',e=>{if(e.target.matches?.('[data-v152-autosize]'))v152Autosize(e.target)});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)&&e.target.matches?.('[data-v152-autosize]')&&e.target.value.trim()){e.preventDefault();e.target.form?.requestSubmit()}});
+document.addEventListener('focusin',e=>{if(e.target.matches?.('[data-v152-autosize]')&&matchMedia('(max-width: 900px)').matches)setTimeout(()=>e.target.scrollIntoView({block:'center',behavior:'smooth'}),300)});
+
+/* Build 152 · the page end always clears the bottom tab bar. The bar's real height is
+   measured, so the iPhone home-indicator area is included. */
+let v152PageEndFrame=0;
+function v152PageEnd(){v152PageEndFrame=0;const bars=[$('.mnav'),$('#admTabbar')].filter(n=>n&&getComputedStyle(n).display!=='none'&&!n.hidden&&n.getBoundingClientRect().height>0);
+ const height=bars.reduce((max,n)=>Math.max(max,innerHeight-n.getBoundingClientRect().top),0);document.documentElement.style.setProperty('--v152-tab-space',Math.ceil(height+16)+'px');
+ const footer=$('#contacts'),candidate=footer&&getComputedStyle(footer).display!=='none'&&footer.getBoundingClientRect().height>0?footer:app;
+ for(const node of $$('.v152-page-end'))if(node!==candidate){node.classList.remove('v152-page-end');node.style.removeProperty('padding-bottom')}
+ if(!candidate)return;candidate.style.removeProperty('padding-bottom');if(!height){candidate.classList.remove('v152-page-end');return}
+ // Space the page already leaves below its last visible block (paddings, margins), so the bar is cleared without doubling it.
+ let node=candidate,trailing=0;for(let depth=0;depth<10;depth++){const child=[...node.children].reverse().find(c=>{const cs=getComputedStyle(c);return cs.display!=='none'&&cs.position!=='fixed'&&cs.position!=='absolute'&&c.getBoundingClientRect().height>0});if(!child)break;trailing+=Math.max(0,node.getBoundingClientRect().bottom-child.getBoundingClientRect().bottom);node=child}
+ const pad=Math.max(0,Math.ceil(height+20-trailing+(parseFloat(getComputedStyle(candidate).paddingBottom)||0)));candidate.classList.add('v152-page-end');candidate.style.setProperty('padding-bottom',pad+'px','important')}
+function v152QueuePageEnd(){if(v152PageEndFrame||typeof requestAnimationFrame!=='function')return;v152PageEndFrame=requestAnimationFrame(v152PageEnd)}
+if(typeof MutationObserver!=='undefined'&&typeof app!=='undefined'&&app)new MutationObserver(v152QueuePageEnd).observe(app,{childList:true});
+addEventListener('resize',v152QueuePageEnd);addEventListener('hashchange',v152QueuePageEnd);addEventListener('load',v152QueuePageEnd);v152QueuePageEnd();
+
+/* Build 152 · on a phone: offer to install on the first visit and on every new visit until
+   installed; in the installed app, ask for notifications on every new visit until allowed.
+   «Позже» only hides the offer for the current visit. */
+v17InstallEligible=function(){if(isStandalone())return false;const s=v17Store.get(INSTALL_KEY,{});if(s.installed)return false;
+ const mobile=window.matchMedia?.('(pointer: coarse)').matches||/android|iphone|ipad|ipod/i.test(navigator.userAgent||'');if(!mobile)return false;
+ return !v17Session.get('apsua-install-shown',false)};
+v17InstallBusy=function(){return ['admin','tour','transfer'].includes(current)||!!window.apsuaRequestSending||!!window.apsuaRequestResultOpen||!!window.apsuaAuthPending||!!document.querySelector('dialog[open],.lightbox,#push-welcome')||v17MenuOpen||!!document.activeElement?.matches?.('input,textarea,select')};
+const v152ScheduleInstallBefore=v17ScheduleInstall;v17ScheduleInstall=function(delay=1200){return v152ScheduleInstallBefore(delay)};
+const v152ShowInstallBefore=v17ShowInstall;v17ShowInstall=function(manual){v152ShowInstallBefore(manual);const box=v17InstallBox;if(!box)return;
+ const title=$('#installOfferTitle',box),text=$('#installOfferText',box);if(title)title.textContent='Установите приложение';
+ if(text)text.innerHTML='Так будет доступно больше:<ul class="v152-install-perks"><li>уведомления о статусе заявки и напоминание о поездке</li><li>вход в одно касание</li><li>открывается с экрана «Домой», как обычное приложение</li></ul>';
+ const later=$('.install-offer-actions [data-install-later]',box);if(later)later.textContent='Позже'};
+/* «Позже» and a declined system prompt no longer hide the offer for good. */
+document.addEventListener('click',e=>{if(v17InstallBox&&e.target.closest?.('[data-install-later]')&&v17InstallBox.contains(e.target)){setTimeout(()=>{const s=v17Store.get(INSTALL_KEY,{});if(s.dismissed&&!s.installed){delete s.dismissed;v17Store.set(INSTALL_KEY,s)}},0)}},true);
+window.addEventListener('appinstalled',()=>{try{sessionStorage.removeItem('apsua-push-later')}catch{}});
+
+function v152PushSteps(){if(isIOS())return 'Откройте «Настройки» → «Уведомления» → «Апсуа Тур» и включите «Допуск уведомлений».';return 'Нажмите и подержите значок «Апсуа Тур» → «О приложении» → «Уведомления» и включите их.'}
+function v152PushNudge(){
+ const guestNudge=$('.v152-push-nudge[data-kind="guest"]');if(guestNudge&&serverIdentity){guestNudge.remove();v152PushWelcomeBefore()}
+ if(!serverReady)return;
+ if(!pushInstalled()||!pushAvailable()||pushDeviceEnabled||pushDeviceChanging||current==='account'||current==='admin'||$('#push-welcome'))return;
+ try{if(sessionStorage.getItem('apsua-push-later')==='1')return}catch{}
+ if(serverIdentity&&Notification.permission!=='denied')return; // the regular prompt handles this case
+ if(serverIdentity&&pushOptedOut())return;
+ const denied=Notification.permission==='denied';
+ document.body.insertAdjacentHTML('beforeend',`<aside id="push-welcome" class="push-welcome panel is-ready v152-push-nudge" data-kind="${denied?'denied':'guest'}" aria-label="Уведомления"><div><h2>${denied?'Уведомления выключены':'Будьте в курсе'}</h2><p class="sub">${denied?'Без них вы не узнаете о подтверждении заявки и назначении водителя. '+v152PushSteps():'Войдите, чтобы получать уведомления о подтверждении заявки, назначении водителя и напоминание о поездке.'}</p></div><div class="push-welcome-actions">${denied?'':'<a class="btn btn-sea small" href="#/account" data-v152-push-login>Войти и включить</a>'}<button type="button" class="btn small" id="push-later">${denied?'Понятно':'Позже'}</button></div></aside>`)}
+const v152PushWelcomeBefore=pushWelcome;pushWelcome=function(){v152PushWelcomeBefore();v152PushNudge()};
+window.addEventListener('site-ready',()=>{v152PushNudge();setTimeout(v152PushNudge,1500)});window.addEventListener('pageshow',v152PushNudge);window.addEventListener('hashchange',()=>setTimeout(v152PushNudge,0));
+document.addEventListener('click',e=>{if(e.target.closest?.('[data-v152-push-login]'))$('#push-welcome')?.remove()});
 
 hostedBoot();
 })();
