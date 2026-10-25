@@ -1,0 +1,441 @@
+/* ==========================================================================
+   Build 152 · catalog search and filters. Loaded after v146.css.
+   Scope: the «Экскурсии» search form (#search2), the quick actions under the page title
+   and the catalog toolbar (categories, format, price, sorting). Nothing else is restyled.
+   Light theme only. Uses the existing --apple-* and --control-* tokens.
+   ========================================================================== */
+
+:root{
+  --v152-chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%236e6e73' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-chev-up:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 7.5 6 4l3.5 3.5' fill='none' stroke='%236e6e73' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-chev-blue:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%230071e3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-sort:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5 13V3M2.5 5.5 5 3l2.5 2.5M11 3v10M8.5 10.5 11 13l2.5-2.5' fill='none' stroke='%231d1d1f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-pill-h:40px;
+  --v152-pill-line:inset 0 0 0 1px var(--apple-hairline,rgba(0,0,0,.1));
+  --v152-ease:cubic-bezier(.22,1,.36,1);
+}
+
+/* ---------- Quick actions under the title: one row of equal chips ---------- */
+html body #app .page-head+.comfort-actions{display:flex!important;flex-wrap:nowrap!important;gap:8px!important;margin:14px 0 0!important;padding:2px 0!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+html body #app .page-head+.comfort-actions::-webkit-scrollbar{display:none}
+html body #app .page-head+.comfort-actions>.btn{flex:none!important;display:inline-flex!important;align-items:center;gap:6px;width:auto!important;height:36px!important;min-height:36px!important;padding:0 14px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff)!important;color:var(--apple-ink,#1d1d1f)!important;box-shadow:var(--v152-pill-line)!important;font-size:14px!important;font-weight:500!important;line-height:1!important;letter-spacing:-.01em;white-space:nowrap!important;transition:background-color .15s ease,transform .1s ease-out}
+html body #app .page-head+.comfort-actions>.btn [data-compare-count]:not(:empty){display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--apple-blue,#0071e3);color:#fff;font-size:11px;font-weight:600}
+html body #app .page-head+.comfort-actions>.btn:active{transform:scale(.97);transition-duration:60ms}
+@media (hover:hover){html body #app .page-head+.comfort-actions>.btn:hover{background:var(--apple-surface-2,#f5f5f7)!important}}
+
+/* ---------- Search: one bar on a computer ---------- */
+html body #app #search2.search.search-departures{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,.8fr) auto!important;align-items:center!important;gap:0!important;margin:20px 0 0!important;padding:6px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff)!important;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body #app #search2 .field{position:relative!important;display:block!important;border:0!important;box-shadow:none!important;grid-column:auto!important;grid-row:auto!important;order:0!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important}
+html body #app #search2>.btn{grid-column:auto!important;grid-row:auto!important;order:0!important}
+html body #app #search2 .field>span{display:block!important;position:absolute!important;z-index:2;top:11px;left:22px;right:40px;margin:0!important;color:var(--apple-ink-2,#6e6e73)!important;font-size:12px!important;font-weight:500!important;line-height:16px!important;letter-spacing:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+html body #app #search2 .field .sbtn{position:relative!important;display:flex!important;align-items:flex-end!important;justify-content:flex-start!important;gap:0!important;width:100%!important;height:60px!important;min-height:60px!important;margin:0!important;padding:27px 40px 10px 22px!important;border:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;color:var(--apple-ink,#1d1d1f)!important;text-align:left!important;cursor:pointer;transition:background-color .15s ease}
+html body #app #search2 .field .sbtn>.icon:not(.chev){display:none!important}
+html body #app #search2 .field .sbtn>.chev{position:absolute!important;right:16px;top:50%;width:16px!important;height:16px!important;margin:-8px 0 0!important;color:var(--apple-ink-2,#6e6e73)!important;transition:transform .2s var(--v152-ease)}
+html body #app #search2 .field .sbtn[aria-expanded=true]>.chev{transform:rotate(180deg)}
+html body #app #search2 .field .sbtn b{display:block!important;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px!important;font-weight:600!important;line-height:22px!important;letter-spacing:-.01em}
+html body #app #search2 .field .people-open b::after{content:" чел.";font-weight:400;color:var(--apple-ink-2,#6e6e73)}
+html body #app #search2 .field .sbtn[aria-expanded=true]{background:var(--apple-surface-2,#f5f5f7)!important}
+html body #app #search2 .field .sbtn:focus-visible{outline:2px solid var(--apple-blue,#0071e3)!important;outline-offset:-2px}
+@media (hover:hover){html body #app #search2 .field .sbtn:hover{background:var(--apple-surface-2,#f5f5f7)!important}}
+/* Hairline dividers between segments; they step aside for the hovered or open segment. */
+html body #app #search2 .field+.field::before{content:"";position:absolute;z-index:1;left:0;top:18px;bottom:18px;width:1px;background:var(--apple-hairline,rgba(0,0,0,.1));transition:opacity .15s ease}
+html body #app #search2 .field:has(.sbtn[aria-expanded=true])::before,html body #app #search2 .field:has(.sbtn[aria-expanded=true])+.field::before{opacity:0}
+@media (hover:hover){html body #app #search2 .field:hover::before,html body #app #search2 .field:hover+.field::before{opacity:0}}
+html body #app #search2>.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:auto!important;height:48px!important;min-height:48px!important;margin:0 0 0 6px!important;padding:0 24px!important;border-radius:999px!important;font-size:16px!important;font-weight:600!important;white-space:nowrap}
+html body #app #search2>.btn span{display:inline!important}
+html body #app #search2>.btn:active{transform:scale(.97);transition:transform 60ms ease-out}
+
+/* ---------- Search: a grouped card on tablets and phones ---------- */
+@media (max-width:1000px){
+ html body #app #search2.search.search-departures{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;padding:8px!important;border-radius:22px!important}
+ html body #app #search2 .field+.field::before{display:none}
+ html body #app #search2 .field>span{top:9px;left:16px;right:36px}
+ html body #app #search2 .field .sbtn{height:58px!important;min-height:58px!important;padding:26px 36px 9px 16px!important;border-radius:14px!important;background:var(--apple-surface-2,#f5f5f7)!important}
+ html body #app #search2 .field .sbtn>.chev{right:12px}
+ html body #app #search2 .field:nth-child(odd){grid-column:1!important}
+ html body #app #search2 .field:nth-child(even){grid-column:2!important}
+ html body #app #search2>.btn{grid-column:1/-1!important;width:100%!important;height:50px!important;min-height:50px!important;margin:2px 0 0!important;border-radius:14px!important}
+}
+@media (max-width:640px){
+ html body #app #search2.search.search-departures{margin-top:16px!important}
+ html body #app #search2 .field:nth-child(1),html body #app #search2 .field:nth-child(2){grid-column:1/-1!important}
+ html body #app #search2 .field:nth-child(3){grid-column:1!important}
+ html body #app #search2 .field:nth-child(4){grid-column:2!important}
+}
+
+/* ---------- Catalog toolbar ---------- */
+html body #app .catalog-compact-toolbar{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;margin:0 0 20px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+html body #app .catalog-compact-toolbar>*{min-width:0;margin:0!important}
+
+/* Categories: a scroller that fades only on the side where more chips are hidden. */
+html body #app .catalog-compact-toolbar .category-rail{--fade-l:56px;--fade-r:56px;position:relative!important;display:block!important;width:100%!important;padding:0!important}
+html body #app .catalog-compact-toolbar .category-rail:has([data-category-scroll="-1"]:disabled){--fade-l:0px}
+html body #app .catalog-compact-toolbar .category-rail:has([data-category-scroll="1"]:disabled){--fade-r:0px}
+html body #app .catalog-compact-toolbar .category-rail .chips{display:flex!important;flex-wrap:nowrap!important;flex:none!important;width:100%!important;max-width:none!important;min-width:0!important;gap:8px!important;margin:0!important;padding:2px 0!important;overflow-x:auto!important;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade-l),#000 calc(100% - var(--fade-r)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade-l),#000 calc(100% - var(--fade-r)),transparent 100%)}
+html body #app .catalog-compact-toolbar .category-rail .chips::-webkit-scrollbar{display:none}
+html body #app .catalog-compact-toolbar .category-rail .chip{flex:none!important;height:38px!important;min-height:38px!important;margin:0!important;padding:0 16px!important;border:0!important;border-radius:999px!important;background:var(--control-bg,#e8e8ed)!important;color:var(--apple-ink,#1d1d1f)!important;box-shadow:none!important;font-size:15px!important;font-weight:500!important;line-height:38px!important;letter-spacing:-.01em;white-space:nowrap;scroll-snap-align:start;transition:background-color .15s ease,color .15s ease,transform .1s ease-out}
+html body #app .catalog-compact-toolbar .category-rail .chip[aria-pressed=true]{background:var(--control-accent,#0071e3)!important;color:var(--control-accent-ink,#fff)!important}
+html body #app .catalog-compact-toolbar .category-rail .chip:active{transform:scale(.96);transition-duration:60ms}
+@media (hover:hover){html body #app .catalog-compact-toolbar .category-rail .chip:not([aria-pressed=true]):hover{background:var(--control-hover,#dcdce1)!important}}
+html body #app .catalog-compact-toolbar .category-arrow{position:absolute!important;z-index:2;top:50%;display:grid!important;place-items:center;width:34px!important;height:34px!important;min-height:0!important;margin:-17px 0 0!important;padding:0 0 2px!important;border:0!important;border-radius:50%!important;background:var(--apple-surface,#fff)!important;color:var(--apple-ink,#1d1d1f)!important;box-shadow:0 0 0 1px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.12)!important;font-size:22px!important;line-height:1!important;cursor:pointer;transition:opacity .2s ease,transform .1s ease-out}
+html body #app .catalog-compact-toolbar .category-arrow[data-category-scroll="-1"]{left:0}
+html body #app .catalog-compact-toolbar .category-arrow[data-category-scroll="1"]{right:0}
+html body #app .catalog-compact-toolbar .category-arrow:disabled{opacity:0!important;pointer-events:none}
+html body #app .catalog-compact-toolbar .category-arrow:active{transform:scale(.92)}
+/* Touch screens scroll with a finger; the arrows only cover chips there. */
+@media (hover:none){html body #app .catalog-compact-toolbar .category-arrow{display:none!important}}
+
+/* Format · price · sorting: one row of pills. */
+html body #app .catalog-compact-toolbar .catalog-selects{position:relative!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;width:100%!important;margin:0!important;padding:0!important;grid-template-columns:none!important}
+html body #app .catalog-selects>.sort{position:relative!important;display:block!important;flex:none!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important}
+html body #app .catalog-selects>.sort>span{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+html body #app .catalog-selects>.sort-order{margin-left:auto!important}
+html body #app .catalog-selects select.input{-webkit-appearance:none!important;appearance:none!important;field-sizing:content;display:block!important;width:auto!important;max-width:100%;height:var(--v152-pill-h)!important;min-height:var(--v152-pill-h)!important;margin:0!important;padding:0 34px 0 16px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff) var(--v152-chev) no-repeat right 14px center/12px 12px!important;box-shadow:var(--v152-pill-line)!important;color:var(--apple-ink,#1d1d1f)!important;font-size:15px!important;font-weight:500!important;line-height:var(--v152-pill-h)!important;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;transition:background-color .15s ease,box-shadow .15s ease}
+html body #app .catalog-selects #sort.input{padding-left:38px!important;background:var(--v152-sort) no-repeat left 14px center/16px 16px,var(--v152-chev) no-repeat right 14px center/12px 12px,var(--apple-surface,#fff)!important}
+html body #app .catalog-selects select[data-format-filter]:has(option[value=""]:not(:checked)){background-color:var(--apple-blue-soft,rgba(0,113,227,.1))!important;background-image:var(--v152-chev-blue)!important;box-shadow:none!important;color:var(--apple-blue,#0071e3)!important}
+html body #app .catalog-selects select.input:focus-visible{outline:2px solid var(--apple-blue,#0071e3)!important;outline-offset:2px}
+@media (hover:hover){html body #app .catalog-selects select.input:hover{background-color:var(--apple-surface-2,#f5f5f7)!important}}
+
+/* Price: a pill like the others. Its panel is a popover anchored to the pill. */
+html body #app .catalog-selects>.catalog-price{position:relative!important;flex:none!important;overflow:visible!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+html body #app .catalog-price>summary{position:relative;z-index:31;display:flex!important;align-items:center!important;gap:0!important;height:var(--v152-pill-h)!important;min-height:var(--v152-pill-h)!important;margin:0!important;padding:0 34px 0 16px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff) var(--v152-chev) no-repeat right 14px center/12px 12px!important;box-shadow:var(--v152-pill-line)!important;color:var(--apple-ink,#1d1d1f)!important;font-size:15px!important;font-weight:500!important;line-height:1!important;white-space:nowrap;list-style:none!important;cursor:pointer;-webkit-user-select:none;user-select:none;transition:background-color .15s ease,transform .1s ease-out}
+html body #app .catalog-price>summary::-webkit-details-marker{display:none}
+html body #app .catalog-price>summary::marker{content:""}
+html body #app .catalog-price>summary::after{content:none!important;display:none!important}
+html body #app .catalog-price>summary:active{transform:scale(.97);transition-duration:60ms}
+html body #app .catalog-price>summary:focus-visible{outline:2px solid var(--apple-blue,#0071e3)!important;outline-offset:2px}
+html body #app .catalog-price[open]>summary{background-color:var(--apple-surface-2,#f5f5f7)!important;background-image:var(--v152-chev-up)!important}
+html body #app .catalog-price.is-active>summary{background-color:var(--apple-blue-soft,rgba(0,113,227,.1))!important;background-image:var(--v152-chev-blue)!important;box-shadow:none!important;color:var(--apple-blue,#0071e3)!important}
+@media (hover:hover){html body #app .catalog-price:not(.is-active)>summary:hover{background-color:var(--apple-surface-2,#f5f5f7)!important}}
+/* An invisible layer behind the open panel: a tap outside lands on the summary and closes it. */
+html body #app .catalog-price[open]>summary::before{content:"";position:fixed;inset:0;z-index:-1;cursor:default;background:transparent}
+
+html body #app .catalog-price>fieldset{position:absolute!important;z-index:32;top:calc(100% + 8px);left:0;display:grid!important;gap:16px!important;width:360px!important;max-width:calc(100vw - 32px);margin:0!important;padding:18px 20px 16px!important;border:0!important;border-radius:22px!important;background:var(--apple-surface,#fff)!important;box-shadow:0 0 0 1px rgba(0,0,0,.05),0 18px 50px rgba(0,0,0,.16)!important;transform-origin:24px 0;animation:v152-pop-in .24s var(--v152-ease) both}
+html body #app .catalog-price.is-closing>fieldset{animation:v152-pop-out .16s ease-in both}
+@keyframes v152-pop-in{from{opacity:0;transform:translateY(-4px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes v152-pop-out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-4px) scale(.96)}}
+html body #app .catalog-price legend{float:left;display:grid!important;gap:2px;width:100%;margin:0!important;padding:0!important;color:var(--apple-ink,#1d1d1f)!important}
+html body #app .catalog-price legend b{font-size:17px;font-weight:600;letter-spacing:-.02em;line-height:22px}
+html body #app .catalog-price legend small{color:var(--apple-ink-2,#6e6e73);font-size:13px;font-weight:400;line-height:18px}
+html body #app .catalog-price .price-values{clear:both;display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:8px!important;margin:0!important}
+html body #app .catalog-price .price-values>span{color:var(--apple-ink-2,#6e6e73)}
+html body #app .catalog-price .price-values>label{display:grid!important;gap:1px!important;min-width:0;margin:0!important;padding:8px 12px!important;border:0!important;border-radius:12px!important;background:var(--apple-surface-2,#f5f5f7)!important;box-shadow:none!important;cursor:text;transition:box-shadow .15s ease}
+html body #app .catalog-price .price-values>label:focus-within{box-shadow:inset 0 0 0 2px var(--apple-blue,#0071e3)!important}
+html body #app .catalog-price .price-values>label>span{color:var(--apple-ink-2,#6e6e73)!important;font-size:12px!important;font-weight:500!important;line-height:16px!important}
+html body #app .catalog-price .price-values input{width:100%!important;min-width:0;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;color:var(--apple-ink,#1d1d1f)!important;font-size:17px!important;font-weight:600!important;line-height:22px!important;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+html body #app .catalog-price .price-values input::-webkit-outer-spin-button,html body #app .catalog-price .price-values input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+/* Two thumbs on one track. The track spans the thumb centres, so the fill lines up with them. */
+html body #app .catalog-price .price-range{position:relative!important;height:28px!important;margin:0!important;padding:0!important}
+html body #app .catalog-price .price-range-track{position:absolute!important;left:14px!important;right:14px!important;top:50%!important;height:4px!important;margin:-2px 0 0!important;border-radius:2px!important;background:linear-gradient(90deg,var(--apple-fill-strong,rgba(120,120,128,.2)) var(--range-start),var(--apple-blue,#0071e3) var(--range-start),var(--apple-blue,#0071e3) var(--range-end),var(--apple-fill-strong,rgba(120,120,128,.2)) var(--range-end))!important}
+html body #app .catalog-price .price-range input[type=range]{position:absolute!important;inset:0!important;width:100%!important;height:28px!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;-webkit-appearance:none!important;appearance:none!important;pointer-events:none;outline:0}
+html body #app .catalog-price .price-range input[type=range]::-webkit-slider-runnable-track{height:28px;background:transparent;border:0}
+html body #app .catalog-price .price-range input[type=range]::-moz-range-track{height:28px;background:transparent;border:0}
+html body #app .catalog-price .price-range input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;margin:0;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);pointer-events:auto;cursor:grab;transition:transform .12s ease-out}
+html body #app .catalog-price .price-range input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);pointer-events:auto;cursor:grab}
+html body #app .catalog-price .price-range input[type=range]:active::-webkit-slider-thumb{transform:scale(1.1);cursor:grabbing}
+html body #app .catalog-price .price-range input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px rgba(0,113,227,.35),0 3px 8px rgba(0,0,0,.15)}
+html body #app .catalog-price .price-actions{display:flex;justify-content:space-between;gap:8px;margin:0;padding-top:4px}
+html body #app .catalog-price .price-actions .btn{height:36px!important;min-height:36px!important;padding:0 16px!important;border-radius:999px!important;font-size:15px!important;font-weight:500!important}
+html body #app .catalog-price .price-actions [data-price-done]{min-width:96px}
+
+/* Results line above the cards. */
+html body #app .section>.section-head:has(#resCount){align-items:center!important;margin:0 0 12px!important;min-height:32px}
+html body #app .section>.section-head #resCount{margin:0!important;color:var(--apple-ink-2,#6e6e73)!important;font-size:15px!important}
+
+/* ---------- Phones ---------- */
+@media (max-width:640px){
+ /* Rows of chips run to the screen edges, like a native scroller. */
+ html body #app .page-head+.comfort-actions,html body #app .catalog-compact-toolbar .category-rail,html body #app .catalog-compact-toolbar .catalog-selects{margin-inline:calc(-1 * var(--v152-gutter,16px))!important;width:auto!important}
+ html body #app .page-head+.comfort-actions,html body #app .catalog-compact-toolbar .category-rail .chips{padding-inline:var(--v152-gutter,16px)!important;scroll-padding-inline:var(--v152-gutter,16px)}
+ html body #app .catalog-compact-toolbar .category-rail{--fade-l:28px;--fade-r:28px}
+ html body #app .catalog-compact-toolbar .catalog-selects{padding-inline:var(--v152-gutter,16px)!important;overflow-x:auto;scrollbar-width:none}
+ html body #app .catalog-compact-toolbar .catalog-selects::-webkit-scrollbar{display:none}
+ html body #app .catalog-selects>.sort-order{margin-left:0!important}
+ /* 16 px keeps iOS from zooming the page when a select opens. */
+ html body #app .catalog-selects select.input,html body #app .catalog-price>summary{font-size:16px!important}
+ html body #app .catalog-price .price-values input{font-size:17px!important}
+ /* The price panel becomes a bottom sheet above everything, with a dimmed backdrop. */
+ html body #app .catalog-price>summary{z-index:auto!important}
+ html body #app .catalog-price[open]>summary::before{z-index:1000;background:rgba(0,0,0,.32);animation:v152-fade-in .24s ease both}
+ html body #app .catalog-price.is-closing>summary::before{animation:v152-fade-out .2s ease-in both}
+ html body #app .catalog-price>fieldset{position:fixed!important;z-index:1001;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;max-width:none!important;padding:22px 20px calc(16px + env(safe-area-inset-bottom,0px))!important;border-radius:24px 24px 0 0!important;box-shadow:0 -8px 40px rgba(0,0,0,.18)!important;animation:v152-sheet-in .32s var(--v152-ease) both}
+ html body #app .catalog-price>fieldset::before{content:"";position:absolute;top:7px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--apple-fill-strong,rgba(120,120,128,.2))}
+ html body #app .catalog-price.is-closing>fieldset{animation:v152-sheet-out .22s cubic-bezier(.4,0,1,1) both}
+ html body #app .catalog-price .price-actions .btn{flex:1;height:46px!important;min-height:46px!important;border-radius:14px!important;font-size:16px!important}
+}
+@keyframes v152-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes v152-fade-out{from{opacity:1}to{opacity:0}}
+@keyframes v152-sheet-in{from{transform:translateY(100%)}to{transform:none}}
+@keyframes v152-sheet-out{from{transform:none}to{transform:translateY(100%)}}
+
+/* ---------- Reduced motion: no slides or scaling, a short fade at most ---------- */
+@media (prefers-reduced-motion:reduce){
+ html body #app .catalog-price>fieldset,html body #app .catalog-price.is-closing>fieldset{animation:none!important}
+ html body #app .catalog-price[open]>summary::before{animation:none!important}
+ html body #app .catalog-compact-toolbar .chip:active,html body #app .catalog-selects .catalog-price>summary:active,html body #app #search2>.btn:active,html body #app .page-head+.comfort-actions>.btn:active{transform:none!important}
+}
+
+/* ==========================================================================
+   Admin · build 152: always-visible menu, quick jump ⌘K, phone bottom bar, «Сегодня».
+   ========================================================================== */
+html body #app .adm .adm-sheet-head{display:none}
+html body #app .adm .adm-scrim{display:none}
+#admTabbar{display:none}
+
+/* ---------- Menu: every section visible, grouped by task ---------- */
+html body #app .adm .adm-side{display:flex!important;flex-direction:column!important;gap:14px!important;padding:16px 12px 20px!important;box-sizing:border-box}
+html body #app .adm .adm-brand{display:grid;gap:2px;padding:0 6px!important}
+html body #app .adm .adm-brand b{font-size:15px!important;font-weight:600}
+html body #app .adm .adm-brand .adm-status{font-size:11px!important;line-height:1.4!important;color:var(--apple-ink-2,#6e6e73)}
+html body #app .adm .adm-brand #admStatus{color:var(--apple-red,#ff3b30)}
+html body #app .adm .adm-search-open{display:flex;align-items:center;gap:8px;width:100%;height:36px;margin:0;padding:0 8px 0 10px;border:0;border-radius:10px;background:var(--apple-surface,#fff);box-shadow:var(--v152-pill-line);color:var(--apple-ink-2,#6e6e73);font:inherit;font-size:13px;text-align:left;cursor:pointer;transition:box-shadow .15s ease}
+html body #app .adm .adm-search-open>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body #app .adm .adm-search-open kbd,.adm-palette kbd{flex:none;padding:2px 6px;border-radius:6px;background:var(--apple-surface-2,#f5f5f7);color:var(--apple-ink-2,#6e6e73);font:inherit;font-size:11px;font-weight:600}
+html body #app .adm .adm-search-open:focus-visible{outline:2px solid var(--apple-blue,#0071e3);outline-offset:2px}
+@media (hover:hover){html body #app .adm .adm-search-open:hover{box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}}
+html body #app .adm .adm-nav{display:flex;flex-direction:column;gap:14px}
+html body #app .adm .adm-nav-section{display:flex;flex-direction:column;gap:1px}
+html body #app .adm .adm-nav-heading{margin:0;padding:0 10px 4px;color:var(--apple-ink-2,#6e6e73);font-size:11px;font-weight:600;letter-spacing:.06em;line-height:16px;text-transform:uppercase}
+html body #app .adm .adm-nav a{display:flex!important;align-items:center;gap:10px;min-height:34px;margin:0!important;padding:0 10px!important;border-radius:10px!important;background:transparent;color:var(--apple-ink,#1d1d1f)!important;font-size:14px!important;font-weight:500;line-height:1.25!important;text-decoration:none!important;transition:background-color .15s ease,color .15s ease}
+html body #app .adm .adm-nav a .adm-nav-icon{flex:none;color:var(--apple-ink-2,#6e6e73)}
+html body #app .adm .adm-nav a .adm-nav-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body #app .adm .adm-nav a[aria-current=page]{background:var(--apple-blue-soft,rgba(0,113,227,.1))!important;color:var(--apple-blue,#0071e3)!important;font-weight:600}
+html body #app .adm .adm-nav a[aria-current=page] .adm-nav-icon{color:var(--apple-blue,#0071e3)}
+html body #app .adm .adm-nav a:focus-visible{outline:2px solid var(--apple-blue,#0071e3);outline-offset:-2px}
+@media (hover:hover){html body #app .adm .adm-nav a:not([aria-current=page]):hover{background:rgba(0,0,0,.04)}}
+html body #app .adm .adm-nav-badge{flex:none;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:10px;background:var(--control-bg,#e8e8ed);color:var(--apple-ink,#1d1d1f);font-size:12px;font-weight:600;line-height:20px;text-align:center}
+html body #app .adm .adm-nav-badge.is-accent{background:var(--apple-blue,#0071e3);color:#fff}
+html body #app .adm .adm-nav-count{flex:none;color:var(--apple-ink-2,#6e6e73);font-size:12px}
+html body #app .adm .adm-side-foot{display:grid;gap:6px;margin-top:auto}
+
+@media (min-width:901px){
+ html body #app .adm{grid-template-columns:248px minmax(0,1fr)!important}
+ html body #app .adm .adm-side{max-height:calc(100vh - 69px);max-height:calc(100dvh - 69px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+}
+
+/* ---------- Phone: own bottom bar, «Ещё» opens the menu as a sheet ---------- */
+@media (max-width:900px){
+ html body:has(#app .adm) #admTabbar{position:fixed;z-index:900;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(var(--adm-tabs,4),minmax(0,1fr));height:calc(58px + env(safe-area-inset-bottom,0px));padding:5px 8px env(safe-area-inset-bottom,0px);box-sizing:border-box;background:rgba(251,251,253,.94);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border-top:1px solid rgba(0,0,0,.08)}
+ #admTabbar>a,#admTabbar>button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;margin:0;padding:0;border:0;background:transparent;color:var(--apple-ink-2,#6e6e73);font:inherit;font-size:11px;font-weight:500;line-height:1.2;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+ #admTabbar .adm-nav-icon{width:24px;height:24px}
+ #admTabbar>a[aria-current=page],#admTabbar>button.is-current,#admTabbar>button[aria-expanded=true]{color:var(--apple-blue,#0071e3);font-weight:600}
+ #admTabbar>a:active,#admTabbar>button:active{transform:scale(.94);transition:transform 60ms ease-out}
+ #admTabbar .adm-tab-badge{position:absolute;top:1px;left:50%;margin-left:5px;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:var(--apple-red,#ff3b30);color:#fff;font-size:11px;font-weight:600;line-height:18px;text-align:center}
+ html body #app .adm .adm-main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+ html.adm-more-lock,html.adm-more-lock body{overflow:hidden}
+
+ html body #app .adm .adm-side{position:fixed!important;z-index:1001;left:0;right:0;bottom:0;top:auto!important;height:auto!important;max-height:88vh;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;gap:14px!important;padding:8px 16px calc(20px + env(safe-area-inset-bottom,0px))!important;border-radius:24px 24px 0 0;background:var(--apple-surface-2,#f5f5f7)!important;box-shadow:0 -8px 40px rgba(0,0,0,.18);transform:translateY(105%);visibility:hidden;transition:transform .34s var(--v152-ease),visibility 0s linear .34s}
+ html body #app .adm.is-more-open .adm-side{transform:none;visibility:visible;transition:transform .34s var(--v152-ease),visibility 0s}
+ html body #app .adm .adm-side::before{content:"";align-self:center;flex:none;width:36px;height:5px;margin-top:2px;border-radius:3px;background:rgba(120,120,128,.3)}
+ html body #app .adm .adm-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 2px 0}
+ html body #app .adm .adm-sheet-head b{font-size:22px;font-weight:700;letter-spacing:-.02em}
+ html body #app .adm .adm-sheet-close{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:var(--control-bg,#e8e8ed);color:var(--apple-ink-2,#6e6e73);cursor:pointer}
+ html body #app .adm .adm-scrim{position:fixed;z-index:1000;inset:0;display:block;background:rgba(0,0,0,.32);animation:v152-fade-in .24s ease both}
+ html body #app .adm .adm-scrim[hidden]{display:none!important}
+ html body #app .adm .adm-brand{order:5;padding:0 4px!important}
+ html body #app .adm .adm-search-open{height:40px;border-radius:12px;background:rgba(120,120,128,.12);box-shadow:none;font-size:16px}
+ html body #app .adm .adm-search-open kbd{display:none}
+ html body #app .adm .adm-nav-section{padding:4px;border-radius:14px;background:var(--apple-surface,#fff)}
+ html body #app .adm .adm-nav-heading{padding:8px 10px 4px}
+ html body #app .adm .adm-nav a{min-height:46px;font-size:16px!important}
+ html body #app .adm .adm-side-foot{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
+ html body #app .adm .adm-side-foot .btn{min-height:44px!important;font-size:15px!important}
+}
+
+/* ---------- Quick jump ---------- */
+html.adm-palette-lock,html.adm-palette-lock body{overflow:hidden}
+.adm-palette-layer{position:fixed;z-index:1200;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:12vh 16px 16px;box-sizing:border-box;font-family:var(--apple-font,-apple-system,BlinkMacSystemFont,sans-serif);color:var(--apple-ink,#1d1d1f)}
+.adm-palette-scrim{position:absolute;inset:0;background:rgba(0,0,0,.22);animation:v152-fade-in .18s ease both}
+.adm-palette{position:relative;display:flex;flex-direction:column;width:min(600px,100%);max-height:min(560px,76vh);border-radius:20px;background:var(--apple-surface,#fff);box-shadow:0 0 0 1px rgba(0,0,0,.05),0 24px 70px rgba(0,0,0,.25);overflow:hidden;transform-origin:50% 0;animation:v152-pop-in .22s var(--v152-ease) both}
+.adm-palette-layer.is-closing .adm-palette{animation:v152-pop-out .16s ease-in both}
+.adm-palette-layer.is-closing .adm-palette-scrim{animation:v152-fade-out .16s ease-in both}
+.adm-palette-field{display:flex;align-items:center;gap:12px;height:58px;padding:0 18px;border-bottom:1px solid rgba(0,0,0,.08);color:var(--apple-ink-2,#6e6e73)}
+.adm-palette-field .adm-nav-icon{width:20px;height:20px}
+.adm-palette-field input{flex:1;min-width:0;height:100%;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;outline:0;color:var(--apple-ink,#1d1d1f);font:inherit;font-size:18px;-webkit-appearance:none;appearance:none}
+.adm-palette-field input::-webkit-search-cancel-button{display:none}
+.adm-palette-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 8px 8px}
+.adm-palette-group{margin:0;padding:12px 12px 4px;color:var(--apple-ink-2,#6e6e73);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.adm-palette-item{display:flex;align-items:center;gap:12px;min-height:40px;padding:6px 12px;border-radius:12px;cursor:pointer}
+.adm-palette-item .adm-nav-icon{flex:none;color:var(--apple-ink-2,#6e6e73)}
+.adm-palette-item[aria-selected=true]{background:var(--apple-blue-soft,rgba(0,113,227,.1))}
+.adm-palette-item[aria-selected=true] .adm-nav-icon{color:var(--apple-blue,#0071e3)}
+.adm-palette-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:500}
+.adm-palette-item small{flex:none;max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--apple-ink-2,#6e6e73);font-size:13px}
+.adm-palette-empty{margin:0;padding:28px 12px;color:var(--apple-ink-2,#6e6e73);text-align:center}
+.adm-palette-foot{display:flex;gap:16px;padding:10px 18px;border-top:1px solid rgba(0,0,0,.08);color:var(--apple-ink-2,#6e6e73);font-size:12px}
+@media (max-width:640px){
+ .adm-palette-layer{padding:max(8px,env(safe-area-inset-top,0px)) 8px 8px}
+ .adm-palette{max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);border-radius:18px}
+ .adm-palette-field input{font-size:17px}
+ .adm-palette-item{min-height:46px}
+}
+@media (hover:none){.adm-palette-foot,.adm-palette-field kbd{display:none}}
+
+/* ---------- «Сегодня» ---------- */
+html body #app .adm-main .adm-today-head{display:flex!important;flex-wrap:wrap;align-items:flex-end!important;justify-content:space-between;gap:12px!important}
+html body #app .adm-main .adm-today-head h1{margin:0;font-size:34px!important;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+html body #app .adm-main .adm-today-head .sub{margin:6px 0 0!important;font-size:15px!important}
+html body #app .adm-main .adm-head-actions{display:flex;flex-wrap:wrap;gap:8px}
+html body #app .adm-main .adm-head-actions .btn{display:inline-flex;align-items:center;gap:6px;min-height:38px!important;padding:0 16px!important;border-radius:999px!important;font-size:14px!important;font-weight:600}
+html body #app .adm-main .adm-today-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px!important}
+html body #app .adm-main .adm-today-stats .adm-stat{display:flex!important;flex-direction:column;gap:4px;padding:16px 18px!important;border-radius:18px!important;background:var(--apple-surface,#fff);box-shadow:var(--apple-card-shadow,0 2px 12px rgba(0,0,0,.06));color:var(--apple-ink,#1d1d1f);text-decoration:none;transition:transform .12s ease-out}
+html body #app .adm-main .adm-today-stats .adm-stat span{color:var(--apple-ink-2,#6e6e73);font-size:13px}
+html body #app .adm-main .adm-today-stats .adm-stat b{font-size:28px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+html body #app .adm-main .adm-today-stats .adm-stat:first-child b{color:var(--apple-blue,#0071e3)}
+html body #app .adm-main .adm-today-stats .adm-stat:active{transform:scale(.98)}
+html body #app .adm-main .adm-today-actions{display:flex;flex-wrap:nowrap;gap:8px;padding:2px 0;overflow-x:auto;scrollbar-width:none}
+html body #app .adm-main .adm-today-actions::-webkit-scrollbar{display:none}
+html body #app .adm-main .adm-today-actions .btn{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:36px!important;padding:0 14px!important;border:0;border-radius:999px!important;background:var(--apple-surface,#fff)!important;box-shadow:var(--v152-pill-line)!important;color:var(--apple-ink,#1d1d1f)!important;font-size:14px!important;font-weight:500;white-space:nowrap}
+html body #app .adm-main .adm-today-list{display:flex;flex-direction:column;margin:-6px -8px}
+html body #app .adm-main .adm-today-row{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px;border-radius:12px;color:var(--apple-ink,#1d1d1f);text-decoration:none;transition:background-color .15s ease}
+html body #app .adm-main .adm-today-row+.adm-today-row{box-shadow:0 -1px 0 rgba(0,0,0,.06)}
+@media (hover:hover){html body #app .adm-main .adm-today-row:hover{background:var(--apple-surface-2,#f5f5f7)}}
+html body #app .adm-main .adm-today-row:focus-visible{outline:2px solid var(--apple-blue,#0071e3);outline-offset:-2px}
+html body #app .adm-main .adm-today-dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--apple-blue,#0071e3)}
+html body #app .adm-main .adm-today-dot.is-awaiting_payment{background:var(--apple-orange,#ff9500)}
+html body #app .adm-main .adm-today-dot.is-question{background:#8e8e93}
+html body #app .adm-main .adm-today-dot.is-story{background:#af52de}
+html body #app .adm-main .adm-today-text{flex:1;min-width:0;display:grid;gap:2px}
+html body #app .adm-main .adm-today-text b{font-size:15px;font-weight:600;line-height:1.3}
+html body #app .adm-main .adm-today-text small{overflow:hidden;color:var(--apple-ink-2,#6e6e73);font-size:13px;line-height:1.35;text-overflow:ellipsis;white-space:nowrap}
+html body #app .adm-main .adm-today-go{flex:none;height:32px;padding:0 14px;border-radius:999px;background:var(--control-bg,#e8e8ed);color:var(--apple-ink,#1d1d1f);font-size:13px;font-weight:500;line-height:32px}
+html body #app .adm-main .adm-today-trip img,html body #app .adm-main .adm-today-icon{flex:none;width:52px;height:38px;border-radius:8px;object-fit:cover}
+html body #app .adm-main .adm-today-icon{display:grid;place-items:center;background:var(--apple-surface-2,#f5f5f7);color:var(--apple-ink-2,#6e6e73)}
+html body #app .adm-main .adm-today-more{display:block;padding:10px 8px;color:var(--apple-link,#0066cc);font-size:14px;text-decoration:none}
+html body #app .adm-main .adm-today-note{margin:10px 0 0!important}
+html body #app .adm-main .adm-today-empty{margin:0!important;font-size:14px!important}
+@media (max-width:900px){
+ html body #app .adm-main .adm-today-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important}
+ html body #app .adm-main .adm-today-head h1{font-size:30px!important}
+ html body #app .adm-main .adm-today-actions{margin-inline:-14px;padding-inline:14px}
+ html body #app .adm-main .adm-today-go{display:none}
+ html body #app .adm-main .adm-today-row{min-height:60px}
+}
+
+@media (prefers-reduced-motion:reduce){
+ html body #app .adm .adm-side,html body #app .adm.is-more-open .adm-side{transition:none!important}
+ html body #app .adm .adm-scrim,.adm-palette,.adm-palette-scrim,.adm-palette-layer.is-closing .adm-palette,.adm-palette-layer.is-closing .adm-palette-scrim{animation:none!important}
+ #admTabbar>a:active,#admTabbar>button:active,html body #app .adm-main .adm-today-stats .adm-stat:active{transform:none!important}
+}
+
+/* ---------- Admin: guards against the shared control styles ---------- */
+html body #app .adm .sr-only,#admTabbar .sr-only{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+html body #app .adm .adm-nav{overflow:visible!important;max-height:none!important}
+html body #app .adm .adm-nav a{border:0!important;box-shadow:none!important;outline-offset:-2px}
+html body #admTabbar>a,html body #admTabbar>button{min-height:0!important;height:auto!important;width:auto!important;border:0!important;border-radius:12px!important;background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body .adm-palette-field input,html body .adm-palette-field input:focus,html body .adm-palette-field input:focus-visible{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;min-height:0!important;padding:0!important}
+@media (max-width:640px){
+ .adm-palette-item{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:1px;padding:8px 12px}
+ .adm-palette-item .adm-nav-icon{grid-row:span 2}
+ .adm-palette-item small{max-width:none}
+}
+html body #admTabbar>a,html body #admTabbar>button{color:var(--apple-ink-2,#6e6e73)!important;font-size:11px!important;font-weight:500!important;letter-spacing:0!important}
+html body #admTabbar>a[aria-current=page],html body #admTabbar>button.is-current,html body #admTabbar>button[aria-expanded=true]{color:var(--apple-blue,#0071e3)!important;font-weight:600!important}
+
+/* ==========================================================================
+   Customer tickets, build 152 — «Мои заказы» and «Мои бронирования».
+   White ticket, mint stub for excursions, blue for transfers; the stub is always on the right.
+   The look follows data-ticket-visual, which the app sets from the real order.status.
+   ========================================================================== */
+html body #app .apsua-ticket{--at-accent:#2fb37d;--at-soft:#e9f8f0;--at-stub:linear-gradient(160deg,#a6ecc4 0%,#79dcc0 100%);--at-stub-ink:#0f3b2f;--at-badge:#20a46c;--ticket-bg:var(--apple-bg,#f5f5f7);--at-line:#e6eaf0;position:relative;display:block!important;margin:0 0 28px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--apple-ink,#1d1d1f);line-height:1.4}
+html body #app .apsua-ticket[data-ticket-kind="transfers"]{--at-accent:#1a86f0;--at-soft:#eaf4ff;--at-stub:linear-gradient(160deg,#bfe0fd 0%,#8cc6f8 100%);--at-stub-ink:#0a3463;--at-badge:#0a84ff}
+html body #app .account-section .apsua-ticket,html body #app .panel .apsua-ticket{--ticket-bg:var(--apple-surface,#fff)}
+html body #app .apsua-ticket-paper{display:grid;grid-template-columns:minmax(0,1fr) clamp(124px,24%,220px);align-items:stretch;min-width:0;padding-right:10px;filter:drop-shadow(0 12px 28px rgba(20,38,60,.07)) drop-shadow(0 2px 6px rgba(20,38,60,.04))}
+
+/* Main part */
+html body #app .apsua-ticket-main{position:relative;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;gap:0;padding:22px 28px 20px 30px;border:1px solid var(--at-line);border-right:0;border-radius:22px 0 0 22px;background:#fff}
+html body #app .apsua-ticket-main::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:5px;border-radius:22px 0 0 22px;background:var(--at-accent)}
+html body #app .apsua-ticket-main::after{content:"";position:absolute;right:0;top:16px;bottom:16px;border-right:2px dashed #d7dee8}
+html body #app .apsua-ticket-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 10px;margin:0;padding:0;border:0}
+html body #app .apsua-ticket-kind{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#68758a;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+html body #app .apsua-ticket-badge{position:relative;display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:10px;background:var(--at-soft);color:var(--at-badge);overflow:visible}
+html body #app .apsua-ticket-badge img{width:100%;height:100%;border-radius:10px;object-fit:cover}
+html body #app .apsua-ticket-badge svg{width:18px;height:18px}
+html body #app .apsua-ticket-badge .order-unread-dot{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:var(--apple-orange,#ff9500)}
+html body #app .apsua-ticket-state{flex:none;max-width:100%;padding:5px 11px;border-radius:999px;background:var(--at-soft);color:#24684a;font-size:12px;font-weight:600;line-height:1.35;white-space:normal;text-align:center}
+html body #app .apsua-ticket[data-ticket-kind="transfers"] .apsua-ticket-state{color:#0b5aa8}
+html body #app .apsua-ticket:is([data-ticket-status="awaiting_payment"],[data-ticket-status="needs_info"]) .apsua-ticket-state{background:#fff4e2;color:#8a4d00}
+html body #app .apsua-ticket:is([data-ticket-status="cancelled"],[data-ticket-status="rejected"]) .apsua-ticket-state{background:#ffeeee;color:#b3261e}
+html body #app .apsua-ticket[data-ticket-status="completed"] .apsua-ticket-state{background:#f1f2f4;color:#4b5563}
+html body #app .apsua-ticket-title{margin:14px 0 4px!important;font-size:clamp(21px,2.3vw,28px)!important;font-weight:700!important;line-height:1.18!important;letter-spacing:-.03em;overflow-wrap:anywhere}
+html body #app .apsua-ticket-code{display:block;color:#6b7686;font-size:12px;font-weight:600;letter-spacing:.02em;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+html body #app .apsua-ticket-facts{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 16px!important;margin:18px 0 0!important;padding:16px 0 0!important;border:0!important;border-top:1px solid var(--at-line)!important}
+html body #app .apsua-ticket-facts>div{min-width:0}
+html body #app .apsua-ticket-facts .apsua-ticket-wide{grid-column:1/-1}
+html body #app .apsua-ticket-facts dt{margin:0 0 5px;color:#6b7686;font-size:11px!important;font-weight:500;line-height:1.3}
+html body #app .apsua-ticket-facts dd{margin:0!important;color:var(--apple-ink,#1d1d1f);font-size:14px!important;font-weight:600;line-height:1.4!important;overflow-wrap:anywhere}
+html body #app .apsua-ticket-total{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-top:auto;padding-top:16px;text-align:right}
+html body #app .apsua-ticket-total b{color:var(--apple-ink,#1d1d1f)!important;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.1;overflow-wrap:anywhere}
+html body #app .apsua-ticket-total span{color:#6b7686;font-size:12px}
+
+/* Stub: two die-cut notches, soft rings, dark ink for legibility */
+html body #app .apsua-ticket-stub{position:relative;min-width:0;box-sizing:border-box;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:14px;padding:20px 18px 18px;border-radius:0 22px 22px 0;background:radial-gradient(circle at 115% 42%,transparent 0 62px,rgba(255,255,255,.22) 63px 64px,transparent 65px 96px,rgba(255,255,255,.16) 97px 98px,transparent 99px),var(--at-stub);color:var(--at-stub-ink);transition:transform .45s var(--v152-ease)}
+html body #app .apsua-ticket-stub::before,html body #app .apsua-ticket-stub::after{content:"";position:absolute;left:-11px;width:22px;height:22px;border-radius:50%;background:var(--ticket-bg)}
+html body #app .apsua-ticket-stub::before{top:-11px}
+html body #app .apsua-ticket-stub::after{bottom:-11px}
+html body #app .apsua-ticket-stub-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+html body #app .apsua-ticket-stub-top span{flex:none;font-size:13px;font-weight:700;letter-spacing:-.01em}
+html body #app .apsua-ticket-stub-top small{min-width:0;font-size:11px;font-weight:600;line-height:1.35;text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+html body #app .apsua-ticket-stub-date{display:flex;flex-direction:column;gap:6px}
+html body #app .apsua-ticket-stub-date b{font-size:48px;font-weight:700;line-height:.9;letter-spacing:-.05em}
+html body #app .apsua-ticket-stub-date span{font-size:12px;font-weight:700;letter-spacing:.18em}
+html body #app .apsua-ticket-stub-foot{padding-top:9px;border-top:1px solid rgba(0,0,0,.14);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+/* The stamp has its own slot between the date and the footer, so it never covers the number or the date. */
+html body #app .apsua-ticket-stamp{position:relative;z-index:3;align-self:center;max-width:100%;box-sizing:border-box;margin:2px 0;padding:6px 9px;border:2.5px solid #d4202c;border-radius:6px;background:rgba(255,255,255,.85);color:#c4161f;outline:1px solid rgba(212,32,44,.45);outline-offset:3px;font-size:15px;font-weight:800;letter-spacing:.08em;line-height:1;white-space:nowrap;transform:rotate(-9deg)}
+
+/* Completed: the stub is torn off along the perforation and sits a little apart */
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{transform:translate(8px,5px) rotate(2.6deg);transform-origin:10% 50%;border-radius:2px 22px 22px 2px;clip-path:polygon(7% 0,100% 0,100% 100%,7% 100%,9.5% 96%,5% 91%,9% 86%,4.5% 81%,8.5% 76%,5% 71%,9.5% 66%,4% 61%,8% 56%,5% 51%,9.5% 46%,4.5% 41%,8.5% 36%,5% 31%,9% 26%,4% 21%,8.5% 16%,5% 11%,9% 6%,5.5% 2%)}
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub::before,html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub::after{display:none}
+/* The torn edge eats into the left side, so its content moves right to stay whole. */
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{padding-left:calc(18px + 9%)}
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-main::after{border-right-style:dotted;border-right-color:#cfd7e2}
+
+/* Under the ticket */
+html body #app .apsua-ticket>.order-card-note{margin:14px 0 0!important;color:#5f6b7a;font-size:13px!important;line-height:1.45}
+html body #app .apsua-ticket>.trip-manager-note,html body #app .apsua-ticket>.fleet-assigned-summary{margin:8px 0 0!important;font-size:13px}
+html body #app .apsua-ticket>.order-answer-form{margin-top:12px}
+html body #app .apsua-ticket>.order-card-actions{display:flex!important;flex-wrap:wrap;gap:8px!important;margin:12px 0 0!important}
+html body #app .apsua-ticket>.order-card-actions .btn{min-height:40px;white-space:normal}
+
+@media (max-width:840px){
+ html body #app .apsua-ticket-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:600px){
+ html body #app .apsua-ticket-paper{grid-template-columns:minmax(0,1fr) clamp(100px,31%,132px);padding-right:6px}
+ html body #app .apsua-ticket-main{padding:16px 12px 16px 17px;border-radius:18px 0 0 18px}
+ html body #app .apsua-ticket-main::before{border-radius:18px 0 0 18px}
+ html body #app .apsua-ticket-heading{align-items:flex-start}
+ html body #app .apsua-ticket-kind{gap:8px;font-size:10px;letter-spacing:.08em}
+ html body #app .apsua-ticket-badge{width:28px;height:28px;border-radius:9px}
+ html body #app .apsua-ticket-state{padding:4px 9px;font-size:11px}
+ html body #app .apsua-ticket-title{margin-top:12px!important;font-size:19px!important}
+ html body #app .apsua-ticket-code{font-size:11px}
+ html body #app .apsua-ticket-facts{gap:12px 10px!important;margin-top:14px!important;padding-top:13px!important}
+ html body #app .apsua-ticket-facts dd{font-size:13px!important}
+ html body #app .apsua-ticket-total b{font-size:20px}
+ html body #app .apsua-ticket-stub{padding:14px 10px 14px 12px;border-radius:0 18px 18px 0}
+ html body #app .apsua-ticket-stub-top{flex-direction:column;gap:8px}
+ html body #app .apsua-ticket-stub-top small{font-size:10px;text-align:left}
+ html body #app .apsua-ticket-stub-date b{font-size:34px}
+ html body #app .apsua-ticket-stub-date span{font-size:11px;letter-spacing:.14em}
+ html body #app .apsua-ticket-stub-foot{font-size:9px;letter-spacing:.08em}
+ html body #app .apsua-ticket-stamp{padding:4px 5px;border-width:2px;outline-offset:2px;font-size:10.5px;letter-spacing:.02em}
+ html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{padding-left:calc(12px + 9%)}
+ html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{transform:translate(5px,4px) rotate(2deg)}
+}
+@media (max-width:360px){
+ html body #app .apsua-ticket-paper{grid-template-columns:minmax(0,1fr) 96px}
+ html body #app .apsua-ticket-main{padding-left:14px;padding-right:9px}
+ html body #app .apsua-ticket-facts{grid-template-columns:minmax(0,1fr)}
+ html body #app .apsua-ticket-stub{padding:13px 8px 13px 11px}
+ html body #app .apsua-ticket-stamp{font-size:9.5px;letter-spacing:0;padding:3px 4px}
+}
+@media (prefers-reduced-motion:reduce){html body #app .apsua-ticket-stub{transition:none}}
+@media print{
+ html body #app .apsua-ticket{break-inside:avoid}
+ html body #app .apsua-ticket-paper{filter:none}
+ html body #app .apsua-ticket-main{border-right:1px dashed #9aa4b2}
+ html body #app .apsua-ticket-stub{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ html body #app .apsua-ticket>.order-card-actions{display:none!important}
+}

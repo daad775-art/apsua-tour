@@ -11,7 +11,7 @@ assert.ok(shell.includes('<html lang=\\"ru\\" data-theme=\\"light\\">'),'Light t
 assert.ok(shell.indexOf("localStorage.removeItem('apsua-color-mode')")<shell.indexOf('user-theme.css'),'A stored dark choice is cleared before styles load');
 assert.ok(shell.includes('id=\\"menuToggle\\"'),'The header slot is used by the mobile menu button');
 assert.equal((shell.match(/user-theme\.css/g)||[]).length,1,'The main stylesheet is loaded once');
-for(const file of ['public/user-theme.css','public/v134.css','public/apple-theme.css','public/v146.css'])assert.ok(!/data-theme=["']?dark|prefers-color-scheme:\s*dark/.test(read(file)),file+' has no dark rules');
+for(const file of ['public/user-theme.css','public/v134.css','public/apple-theme.css','public/v146.css','public/v152.css'])assert.ok(!/data-theme=["']?dark|prefers-color-scheme:\s*dark/.test(read(file)),file+' has no dark rules');
 const css=read('public/user-theme.css');for(const selector of ['.price-values>label','.map-side','.theatre-event','.service-card','.tourist-stats>div','.admin-save-bar','.transfer-band>.copy'])assert.ok(css.includes(selector),selector+' keeps its light styles');
 assert.ok(css.includes('html body :is(button,.btn,.ibtn,.chip,.circle'),'Shared control styles survive the cleanup');
 const app=read('public/user-app.js');

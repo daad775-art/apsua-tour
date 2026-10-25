@@ -1,0 +1,142 @@
+# Pull request validation for «Апсуа Тур».
+#
+# Runs every mandatory check from START-HERE.md, in the same order, on a clean checkout.
+# It only checks the code: no deployment, no Sites/Cloudflare commands, no secrets,
+# no D1/R2 access and no writes to the repository (read-only token, credentials not kept).
+#
+# Each test is its own step so a failure shows the exact test name and output. Once
+# dependencies are installed, every test still runs even if an earlier one failed, and
+# the job fails if any check fails. deployment-shell inspects the build output, so it
+# runs only when the build succeeded (a failed build already fails the job).
+
+name: PR validation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  start-here-checks:
+    name: START-HERE checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Same non-secret tool settings the project scripts set for local builds.
+      CLOUDFLARE_CF_FETCH_ENABLED: "false"
+      WRANGLER_SEND_METRICS: "false"
+      WRANGLER_WRITE_LOGS: "false"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: npm
+
+      - name: npm ci
+        id: install
+        run: npm ci
+
+      - name: npm run build
+        id: build
+        run: npm run build
+
+      - name: node tests/app-icons.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/app-icons.mjs
+
+      - name: node tests/rail-motion.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/rail-motion.mjs
+
+      - name: node tests/telegram-login-ui.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/telegram-login-ui.mjs
+
+      - name: node tests/telegram-app.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/telegram-app.mjs
+
+      - name: node tests/telegram-oidc.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/telegram-oidc.mjs
+
+      - name: node tests/telegram-key-cache.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/telegram-key-cache.mjs
+
+      - name: node tests/telegram-web.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/telegram-web.mjs
+
+      - name: node tests/account-ui.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/account-ui.mjs
+
+      - name: node tests/account-moderation.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/account-moderation.mjs
+
+      - name: node tests/order-notify.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/order-notify.mjs
+
+      - name: node tests/theme.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/theme.mjs
+
+      - name: node tests/control-appearance.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/control-appearance.mjs
+
+      - name: node tests/live-updates.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/live-updates.mjs
+
+      - name: node tests/visual-editor.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/visual-editor.mjs
+
+      - name: node tests/intro.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/intro.mjs
+
+      - name: node tests/push-defaults.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/push-defaults.mjs
+
+      - name: node tests/web-push.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/web-push.mjs
+
+      - name: node tests/push-worker.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/push-worker.mjs
+
+      - name: node tests/push-runtime.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/push-runtime.mjs
+
+      - name: node tests/session-reminders.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/session-reminders.mjs
+
+      - name: npx tsc --noEmit
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+
+      - name: node tests/deployment-shell.mjs
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node tests/deployment-shell.mjs
