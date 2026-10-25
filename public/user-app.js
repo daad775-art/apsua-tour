@@ -3270,6 +3270,10 @@ SITE_CHANGELOG.push({version:'19.9',date:'2026-10-25',author:'Руслан',titl
 SITE_CHANGELOG.push({version:'20.0',date:'2026-10-25',author:'Руслан',title:'Предложение установить приложение и включить уведомления',description:'При первом заходе с телефона сразу предлагается установить приложение и перечислено, что оно даёт. «Позже» скрывает предложение только до следующего захода. В установленном приложении предлагается включить уведомления, пока они не будут разрешены; если они запрещены в системе, показано, где их включить.',type:'feature',priority:'important'});
 SITE_CHANGELOG.push({version:'20.1',date:'2026-10-25',author:'Руслан',title:'Аватар Telegram в шапке и единый вход',description:'После входа фотография из Telegram показывается не только в профиле, но и в кнопке аккаунта в шапке. На телефоне и компьютере используется единый официальный безопасный вход Telegram без отдельного перехода в Telegram Web.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'20.2',date:'2026-10-25',author:'Руслан',title:'Вход через бота Telegram без номера и кода',description:'На телефоне кнопка «Войти через Telegram» сразу открывает чат с ботом «Апсуа Тур»: нажмите «Начать», затем «Авторизоваться» — и вход на сайте завершится сам. На компьютере показан QR-код для камеры телефона и кнопки «Открыть Telegram» и «Telegram Web». Вход по номеру телефона через окно Telegram остался запасным. Фото профиля из Telegram сохраняется при входе через бота.',type:'fix',priority:'important'});
+SITE_CHANGELOG.push({version:'20.3',date:'2026-10-26',author:'Руслан',title:'Каталог на телефоне начинается с категорий',description:'На телефоне под заголовком «Найди своё путешествие» сразу идут категории и фильтры: карточка поиска, кнопки «Что доступно завтра» и «Подберите мне экскурсию» и строка с количеством маршрутов убраны. На компьютере всё по-прежнему.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'20.4',date:'2026-10-26',author:'Руслан',title:'Лёгкие фото',description:'Встроенные фото сайта стали почти вдвое легче без видимой потери качества. Новые фото из админки сохраняются в лёгком формате и получают маленькую копию для карточек; большое фото открывается только в галерее. Ранее загруженные фото сжимаются автоматически при следующем сохранении в админке, оригиналы остаются.',type:'improvement',priority:'important'});
+SITE_CHANGELOG.push({version:'20.5',date:'2026-10-26',author:'Руслан',title:'«Назад» без перезагрузки',description:'Главная, каталог, дневник, отзывы и «Полезное» при возврате назад показываются мгновенно, на том же месте и с теми же положениями лент. Страница обновляется сама, только если изменились данные сайта, вход или избранное, либо прошло больше 10 минут. Страница, которую телефон выгрузил в фоне, открывается на прежнем месте.',type:'improvement',priority:'important'});
+SITE_CHANGELOG.push({version:'20.6',date:'2026-10-26',author:'Руслан',title:'Сезонный баннер на главной',description:'После «Чаще всего бронируют» появился яркий баннер без текста — сейчас «Мандариновый сезон». Нажатие открывает экскурсию, выбранную в админке («Главный экран» → «Сезонный баннер»); там же можно заменить фото или скрыть баннер.',type:'feature',priority:'normal'});
 SITE_CHANGELOG.push({version:'17.8',date:'2026-10-25',author:'Руслан',title:'Официальные соцсети и регулярные напоминания',description:'В подвале сразу доступны официальные страницы Апсуа Тур во ВКонтакте и Instagram. Сервер проверяет поездки каждые 15 минут, чтобы напоминание накануне не зависело от посещений сайта.',type:'improvement',priority:'normal'});
 
 /* ==========================================================================
@@ -3534,6 +3538,110 @@ document.addEventListener('click',e=>{const alt=e.target.closest?.('[data-v152-t
 
 /* A desktop QR wait stops when the sign-in window is closed. */
 const closeTelegramSigninBeforeV152=closeTelegramSignin;closeTelegramSignin=function(...a){const r=closeTelegramSigninBeforeV152.apply(this,a);if(telegramAuthAttempt?.mode==='web'&&!serverIdentity&&!$('[data-tg-login]'))endTelegramAttempt();return r};
+
+/* ==========================================================================
+   Build 152 · lighter photos. New uploads are re-encoded (WebP when the browser can,
+   otherwise JPEG) and get a small copy for cards. Photos uploaded earlier get light
+   copies on the next admin save. Originals stay in storage; C.mediaLight maps an
+   uploaded photo to its light copies: {"/api/media/<id>": {t: card copy, f: full copy}}.
+   ========================================================================== */
+const V152_MEDIA=/^\/api\/media\/[a-f0-9-]{36}$/,V152_THUMB=1000,V152_FULL=1800;
+let v152WebP=null;
+function v152CanWebP(){if(v152WebP!==null)return v152WebP;try{const c=document.createElement('canvas');c.width=c.height=2;v152WebP=c.toDataURL('image/webp').startsWith('data:image/webp')}catch{v152WebP=false}return v152WebP}
+// Halving steps keep detail when a large photo is reduced a lot.
+function v152Draw(source,width,height,opaque){let w=source.width,h=source.height,img=source;
+ while(w/2>=width*1.6&&h/2>=height*1.6){const c=document.createElement('canvas');c.width=Math.round(w/2);c.height=Math.round(h/2);const g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(img,0,0,c.width,c.height);img=c;w=c.width;h=c.height}
+ const c=document.createElement('canvas');c.width=width;c.height=height;const g=c.getContext('2d');g.imageSmoothingQuality='high';if(opaque){g.fillStyle='#fff';g.fillRect(0,0,width,height)}g.drawImage(img,0,0,width,height);return c}
+function v152Encode(canvas,keepAlpha){if(keepAlpha)return canvas.toDataURL('image/png');return v152CanWebP()?canvas.toDataURL('image/webp',.82):canvas.toDataURL('image/jpeg',.84)}
+function v152Resize(image,max,keepAlpha=false){const k=Math.min(1,max/Math.max(image.width,image.height)),w=Math.max(1,Math.round(image.width*k)),h=Math.max(1,Math.round(image.height*k));return v152Encode(v152Draw(image,w,h,!keepAlpha),keepAlpha)}
+// Same contract as before (callback with a data URL or ''), with better scaling and WebP.
+readPhoto=function(file,max,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{try{const alpha=/png|webp|svg/.test(file.type)&&max<=800;cb(v152Resize(im,max,alpha))}catch{cb('')}};im.onerror=()=>cb('');im.src=r.result};r.onerror=()=>cb('');r.readAsDataURL(file)};
+async function v152Upload(dataUrl){const blob=await(await fetch(dataUrl)).blob();const result=await api('/api/media',{method:'POST',headers:{'Content-Type':blob.type},body:blob});return result.url}
+function v152MediaUrl(value){const v=String(value||'');if(V152_MEDIA.test(v))return v;if(v.startsWith('img:')){const u=mediaMapping?.[v.slice(4)]||IMG[v.slice(4)];return V152_MEDIA.test(String(u||''))?u:''}return ''}
+function v152Light(){if(!C.mediaLight||typeof C.mediaLight!=='object'||Array.isArray(C.mediaLight))C.mediaLight={};return C.mediaLight}
+// New uploads: the stored file is already light; a card copy is added next to it.
+const storePhotoBeforeV152=storePhoto;storePhoto=async function(file,max){const value=await storePhotoBeforeV152(file,max);try{const url=v152MediaUrl(value);if(url&&max>V152_THUMB&&!serverEditor){const image=await v152LoadImage(url);if(image&&Math.max(image.width,image.height)>V152_THUMB*1.15){const thumb=await v152Upload(v152Resize(image,V152_THUMB));v152Light()[url]={...(v152Light()[url]||{}),t:thumb}}}}catch{}return value};
+function v152LoadImage(url){return new Promise(resolve=>{const im=new Image();im.decoding='async';im.onload=()=>resolve(im);im.onerror=()=>resolve(null);im.src=url})}
+function v152CollectMedia(value,out=new Set(),depth=0){if(depth>8||value==null)return out;if(typeof value==='string'){const u=v152MediaUrl(value);if(u)out.add(u);return out}if(Array.isArray(value)){for(const x of value)v152CollectMedia(x,out,depth+1);return out}if(typeof value==='object')for(const [k,x] of Object.entries(value)){if(k==='mediaLight'||k==='visualEditor')continue;v152CollectMedia(x,out,depth+1)}return out}
+// Earlier uploads: light copies are made during a save started by the admin (never on their own).
+let v152CompressBusy=false;
+async function v152CompressSaved(limit=24){if(v152CompressBusy||serverEditor||typeof document==='undefined'||typeof fetch!=='function')return 0;v152CompressBusy=true;let uploads=0,done=0;
+ try{const known=C.mediaLight&&typeof C.mediaLight==='object'?C.mediaLight:{},todo=[...v152CollectMedia(C)].filter(u=>!known[u]&&!Object.values(known).some(x=>x&&(x.t===u||x.f===u)));if(!todo.length)return 0;const light=v152Light();
+  for(const url of todo){if(uploads>=limit)break;admStatus?.(`Сжимаем фото: ${done+1} из ${Math.min(todo.length,Math.ceil(limit/2))}…`);
+   try{const response=await fetch(url);if(!response.ok)continue;const blob=await response.blob();if(!blob.type.startsWith('image/')||blob.type==='image/svg+xml'){light[url]={skip:1};continue}
+    const image=await v152LoadImage(URL.createObjectURL(blob));if(!image){light[url]={skip:1};continue}const big=Math.max(image.width,image.height),entry={};
+    if(big>V152_THUMB*1.15){entry.t=await v152Upload(v152Resize(image,V152_THUMB));uploads++}
+    const fullData=v152Resize(image,V152_FULL),fullBytes=Math.round((fullData.length-fullData.indexOf(',')-1)*3/4);
+    if(fullBytes<blob.size*.8){entry.f=await v152Upload(fullData);uploads++}
+    light[url]=Object.keys(entry).length?entry:{skip:1};URL.revokeObjectURL(image.src);done++}catch(err){if(/лимит/i.test(err?.message||''))break}}
+ }finally{v152CompressBusy=false}return done}
+const saveAdminChangesBeforeV152=saveAdminChanges;saveAdminChanges=async function(...a){if(!adminSaving&&adminDirty&&serverAdmin&&!serverEditor){try{await v152CompressSaved()}catch{}}return saveAdminChangesBeforeV152.apply(this,a)};
+// Show the light copies: card copy in lists and rails, full copy in banners and galleries.
+const V152_FULL_ZONE='.v4-hero,.tour-gallery,.gallery,[data-gallery-main],.v152-story-media,.photo-lightbox,.lightbox,.adm,.v152-season';
+const V152_BUILTIN_LIGHT={"assets/lake2.jpg":{t:"assets/lake2-card.webp"},"assets/ritsa-new.jpg":{t:"assets/ritsa-new-card.webp"},"assets/ritsa-wide.jpg":{t:"assets/ritsa-wide-card.webp"}};
+function v152UseLight(root=app){const light={...V152_BUILTIN_LIGHT,...(C?.mediaLight&&typeof C.mediaLight==='object'?C.mediaLight:{})};if(!root||typeof root.querySelectorAll!=='function')return;
+ for(const img of root.querySelectorAll('img')){const original=img.dataset.v152Src||img.getAttribute('src')||'';const entry=light&&light[original];if(!entry||entry.skip)continue;const full=!!img.closest(V152_FULL_ZONE),target=full?(entry.f||original):(entry.t||entry.f||original);if(target!==img.getAttribute('src')){img.dataset.v152Src=original;img.setAttribute('src',target)}if(!img.hasAttribute('decoding'))img.decoding='async'}}
+const lightboxBeforeV152=lightbox;lightbox=function(pics,i){const light=C?.mediaLight||{};return lightboxBeforeV152((pics||[]).map(p=>light[p]?.f||p),i)};
+if(typeof MutationObserver!=='undefined'&&typeof app!=='undefined'&&app)new MutationObserver(()=>v152UseLight(app)).observe(app,{childList:true,subtree:true});
+// Swap to light copies in the same task as the render, so the heavy originals are never requested.
+const v152LightWrap=fn=>function(...a){const r=fn.apply(this,a);try{v152UseLight(app)}catch{}return r};
+tourView=v152LightWrap(tourView);catalogView=v152LightWrap(catalogView);renderCards=v152LightWrap(renderCards);diaryView=v152LightWrap(diaryView);reviewsView=v152LightWrap(reviewsView);usefulView=v152LightWrap(usefulView);fleetPage=v152LightWrap(fleetPage);
+
+/* ==========================================================================
+   Build 152 · seasonal banner: a picture without text that opens the excursion chosen
+   in the admin. Off, photo and excursion are edited in «Главный экран» and saved manually.
+   ========================================================================== */
+const V152_SEASON_DEFAULT={show:true,tour:'',photo:''};
+function v152Season(){const s=C.seasonBanner&&typeof C.seasonBanner==='object'?C.seasonBanner:V152_SEASON_DEFAULT;return {show:s.show!==false,tour:String(s.tour||''),photo:String(s.photo||'')}}
+function v152SeasonHTML(){const s=v152Season();if(!s.show)return '';const tour=s.tour&&C.tours.find(t=>t.id===s.tour&&tourPublic(t));const href=tour?'#/excursions/'+encodeURIComponent(tour.id):'#/excursions',label=tour?`Сезонное предложение: ${tour.title}`:'Сезонное предложение: все экскурсии';
+ const custom=s.photo?src(s.photo):'';const img=custom?`<img src="${esc(custom)}" alt="" loading="lazy" decoding="async">`:`<img src="assets/season-mandarin-1200.webp" srcset="assets/season-mandarin-1200.webp 1200w, assets/season-mandarin.webp 2400w" sizes="(max-width: 900px) 100vw, 1200px" width="2400" height="1200" alt="" loading="lazy" decoding="async">`;
+ return `<section class="v4-sec v152-season-sec"><a class="v152-season" href="${href}" aria-label="${esc(label)}">${img}</a></section>`}
+function v152PlaceSeason(){const wrap=$('.v4-home>.wrap');if(!wrap||typeof wrap.querySelector!=='function')return;wrap.querySelector('.v152-season-sec')?.remove();const html=v152SeasonHTML();if(!html)return;const pop=$('#v4Pop')?.closest('.v4-sec'),places=$('#v4Places')?.closest('.v4-sec');
+ if(pop)pop.insertAdjacentHTML('afterend',html);else if(places)places.insertAdjacentHTML('beforebegin',html);else wrap.insertAdjacentHTML('afterbegin',html)}
+const homeBeforeSeason=homeView;homeView=function(...a){const r=homeBeforeSeason.apply(this,a);v152PlaceSeason();v152UseLight(app);return r};
+const heroAdminBeforeSeason=ADM_RENDER.hero;ADM_RENDER.hero=function(...a){const r=heroAdminBeforeSeason.apply(this,a);const main=$('#admMain');if(!main)return r;C.seasonBanner={...V152_SEASON_DEFAULT,...(C.seasonBanner&&typeof C.seasonBanner==='object'?C.seasonBanner:{})};
+ // Filling in the defaults is not an edit: the saved baseline gets the same values.
+ if(adminBaseline&&JSON.stringify(adminBaseline.seasonBanner)!==JSON.stringify(C.seasonBanner)&&!(adminBaseline.seasonBanner&&typeof adminBaseline.seasonBanner==='object'))adminBaseline.seasonBanner=clone(C.seasonBanner);
+ const tours=[['','Все экскурсии (каталог)'],...C.tours.filter(t=>tourPublic(t)).map(t=>[t.id,t.title])];
+ main.insertAdjacentHTML('beforeend',card('Сезонный баннер',`<p class="sub">Картинка без текста на главной после «Чаще всего бронируют». Нажатие открывает выбранную экскурсию. Лучше горизонтальное фото 2:1 от 1600 px. Если своё фото не загружено, показывается баннер «Мандариновый сезон».</p>${F.bool('seasonBanner.show','Показывать баннер')}${F.select('seasonBanner.tour','Куда ведёт нажатие',tours)}${F.photo('seasonBanner.photo','Своё фото баннера',['sea',0])}<div class="v152-season-preview"><span class="hint">Сейчас на главной:</span><img src="${esc(C.seasonBanner.photo?src(C.seasonBanner.photo):'assets/season-mandarin-1200.webp')}" alt=""></div>`));
+ if(typeof setupCompactAdmin==='function')setupCompactAdmin();if(typeof setupAdminSave==='function')setupAdminSave();return r};
+
+/* ==========================================================================
+   Build 152 · back without reloading. List pages are kept when you leave them; going back
+   shows the same page instantly, at the same place, with rails where they were. A page is
+   rebuilt when the site data, the signed-in user or favourites changed, or after 10 minutes.
+   ========================================================================== */
+const V152_KEEP=/^#\/(?:|excursions(?:\?[^/]*)?|favorites|diary|reviews|useful|fleet)$/,V152_KEEP_MS=600000,v152Kept=new Map();
+function v152PageSig(){let lists='';try{lists=['diary','reviews','bookings','transfers'].map(k=>Array.isArray(serverLists?.[k])?serverLists[k].length:0).join('.')}catch{}return [contentRevision,serverIdentity?.id||'',[...(favs||[])].sort().join(','),lists,typeof myOrdersCache==='object'&&myOrdersCache?myOrdersCache.length:''].join('|')}
+let v152ShownHash=typeof location==='object'?location.hash||'#/':'#/',v152ShownCurrent='',v152Traverse=false,v152KeepObserver=null;
+// The router replaces the page; the removed page is kept as it was (with its listeners, scroll of rails and loaded photos).
+if(typeof MutationObserver!=='undefined'&&typeof app!=='undefined'&&app){v152KeepObserver=new MutationObserver(records=>{const hash=location.hash||'#/';if(hash===v152ShownHash)return;
+ v152Traverse=typeof history==='object'&&!!history?.state?.apsuaIndex;const first=records.find(r=>r.removedNodes.length);const old=v152ShownHash;
+ if(first&&V152_KEEP.test(old)&&!document.body.classList.contains('is-admin')&&!/^#\/admin/.test(old)){v152Kept.delete(old);v152Kept.set(old,{nodes:[...first.removedNodes],y:v152LeaveY,at:Date.now(),sig:v152PageSig(),current:v152ShownCurrent});while(v152Kept.size>6)v152Kept.delete(v152Kept.keys().next().value)}});v152KeepObserver.observe(app,{childList:true})}
+let v152LeaveY=0;if(typeof window==='object')window.addEventListener('scroll',()=>{v152LeaveY=Math.round(window.scrollY||0)},{passive:true});
+// Removing nodes from the page resets their horizontal scroll: remember rails' positions as they move.
+const v152Scrolled=new Set();if(typeof document==='object'&&document.addEventListener)document.addEventListener('scroll',e=>{const n=e.target;if(n&&n.nodeType===1&&app?.contains(n)){n._v152x=n.scrollLeft;n._v152y=n.scrollTop;v152Scrolled.add(n)}},{capture:true,passive:true});
+function v152RestoreInner(nodes){for(const n of [...v152Scrolled]){if(!n.isConnected){if(!nodes.some(root=>root.contains?.(n)))v152Scrolled.delete(n);continue}if(n._v152x)n.scrollLeft=n._v152x;if(n._v152y)n.scrollTop=n._v152y}}
+// Filters change the address without a page change; the kept page must be filed under the current address.
+if(typeof history==='object'&&history?.replaceState){const replaceBeforeV152=history.replaceState.bind(history);history.replaceState=function(...a){const before=location.hash,index=history.state?.apsuaIndex;if(index&&(a[0]==null||typeof a[0]==='object'&&!Array.isArray(a[0])&&!a[0].apsuaIndex))a[0]={...(a[0]||{}),apsuaIndex:index};const r=replaceBeforeV152(...a);if(a.length>2&&a[2]!=null&&before===v152ShownHash&&location.hash!==before)v152ShownHash=location.hash||'#/';return r}}
+// After the router and the scroll bookkeeping: on back/forward show the kept page before anything is painted.
+let v152Restored=null;
+window.addEventListener('hashchange',()=>{const hash=location.hash||'#/',kept=v152Kept.get(hash);v152Restored=null;
+ const done=()=>{v152ShownHash=hash;v152ShownCurrent=current;v152LeaveY=Math.round(window.scrollY||0)};
+ if(!kept){done();return}v152Kept.delete(hash);
+ if(!v152Traverse||Date.now()-kept.at>V152_KEEP_MS||kept.sig!==v152PageSig()||kept.current!==current){done();return}
+ app.replaceChildren(...kept.nodes);v152KeepObserver?.takeRecords();v152RestoreInner(kept.nodes);v152Restored={hash,y:kept.y};done();v152LeaveY=kept.y;
+ app.getAnimations?.().forEach(a=>{if(a.id==='v17-page')a.cancel()});window.scrollTo({top:kept.y,behavior:'instant'});
+ requestAnimationFrame(()=>{if(v152Restored?.hash===hash)window.scrollTo({top:kept.y,behavior:'instant'})});
+ setTimeout(()=>{if(v152Restored?.hash===hash&&Math.abs((window.scrollY||0)-kept.y)>2)window.scrollTo({top:kept.y,behavior:'instant'})},200)});
+window.addEventListener('site-ready',()=>{v152ShownHash=location.hash||'#/';v152ShownCurrent=current});
+// A tab the phone unloaded in the background reopens at the same place.
+(()=>{let nav='';try{nav=performance.getEntriesByType('navigation')[0]?.type||''}catch{}if(!(document.wasDiscarded||nav==='reload'||nav==='back_forward'))return;const y=v17Scroll.get(String(v17Index));if(!y)return;
+ // Late redraws during start-up may jump to the top; hold the place until the visitor scrolls or 2 s pass.
+ let until=0,touched=false;const stop=()=>{touched=true};for(const t of ['pointerdown','touchstart','wheel','keydown'])window.addEventListener(t,stop,{once:true,passive:true});
+ const hold=()=>{if(touched||Date.now()>until){window.removeEventListener('scroll',guard);return}if(Math.abs((window.scrollY||0)-y)>2&&document.documentElement.scrollHeight>=y+innerHeight*.5)window.scrollTo({top:y,behavior:'instant'})};
+ const guard=()=>requestAnimationFrame(hold);
+ window.addEventListener('site-ready',()=>{until=Date.now()+2000;window.addEventListener('scroll',guard,{passive:true});requestAnimationFrame(hold);setTimeout(hold,300);setTimeout(hold,900)},{once:true})})();
 
 hostedBoot();
 })();

@@ -884,3 +884,29 @@ html body .v152-tg .v152-tg-alt.is-main{color:#fff!important}
 html body .v152-tg .v152-tg-alt.is-main svg{color:#fff}
 html body .v152-tg-qr{grid-template-columns:repeat(auto-fit,minmax(184px,1fr))!important}
 html body .v152-tg-qr-box{justify-self:center}
+
+/* ==========================================================================
+   Build 152 · catalog on phones: title, then categories and filters
+   ========================================================================== */
+@media (max-width:767px){
+ html body #app .wrap:has(>#search2)>.comfort-actions,html body #app .wrap:has(>#search2)>#search2{display:none!important}
+ html body #app .wrap:has(>#search2) #resCount{display:none!important}
+ html body #app .wrap:has(>#search2) .section-head:has(#resCount):not(:has(#resetPlace:not([hidden]))){display:none!important}
+ html body #app .wrap:has(>#search2) .section-head:has(#resCount){justify-content:flex-end!important}
+ html body #app .wrap:has(>#search2)>.page-head{margin-bottom:14px!important}
+}
+
+/* ==========================================================================
+   Build 152 · seasonal banner (picture only, opens an excursion)
+   ========================================================================== */
+html body #app .v152-season-sec{margin-top:clamp(8px,1.5vw,16px)!important}
+html body #app .v152-season{position:relative;display:block;overflow:hidden;aspect-ratio:2/1;border-radius:clamp(20px,2.4vw,28px);background:#0b8f86;box-shadow:0 1px 2px rgba(0,0,0,.06),0 14px 34px rgba(4,67,79,.22);transform:translateZ(0);transition:transform .25s var(--v152-ease),box-shadow .25s var(--v152-ease)}
+html body #app .v152-season img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%;transition:transform .6s var(--v152-ease)}
+html body #app .v152-season:focus-visible{outline:3px solid var(--apple-blue,#0071e3);outline-offset:3px}
+@media (hover:hover){html body #app .v152-season:hover{box-shadow:0 1px 2px rgba(0,0,0,.06),0 20px 44px rgba(4,67,79,.28)}html body #app .v152-season:hover img{transform:scale(1.025)}}
+html body #app .v152-season:active{transform:scale(.985)}
+@media (min-width:901px){html body #app .v152-season{aspect-ratio:3/1}}
+@media (prefers-reduced-motion:reduce){html body #app .v152-season,html body #app .v152-season img{transition:none}html body #app .v152-season:hover img{transform:none}}
+html body .v152-season-preview{display:grid;gap:6px;margin-top:12px}
+html body .v152-season-preview img{width:100%;max-width:420px;aspect-ratio:2/1;object-fit:cover;border-radius:16px}
+@media (min-width:901px){html body #app .v152-season img{object-position:60% 64%}}
