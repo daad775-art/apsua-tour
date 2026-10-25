@@ -844,7 +844,9 @@ html body #app .v152-story-track .v152-story-photo{height:min(68vh,620px)}
 .v152-push-nudge .sub{font-size:14px;line-height:1.4}
 
 /* 20.1 — Telegram profile photo in the compact header account control. */
-#accBtn.has-avatar{padding:4px!important;overflow:hidden}
+#accBtn.has-avatar{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:3px!important;overflow:hidden;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important}
 #accBtn.has-avatar>.icon{display:none!important}
-#accBtn .header-account-avatar{display:block;width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:center;background:#e9e9ee;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
-@media(max-width:700px){#accBtn .header-account-avatar{width:38px;height:38px}}
+#accBtn .header-account-avatar{display:block;width:38px;height:38px;min-width:38px;max-width:none;aspect-ratio:1;border:0;border-radius:50%;clip-path:circle(50%);object-fit:cover;object-position:center;background:transparent;box-shadow:none;flex:0 0 38px}
+
+.staff-search{max-width:460px}.staff-list{display:grid;margin-top:14px}.staff-row{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(190px,240px);gap:14px;align-items:center;padding:14px 2px;border-top:1px solid var(--line,#e5e5e8)}.staff-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:#eeeef2;display:grid;place-items:center;font-weight:800}.staff-avatar img{width:100%;height:100%;object-fit:cover}.staff-person,.staff-role{display:grid;gap:2px;min-width:0}.staff-person span,.staff-person small,.staff-role small{color:var(--muted,#777);overflow:hidden;text-overflow:ellipsis}.staff-role small{min-height:1.2em}.staff-observer .order-manager-editor,.staff-observer .order-clarification-editor{opacity:.65}
+@media(max-width:600px){.staff-row{grid-template-columns:44px minmax(0,1fr);gap:10px}.staff-role{grid-column:1/-1}.staff-role .input{width:100%}}
