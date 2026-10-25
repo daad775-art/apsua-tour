@@ -46,4 +46,17 @@ console.log('PASS: modal sign-in, same-page/scroll/form preservation, account re
 
 const desktop=await setup({desktop:true});assert.equal(desktop.slot.innerHTML.includes('data-telegram-web'),false);assert.equal(desktop.button.textContent,'Войти через Telegram');desktop.button.onclick();await tick();assert.deepEqual(Array.from(desktop.options().scope),['profile']);assert.equal(desktop.opened.length,0);assert.ok(desktop.requests.some(r=>r.path==='/api/telegram-oidc/start'));assert.ok(desktop.requests.some(r=>r.path==='/api/telegram-oidc/finish'));assert.equal(desktop.requests.some(r=>r.path==='/api/telegram-login/start'),false);assert.equal(desktop.context.serverIdentity.id,'tg:12345');
 const mobile=await setup({desktop:false});assert.equal(mobile.slot.innerHTML.includes('data-telegram-web'),false);assert.equal(mobile.requests.some(r=>r.path==='/api/telegram-login/start'),false);assert.ok(mobile.requests.some(r=>r.path==='/api/telegram-oidc/start'));
-console.log('PASS: desktop and mobile use the same official Telegram OIDC popup, finish on the original page without reload, and never start the legacy Telegram Web flow.');
+console.log('PASS: the official Telegram OIDC window (now the phone-number fallback) behaves the same on desktop and mobile and finishes on the original page without reload.');
+
+// Build 152: sign-in through the bot. Only the site's own t.me / Telegram Web links are accepted, and the QR code is valid.
+{
+ const layer=full.slice(full.indexOf('const V152_QR=(()=>{'),full.indexOf('telegramAuthMessage=function'));
+ const ctx={TextEncoder,URL,Error,Math,Array,String,Number,window:{}};vm.createContext(ctx);vm.runInContext(layer+';globalThis.out={V152_QR,v152TelegramLinks};',ctx);const {V152_QR,v152TelegramLinks}=ctx.out;
+ const id='a1b2c3d4e5f60718293a4b5c6d7e8f90',good={url:'https://t.me/ApsuaturBot?start=login_'+id,webUrl:'https://web.telegram.org/k/#?tgaddr='+encodeURIComponent('tg://resolve?domain=ApsuaturBot&start=login_'+id)};
+ const links=v152TelegramLinks(good);assert.equal(links.url,good.url);assert.equal(links.app,'tg://resolve?domain=ApsuaturBot&start=login_'+id);assert.equal(links.web,good.webUrl);
+ for(const url of ['https://evil.example/ApsuaturBot?start=login_'+id,'https://t.me/ApsuaturBot?start=other','https://t.me/a?start=login_'+id,'javascript:alert(1)','tg://resolve?domain=x'])assert.throws(()=>v152TelegramLinks({url,webUrl:good.webUrl}));
+ assert.equal(v152TelegramLinks({url:good.url,webUrl:'https://evil.example/k/'}).web,'','foreign Telegram Web link is dropped');
+ const m=V152_QR.encode(good.url);assert.equal(m.length,37,'version 5 for the sign-in link');for(const [x,y] of [[0,0],[30,0],[0,30]]){for(let i=0;i<7;i++){assert.equal(m[y][x+i],true);assert.equal(m[y+6][x+i],true);assert.equal(m[y+i][x],true);assert.equal(m[y+i][x+6],true)}assert.equal(m[y+1][x+1],false);assert.equal(m[y+3][x+3],true)}
+ assert.match(V152_QR.svg(good.url),/^<svg class="v152-qr-svg"/);assert.throws(()=>V152_QR.encode('x'.repeat(400)));
+ console.log('PASS: bot sign-in accepts only the site bot links (t.me, tg://resolve, Telegram Web) and draws a valid QR code for them.');
+}

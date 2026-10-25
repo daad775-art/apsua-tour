@@ -62,5 +62,12 @@ assert.equal(offlinePrompt.status,200);assert.equal(offlinePrompt.data.method,'s
 const offlineApprove=await webhook({callback_query:{...callback,data:'login_yes_'+offlineId}});
 assert.equal(offlineApprove.status,200);assert.equal(offlineApprove.data.method,'answerCallbackQuery');
 assert.equal((await call('/api/telegram-login/finish','POST',{cookie:offline.cookie})).status,200);
+// A sign-in through the bot carries no photo: the Telegram photo saved by an earlier official sign-in stays.
+sqlite.prepare('UPDATE records SET body=? WHERE id=?').run(JSON.stringify({username:'example',photo:'https://t.me/i/userpic/320/example.jpg',name:'Старое имя'}),'tg-identity:tg:'+user.id);
+const keep=await start(),keepId=new URL(keep.data.url).searchParams.get('start').slice(6);
+await webhook({message:{...message,text:'/start login_'+keepId}});await webhook({callback_query:{...callback,data:'login_yes_'+keepId}});
+assert.equal((await call('/api/telegram-login/finish','POST',{cookie:keep.cookie})).status,200);
+const kept=JSON.parse(sqlite.prepare('SELECT body FROM records WHERE id=?').get('tg-identity:tg:'+user.id).body);assert.equal(kept.photo,'https://t.me/i/userpic/320/example.jpg');assert.equal(kept.name,user.first_name);
 for(let i=0;i<5;i++)await start();assert.equal((await start()).status,429);
-console.log('PASS: Web login deep link keeps the exact start nonce, no visible code, cookie binding, same-origin checks, private signed webhook, explicit confirmation, wrong-account protection, session issuance, replay/expiry/denial, renewal and rate limits. No real users contacted.');
+console.log('PASS: Web login deep link keeps the exact start nonce, no visible code, cookie binding, same-origin checks, private signed webhook, explicit confirmation, wrong-account protection, session issuance, replay/expiry/denial, renewal and rate limits; a bot sign-in keeps the saved Telegram photo. No real users contacted.');
+

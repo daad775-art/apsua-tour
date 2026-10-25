@@ -3269,6 +3269,7 @@ SITE_CHANGELOG.push({version:'19.8',date:'2026-10-25',author:'Руслан',titl
 SITE_CHANGELOG.push({version:'19.9',date:'2026-10-25',author:'Руслан',title:'Низ страницы не прячется под меню',description:'На телефоне в конце каждой страницы, включая админку, остаётся место под нижним меню с учётом полоски «Домой» на iPhone — последние кнопки и строки видны целиком.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'20.0',date:'2026-10-25',author:'Руслан',title:'Предложение установить приложение и включить уведомления',description:'При первом заходе с телефона сразу предлагается установить приложение и перечислено, что оно даёт. «Позже» скрывает предложение только до следующего захода. В установленном приложении предлагается включить уведомления, пока они не будут разрешены; если они запрещены в системе, показано, где их включить.',type:'feature',priority:'important'});
 SITE_CHANGELOG.push({version:'20.1',date:'2026-10-25',author:'Руслан',title:'Аватар Telegram в шапке и единый вход',description:'После входа фотография из Telegram показывается не только в профиле, но и в кнопке аккаунта в шапке. На телефоне и компьютере используется единый официальный безопасный вход Telegram без отдельного перехода в Telegram Web.',type:'fix',priority:'important'});
+SITE_CHANGELOG.push({version:'20.2',date:'2026-10-25',author:'Руслан',title:'Вход через бота Telegram без номера и кода',description:'На телефоне кнопка «Войти через Telegram» сразу открывает чат с ботом «Апсуа Тур»: нажмите «Начать», затем «Авторизоваться» — и вход на сайте завершится сам. На компьютере показан QR-код для камеры телефона и кнопки «Открыть Telegram» и «Telegram Web». Вход по номеру телефона через окно Telegram остался запасным. Фото профиля из Telegram сохраняется при входе через бота.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'17.8',date:'2026-10-25',author:'Руслан',title:'Официальные соцсети и регулярные напоминания',description:'В подвале сразу доступны официальные страницы Апсуа Тур во ВКонтакте и Instagram. Сервер проверяет поездки каждые 15 минут, чтобы напоминание накануне не зависело от посещений сайта.',type:'improvement',priority:'normal'});
 
 /* ==========================================================================
@@ -3441,6 +3442,98 @@ ADM_RENDER.staff=function(){$('#admMain').innerHTML=`<header class="adm-head"><d
 document.addEventListener('input',event=>{if(!event.target.matches?.('[data-staff-search]'))return;staffQuery=event.target.value;renderStaffRows()});
 document.addEventListener('change',async event=>{const select=event.target.closest?.('[data-staff-role]');if(!select)return;const row=select.closest('[data-staff-id]'),userId=row?.dataset.staffId,previous=staffRows.find(item=>item.id===userId)?.role||'';select.disabled=true;try{const result=await api('/api/admin/staff',{method:'PUT',body:JSON.stringify({userId,role:select.value})});staffRows=result.staff||[];renderStaffRows();toast(select.value?'Доступ обновлён':'Доступ отозван')}catch(error){select.value=previous;toast(error.message)}finally{if(select.isConnected)select.disabled=false}});
 const staffRequestsBefore=ADM_RENDER.requests;ADM_RENDER.requests=function(...args){const result=staffRequestsBefore.apply(this,args);if(serverStaffRole==='observer'){const main=$('#admMain');main?.classList.add('staff-observer');main?.querySelectorAll('.order-admin-tools input,.order-admin-tools select,.order-admin-tools textarea,.order-admin-tools button').forEach(control=>control.disabled=true);main?.querySelector('.adm-head')?.insertAdjacentHTML('beforeend','<p class="hint">Режим наблюдателя · изменение заявок отключено</p>')}return result};
+
+/* Build 152 · minimal QR code encoder (byte mode, error correction M, versions 1–10).
+   Only used to show the sign-in link as a QR code; no network, no library. */
+const V152_QR=(()=>{
+ const BLOCKS=[null,[10,1,16,0,0],[16,1,28,0,0],[26,1,44,0,0],[18,2,32,0,0],[24,2,43,0,0],[16,4,27,0,0],[18,4,31,0,0],[22,2,38,2,39],[22,3,36,2,37],[26,4,43,1,44]];
+ const ALIGN=[null,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50]];
+ const EXP=new Array(512),LOG=new Array(256);for(let i=0,x=1;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}for(let i=255;i<512;i++)EXP[i]=EXP[i-255];
+ const mul=(a,b)=>a&&b?EXP[LOG[a]+LOG[b]]:0;
+ function rs(data,n){let gen=[1];for(let i=0;i<n;i++){const next=new Array(gen.length+1).fill(0);for(let j=0;j<gen.length;j++){next[j]^=gen[j];next[j+1]^=mul(gen[j],EXP[i])}gen=next}
+  const res=new Array(n).fill(0);for(const d of data){const f=d^res[0];res.shift();res.push(0);for(let j=0;j<n;j++)res[j]^=mul(gen[j+1],f)}return res}
+ function encode(text){
+  const bytes=[...new TextEncoder().encode(String(text))];let version=0;
+  for(let v=1;v<=10;v++){const b=BLOCKS[v],cap=b[1]*b[2]+b[3]*b[4];if(4+(v<10?8:16)+bytes.length*8<=cap*8){version=v;break}}
+  if(!version)throw new Error('QR: text too long');
+  const [ecLen,g1,d1,g2,d2]=BLOCKS[version],cap=g1*d1+g2*d2,bits=[];const put=(val,len)=>{for(let i=len-1;i>=0;i--)bits.push((val>>>i)&1)};
+  put(4,4);put(bytes.length,version<10?8:16);for(const b of bytes)put(b,8);put(0,Math.min(4,cap*8-bits.length));while(bits.length%8)bits.push(0);
+  const data=[];for(let i=0;i<bits.length;i+=8)data.push(bits.slice(i,i+8).reduce((a,b)=>a<<1|b,0));for(let pad=0xEC;data.length<cap;pad^=0xEC^0x11)data.push(pad);
+  const blocks=[];let at=0;for(let i=0;i<g1+g2;i++){const len=i<g1?d1:d2,chunk=data.slice(at,at+len);at+=len;blocks.push({data:chunk,ec:rs(chunk,ecLen)})}
+  const words=[];for(let i=0;i<Math.max(d1,d2);i++)for(const b of blocks)if(i<b.data.length)words.push(b.data[i]);for(let i=0;i<ecLen;i++)for(const b of blocks)words.push(b.ec[i]);
+  const size=17+4*version,mod=[...Array(size)].map(()=>new Array(size).fill(false)),fn=[...Array(size)].map(()=>new Array(size).fill(false));
+  const set=(x,y,dark)=>{mod[y][x]=dark;fn[y][x]=true};
+  for(let i=0;i<size;i++){set(6,i,i%2===0);set(i,6,i%2===0)}
+  for(const [cx,cy] of [[3,3],[size-4,3],[3,size-4]])for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=cx+dx,y=cy+dy;if(x>=0&&x<size&&y>=0&&y<size){const d=Math.max(Math.abs(dx),Math.abs(dy));set(x,y,d!==2&&d!==4)}}
+  const al=ALIGN[version],last=al.length-1;for(let i=0;i<al.length;i++)for(let j=0;j<al.length;j++){if(i===0&&j===0||i===0&&j===last||i===last&&j===0)continue;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)set(al[i]+dx,al[j]+dy,Math.max(Math.abs(dx),Math.abs(dy))!==1)}
+  const format=mask=>{const d=mask;let r=d;for(let i=0;i<10;i++)r=(r<<1)^((r>>>9)*0x537);const b=((d<<10)|r)^0x5412,bit=i=>((b>>>i)&1)===1;
+   for(let i=0;i<=5;i++)set(8,i,bit(i));set(8,7,bit(6));set(8,8,bit(7));set(7,8,bit(8));for(let i=9;i<15;i++)set(14-i,8,bit(i));
+   for(let i=0;i<8;i++)set(size-1-i,8,bit(i));for(let i=8;i<15;i++)set(8,size-15+i,bit(i));set(8,size-8,true)};
+  format(0);
+  if(version>=7){let r=version;for(let i=0;i<12;i++)r=(r<<1)^((r>>>11)*0x1F25);const b=(version<<12)|r;for(let i=0;i<18;i++){const bit=((b>>>i)&1)===1,a=size-11+i%3,c=Math.floor(i/3);set(a,c,bit);set(c,a,bit)}}
+  let n=0;for(let right=size-1;right>=1;right-=2){if(right===6)right=5;for(let vert=0;vert<size;vert++)for(let j=0;j<2;j++){const x=right-j,up=((right+1)&2)===0,y=up?size-1-vert:vert;if(!fn[y][x]&&n<words.length*8){mod[y][x]=((words[n>>>3]>>>(7-(n&7)))&1)===1;n++}}}
+  const MASKS=[(x,y)=>(x+y)%2===0,(x,y)=>y%2===0,(x,y)=>x%3===0,(x,y)=>(x+y)%3===0,(x,y)=>(Math.floor(x/3)+Math.floor(y/2))%2===0,(x,y)=>x*y%2+x*y%3===0,(x,y)=>(x*y%2+x*y%3)%2===0,(x,y)=>((x+y)%2+x*y%3)%2===0];
+  const apply=m=>{for(let y=0;y<size;y++)for(let x=0;x<size;x++)if(!fn[y][x]&&MASKS[m](x,y))mod[y][x]=!mod[y][x]};
+  const penalty=()=>{let p=0;for(let pass=0;pass<2;pass++)for(let a=0;a<size;a++){let run=1;for(let b=1;b<size;b++){const cur=pass?mod[b][a]:mod[a][b],prev=pass?mod[b-1][a]:mod[a][b-1];if(cur===prev){run++;if(run===5)p+=3;else if(run>5)p++}else run=1}}
+   for(let y=0;y<size-1;y++)for(let x=0;x<size-1;x++){const c=mod[y][x];if(c===mod[y][x+1]&&c===mod[y+1][x]&&c===mod[y+1][x+1])p+=3}
+   const pat=[1,0,1,1,1,0,1];for(let pass=0;pass<2;pass++)for(let a=0;a<size;a++)for(let b=0;b+6<size;b++){let ok=true;for(let k=0;k<7&&ok;k++)ok=(pass?mod[b+k][a]:mod[a][b+k])===!!pat[k];if(!ok)continue;const light=(s,e)=>{for(let k=s;k<e;k++){if(k<0||k>=size)continue;if(pass?mod[k][a]:mod[a][k])return false}return true};if(light(b-4,b)||light(b+7,b+11))p+=40}
+   let dark=0;for(const row of mod)for(const c of row)if(c)dark++;p+=Math.floor(Math.abs(dark*20-size*size*10)/(size*size))*10;return p};
+  let best=0,bestScore=Infinity;for(let m=0;m<8;m++){apply(m);format(m);const s=penalty();if(s<bestScore){bestScore=s;best=m}apply(m)}
+  apply(best);format(best);return mod}
+ function svg(text,label='QR-код'){const m=encode(text),size=m.length,q=4,total=size+2*q;let d='';for(let y=0;y<size;y++)for(let x=0;x<size;x++)if(m[y][x])d+=`M${x+q} ${y+q}h1v1h-1z`;
+  return `<svg class="v152-qr-svg" viewBox="0 0 ${total} ${total}" role="img" aria-label="${label}" shape-rendering="crispEdges"><rect width="${total}" height="${total}" fill="#fff"/><path d="${d}" fill="#1d1d1f"/></svg>`}
+ return {encode,svg}})();
+
+/* Build 152 · Telegram sign-in through the site's bot on every device. On a phone the button
+   opens the bot chat in the Telegram app; on a computer a QR code (scan with the phone) and
+   buttons for Telegram Desktop and Telegram Web. No phone number or code is needed: the bot
+   asks to press «Авторизоваться», and the page finishes the sign-in by itself. The official
+   Telegram window (phone number) stays as a fallback link. */
+const V152_TG_ICON='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.2-.2 1.5l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.8-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5ZM9.6 14.6l-.4 4.1-1.4-4.5 10.2-6.4-8.4 6.8Z"/></svg>';
+function v152Desktop(){return !!window.matchMedia?.('(hover: hover) and (pointer: fine)').matches}
+function v152TelegramLinks(data){let url='',web='';try{const u=new URL(data.url);if(u.origin==='https://t.me'&&/^\/[A-Za-z0-9_]{5,32}$/.test(u.pathname)&&/^login_[a-f0-9]{32}$/.test(u.searchParams.get('start')||''))url=u.href}catch{}
+ try{const w=new URL(data.webUrl);if(w.origin==='https://web.telegram.org'&&w.pathname==='/k/')web=w.href}catch{}
+ if(!url)throw new Error('Некорректная ссылка Telegram');const u=new URL(url);return {url,web,app:'tg://resolve?domain='+u.pathname.slice(1)+'&start='+u.searchParams.get('start')}}
+telegramAuthMessage=function(text='',pending=false){$$('[data-tg-login]').forEach(slot=>{const status=$('.tg-app-status',slot);slot.classList.toggle('is-waiting',pending);const lock=pending&&telegramAuthAttempt?.mode!=='web';for(const open of $$('.tg-app-open',slot)){if(open.tagName==='BUTTON')open.disabled=lock;else if(lock)open.setAttribute('aria-disabled','true');else if(open.getAttribute('href')!=='#')open.removeAttribute('aria-disabled')}if(status){status.hidden=!text;status.textContent=text}})};
+const V152_TG_WAIT='Нажмите в Telegram «Начать», затем «Авторизоваться» — и вернитесь сюда.';
+mountTelegramLogin=function(slot=$('[data-tg-login]')){
+ if(!slot||slot.childElementCount||!serverTelegramAuth.enabled)return;
+ const desktop=v152Desktop();slot.classList.add('v152-tg',desktop?'is-desktop':'is-phone');
+ slot.innerHTML=desktop
+  ?`<div class="v152-tg-qr" aria-live="polite"><span class="v152-tg-qr-box" data-v152-tg-qr><span class="v152-tg-qr-wait">Готовим QR…</span></span><div class="v152-tg-qr-text"><h3>Войдите с телефона</h3><p>Наведите камеру телефона на код. Откроется Telegram: нажмите «Начать», затем «Авторизоваться». Вход на этом компьютере завершится сам.</p><div class="v152-tg-actions"><a class="btn btn-primary tg-app-open" data-v152-tg-open="app" href="#" aria-disabled="true">${V152_TG_ICON}Открыть Telegram</a><a class="btn btn-ghost tg-app-open" data-v152-tg-open="web" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Telegram Web</a></div></div></div><p class="tg-app-status" role="status" hidden></p><button type="button" class="v152-tg-alt" data-v152-tg-phone>Войти по номеру телефона</button>`
+  :`<a class="btn btn-primary tg-app-open" data-v152-tg-open="url" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">${V152_TG_ICON}Войти через Telegram</a><p class="v152-tg-steps">Откроется чат с ботом «Апсуа Тур». Нажмите «Начать», затем «Авторизоваться» и вернитесь на сайт. Номер и код не нужны.</p><p class="tg-app-status" role="status" hidden></p><button type="button" class="v152-tg-alt" data-v152-tg-phone>Нет Telegram на этом телефоне? Войти по номеру</button>`;
+ const current=()=>slot.isConnected!==false,fail=err=>endTelegramAttempt(err?.message||'Не удалось войти. Попробуйте ещё раз.');
+ slot._bot=null;slot._oidc=null;slot._botError='';
+ const paint=()=>{const bot=slot._bot;for(const a of $$('[data-v152-tg-open]',slot)){const href=bot?bot.links[a.dataset.v152TgOpen]:'';if(href){a.href=href;a.removeAttribute('aria-disabled');a.hidden=false}else{a.setAttribute('href','#');if(a.dataset.v152TgOpen==='web'&&bot)a.hidden=true;else a.setAttribute('aria-disabled','true')}}
+  const box=$('[data-v152-tg-qr]',slot);if(box){box.innerHTML=bot?V152_QR.svg(bot.links.url,'QR-код для входа через Telegram'):`<span class="v152-tg-qr-wait">${slot._botError?'QR недоступен':'Готовим QR…'}</span>`}
+  const alt=$('[data-v152-tg-phone]',slot),noBot=!bot&&!!slot._botError;slot.classList.toggle('has-bot',!!bot);slot.classList.toggle('no-bot',noBot);
+  // Without the bot the official Telegram window becomes the main way in.
+  if(alt){alt.className=noBot?'btn btn-primary v152-tg-alt is-main':'v152-tg-alt';alt.innerHTML=noBot?V152_TG_ICON+'Войти через Telegram':(desktop?'Войти по номеру телефона':'Нет Telegram на этом телефоне? Войти по номеру')}
+  // On a computer the QR code can be scanned without any click, so the page listens for the approval right away.
+  if(desktop&&bot&&!telegramAuthAttempt&&current())startTelegramAttempt(bot);
+  if(telegramAuthAttempt)telegramAuthMessage(telegramAuthAttempt.mode==='web'?(desktop?'Ждём подтверждения в Telegram…':V152_TG_WAIT):'После подтверждения вернитесь на сайт.',true)};
+ const prepareBot=async()=>{try{const data=await api('/api/telegram-login/start',{method:'POST',body:JSON.stringify({mode:'web'})});if(!current())return;slot._bot={...data,mode:'web',links:v152TelegramLinks(data)};slot._botError='';clearTimeout(slot._botTimer);slot._botTimer=setTimeout(()=>{if(current()&&!telegramAuthAttempt){slot._bot=null;prepareBot()}},Math.max(5000,Number(data.expires)-Date.now()-15000))}catch(err){if(!current())return;slot._bot=null;slot._botError=err?.message||'unavailable'}paint()};
+ const prepareOIDC=async()=>{try{const results=await Promise.all([api('/api/telegram-oidc/start',{method:'POST',body:'{}'}),loadTelegramLoginSDK()]);if(current())slot._oidc={...results[0],mode:'oidc'}}catch{if(current())slot._oidc=null}};
+ slot._refreshTelegramWeb=slot._refreshTelegramLogin=()=>{slot._bot=null;paint();prepareBot();prepareOIDC()};
+ slot._v152Fail=fail;paint();prepareBot();prepareOIDC();
+};
+document.addEventListener('click',e=>{const open=e.target.closest?.('[data-v152-tg-open]');if(!open)return;const slot=open.closest('[data-tg-login]');if(!slot)return;
+ if(telegramAuthAttempt){if(telegramAuthAttempt.mode!=='web')e.preventDefault();return}
+ const bot=slot._bot;if(!bot||Date.now()>=bot.expires||open.hasAttribute('aria-disabled')){e.preventDefault();slot._refreshTelegramLogin?.();return}
+ startTelegramAttempt(bot);telegramAuthMessage(V152_TG_WAIT,true)});
+document.addEventListener('click',e=>{const alt=e.target.closest?.('[data-v152-tg-phone]');if(!alt)return;const slot=alt.closest('[data-tg-login]');if(!slot)return;e.preventDefault();
+ if(telegramAuthAttempt?.mode==='web')endTelegramAttempt();if(telegramAuthAttempt)return;
+ const challenge=slot._oidc,fail=slot._v152Fail||(err=>endTelegramAttempt(err?.message||'Не удалось войти.'));
+ if(!challenge||Date.now()>=challenge.expires||!window.Telegram?.Login){telegramAuthMessage('Готовим вход по номеру… Нажмите ещё раз через секунду.',false);slot._refreshTelegramLogin?.();return}
+ const attempt=startTelegramAttempt(challenge);slot._oidc=null;
+ try{const opening=window.Telegram.Login.auth({client_id:Number(challenge.clientId),scope:['profile'],lang:'ru',nonce:challenge.nonce},async answer=>{
+  if(telegramAuthAttempt!==attempt)return;
+  if(!answer?.id_token){await recoverTelegramSignin();if(telegramAuthAttempt===attempt)fail(new Error(answer?.error?'Вход не завершён. Попробуйте ещё раз.':'Вход отменён'));return}
+  try{telegramAuthMessage('Входим…',true);await api('/api/telegram-oidc/finish',{method:'POST',body:JSON.stringify({id_token:answer.id_token})});if(telegramAuthAttempt!==attempt)return;const data=await api('/api/state');if(!completeTelegramSignin(data,attempt)&&telegramAuthAttempt===attempt){telegramAuthMessage('Обновляем вход…',true);recoverTelegramSignin()}}catch(err){if(telegramAuthAttempt===attempt)fail(err)}
+ });if(opening?.catch)opening.catch(err=>{if(telegramAuthAttempt===attempt)fail(err)})}catch(err){fail(err)}});
+
+/* A desktop QR wait stops when the sign-in window is closed. */
+const closeTelegramSigninBeforeV152=closeTelegramSignin;closeTelegramSignin=function(...a){const r=closeTelegramSigninBeforeV152.apply(this,a);if(telegramAuthAttempt?.mode==='web'&&!serverIdentity&&!$('[data-tg-login]'))endTelegramAttempt();return r};
 
 hostedBoot();
 })();

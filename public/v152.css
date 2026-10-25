@@ -850,3 +850,37 @@ html body #app .v152-story-track .v152-story-photo{height:min(68vh,620px)}
 
 .staff-search{max-width:460px}.staff-list{display:grid;margin-top:14px}.staff-row{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(190px,240px);gap:14px;align-items:center;padding:14px 2px;border-top:1px solid var(--line,#e5e5e8)}.staff-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:#eeeef2;display:grid;place-items:center;font-weight:800}.staff-avatar img{width:100%;height:100%;object-fit:cover}.staff-person,.staff-role{display:grid;gap:2px;min-width:0}.staff-person span,.staff-person small,.staff-role small{color:var(--muted,#777);overflow:hidden;text-overflow:ellipsis}.staff-role small{min-height:1.2em}.staff-observer .order-manager-editor,.staff-observer .order-clarification-editor{opacity:.65}
 @media(max-width:600px){.staff-row{grid-template-columns:44px minmax(0,1fr);gap:10px}.staff-role{grid-column:1/-1}.staff-role .input{width:100%}}
+
+/* ==========================================================================
+   Build 152 · Telegram sign-in through the bot: phone button, desktop QR
+   ========================================================================== */
+html body .telegram-signin-dialog:has(.v152-tg.is-desktop){width:min(560px,calc(100vw - 32px))}
+html body .v152-tg .tg-app-open{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;text-decoration:none!important}
+html body .v152-tg .tg-app-open svg{width:20px;height:20px;flex:none}
+html body .v152-tg .tg-app-open[aria-disabled]{opacity:.45;pointer-events:none}
+html body .v152-tg-steps{margin:10px 2px 0;color:var(--apple-ink-2,#6e6e73);font-size:14px;line-height:1.45;text-align:center}
+html body .v152-tg-alt{display:block;margin:14px auto 0;padding:6px 8px;border:0;background:none;color:var(--apple-link,#0066cc);font:inherit;font-size:14px;cursor:pointer;text-align:center}
+html body .v152-tg-alt:hover{text-decoration:underline}
+html body .v152-tg-alt.is-main{display:inline-flex;width:100%;min-height:48px;margin:0;justify-content:center;align-items:center;gap:8px;border-radius:16px;color:#fff;text-decoration:none!important}
+html body .v152-tg-alt.is-main svg{width:20px;height:20px}
+html body .v152-tg.no-bot :is(.tg-app-open,.v152-tg-steps,.v152-tg-qr){display:none!important}
+html body .v152-tg-qr{display:grid;grid-template-columns:184px minmax(0,1fr);gap:20px;align-items:center}
+html body .v152-tg-qr-box{display:grid;place-items:center;width:184px;height:184px;padding:6px;box-sizing:border-box;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+html body .v152-tg-qr-box .v152-qr-svg{display:block;width:100%;height:100%}
+html body .v152-tg-qr-wait{color:var(--apple-ink-2,#6e6e73);font-size:13px}
+html body .v152-tg-qr-text h3{margin:0 0 6px;color:var(--apple-ink,#1d1d1f);font-size:17px;font-weight:600;letter-spacing:-.01em}
+html body .v152-tg-qr-text p{margin:0 0 14px;color:var(--apple-ink-2,#6e6e73);font-size:14px;line-height:1.45}
+html body .v152-tg-actions{display:flex;flex-wrap:wrap;gap:8px}
+html body .v152-tg-actions .tg-app-open{width:auto!important;min-height:40px!important;padding:0 16px!important;border-radius:999px!important;font-size:15px!important}
+html body .v152-tg.is-desktop .tg-app-status{text-align:left}
+@media (max-width:520px){html body .v152-tg-qr{grid-template-columns:1fr;justify-items:center;text-align:center}html body .v152-tg-actions{justify-content:center}}
+html body [data-tg-login].v152-tg{display:block!important;width:100%;flex-direction:column}
+html body .v152-tg .tg-app-open.btn-primary{width:100%;min-height:50px;border:0!important;border-radius:16px!important;background:var(--apple-blue,#0071e3)!important;color:#fff!important;font-size:17px!important;font-weight:600!important}
+html body .v152-tg .tg-app-open.btn-ghost{background:var(--control-bg,#e8e8ed)!important;color:var(--apple-ink,#1d1d1f)!important;border:0!important}
+html body .v152-tg .v152-tg-alt:not(.is-main){width:auto;min-height:0;border:0!important;border-radius:8px;background:none!important;box-shadow:none!important;color:var(--apple-link,#0066cc)!important;font-weight:500}
+html body .v152-tg .v152-tg-alt.is-main{background:var(--apple-blue,#0071e3)!important;font-size:17px;font-weight:600}
+html body .v152-tg.is-desktop .v152-tg-actions .tg-app-open.btn-primary{width:auto;min-height:40px;font-size:15px!important}
+html body .v152-tg .v152-tg-alt.is-main{color:#fff!important}
+html body .v152-tg .v152-tg-alt.is-main svg{color:#fff}
+html body .v152-tg-qr{grid-template-columns:repeat(auto-fit,minmax(184px,1fr))!important}
+html body .v152-tg-qr-box{justify-self:center}

@@ -53,7 +53,8 @@ export async function telegramAuth(request: Request, env: TelegramEnv) {
 async function issueTelegramSession(request: Request, env: TelegramEnv, user: { id: string; name: string; username: string; photo: string }) {
   const at = Date.now(), token = hex(crypto.getRandomValues(new Uint8Array(32)).buffer), expires = at + SESSION_DAYS * 86400000;
   await env.DB.batch([
-    env.DB.prepare("INSERT INTO records (id,kind,owner,body,status,created,updated) VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body,updated=excluded.updated")
+    env.DB.prepare("INSERT INTO records (id,kind,owner,body,status,created,updated) VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET body=CASE WHEN COALESCE(json_extract(excluded.body,'$.photo'),'')='' AND COALESCE(json_extract(records.body,'$.photo'),'')<>'' THEN json_set(excluded.body,'$.photo',json_extract(records.body,'$.photo')) ELSE excluded.body END,updated=excluded.updated")
+      // A sign-in through the bot carries no photo: keep the Telegram photo saved by an earlier sign-in.
       .bind('tg-identity:' + user.id, 'tg-identity', user.id, JSON.stringify({ username: user.username, photo: user.photo, name: user.name }), 'private', at, at),
     env.DB.prepare("INSERT OR IGNORE INTO records (id,kind,owner,body,status,created,updated) VALUES (?,?,?,?,?,?,?)")
       .bind('profile:' + user.id, 'profile', user.id, JSON.stringify({ name: user.name, city: '', about: '', avatar: '' }), 'private', at, at),
