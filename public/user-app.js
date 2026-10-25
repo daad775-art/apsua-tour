@@ -226,7 +226,7 @@ function renderChrome(){
  document.title=C.site.name;
  syncAcc();syncFav();
 }
-function syncAcc(){const u=store.get('user',null);$$('[data-acc-label]').forEach(x=>{x.textContent=u?u.name.split(' ')[0]:'Войти';if(u){x.dataset.userProfile=u.id;x.setAttribute('aria-haspopup','dialog')}else{x.removeAttribute('data-user-profile');x.removeAttribute('aria-haspopup')}})}
+function syncAcc(){const u=store.get('user',null),button=$('#accBtn'),avatar=u?.avatar?src(u.avatar):'';$$('[data-acc-label]').forEach(x=>{x.textContent=u?u.name.split(' ')[0]:'Войти';if(u){x.dataset.userProfile=u.id;x.setAttribute('aria-haspopup','dialog')}else{x.removeAttribute('data-user-profile');x.removeAttribute('aria-haspopup')}});if(!button)return;button.querySelector('.header-account-avatar')?.remove();button.classList.toggle('has-avatar',!!avatar);button.setAttribute('aria-label',u?`Профиль: ${u.name||'Telegram'}`:'Войти в профиль');if(avatar){const image=document.createElement('img');image.className='header-account-avatar';image.src=avatar;image.alt='';image.decoding='async';image.referrerPolicy='no-referrer';image.addEventListener('error',()=>{image.remove();button.classList.remove('has-avatar')},{once:true});button.prepend(image)}}
 function syncFav(){store.set('favs',[...favs]);$$('[data-fav-count]').forEach(e=>{e.textContent=favs.size;e.hidden=!favs.size})}
 function pageHead(crumb,eyebrow,title,sub,extra=''){return `<header class="page-head"><div><h1>${esc(title)}</h1>${sub?`<p class="sub">${esc(sub)}</p>`:''}</div>${extra}</header>`}
 
@@ -2643,15 +2643,14 @@ function loadTelegramLoginSDK(){if(window.Telegram?.Login)return Promise.resolve
 function mountTelegramLogin(slot=$('[data-tg-login]')){
  if(!slot||slot.childElementCount||!serverTelegramAuth.enabled)return;
  slot.innerHTML='<button class="btn btn-primary tg-app-open" disabled>Готовим вход…</button><p class="tg-app-status" role="status" hidden></p>';
- const button=$('button',slot),status=$('.tg-app-status',slot),current=()=>slot.isConnected!==false,desktop=!!window.matchMedia?.('(hover: hover) and (pointer: fine)').matches;let challenge;
+ const button=$('button',slot),status=$('.tg-app-status',slot),current=()=>slot.isConnected!==false;let challenge;
  const fail=err=>endTelegramAttempt(err?.message||'Не удалось войти. Попробуйте ещё раз.');
- const prepare=async()=>{button.disabled=true;try{if(desktop){const data=await api('/api/telegram-login/start',{method:'POST',body:JSON.stringify({mode:'web'})});const url=new URL(data.webUrl);if(url.origin!=='https://web.telegram.org'||url.pathname!=='/k/')throw new Error('Некорректная ссылка Telegram Web');if(!current())return;challenge={...data,mode:'web'}}else{const results=await Promise.all([api('/api/telegram-oidc/start',{method:'POST',body:'{}'}),loadTelegramLoginSDK()]);if(!current())return;challenge=results[0]}button.textContent='Войти через Telegram';button.disabled=!!telegramAuthAttempt;if(telegramAuthAttempt)telegramAuthMessage(telegramAuthAttempt.mode==='web'?'В Telegram Web нажмите «Начать», затем «Авторизоваться».':'После подтверждения вернитесь на сайт.',true)}catch(err){if(current())fail(err)}};
- slot._refreshTelegramWeb=prepare;
+ const prepare=async()=>{button.disabled=true;try{const results=await Promise.all([api('/api/telegram-oidc/start',{method:'POST',body:'{}'}),loadTelegramLoginSDK()]);if(!current())return;challenge={...results[0],mode:'oidc'};button.textContent='Войти через Telegram';button.disabled=!!telegramAuthAttempt;if(telegramAuthAttempt)telegramAuthMessage('После подтверждения вернитесь на сайт.',true)}catch(err){if(current())fail(err)}};
+ slot._refreshTelegramLogin=prepare;
  button.onclick=()=>{
   if(telegramAuthAttempt)return;
   if(!challenge||Date.now()>=challenge.expires){prepare();return}
   const attempt=startTelegramAttempt(challenge);
-  if(challenge.mode==='web'){try{window.open(challenge.webUrl,'_blank','noopener,noreferrer')}catch(err){fail(err)}return}
   try{const opening=window.Telegram.Login.auth({client_id:Number(challenge.clientId),scope:['profile'],lang:'ru',nonce:challenge.nonce},async answer=>{
    if(telegramAuthAttempt!==attempt)return;
    if(!answer?.id_token){await recoverTelegramSignin();if(telegramAuthAttempt===attempt)fail(new Error(answer?.error?'Вход не завершён. Попробуйте ещё раз.':'Вход отменён'));return}
@@ -3269,6 +3268,7 @@ SITE_CHANGELOG.push({version:'19.7',date:'2026-10-25',author:'Руслан',titl
 SITE_CHANGELOG.push({version:'19.8',date:'2026-10-25',author:'Руслан',title:'Форма трансфера во всю ширину карточки',description:'На телефоне поля трансфера, переключатель «Встреча / Отъезд» и выбор автомобиля стали шире: отступы карточки такие же, как у поиска экскурсий.',type:'improvement',priority:'normal'});
 SITE_CHANGELOG.push({version:'19.9',date:'2026-10-25',author:'Руслан',title:'Низ страницы не прячется под меню',description:'На телефоне в конце каждой страницы, включая админку, остаётся место под нижним меню с учётом полоски «Домой» на iPhone — последние кнопки и строки видны целиком.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'20.0',date:'2026-10-25',author:'Руслан',title:'Предложение установить приложение и включить уведомления',description:'При первом заходе с телефона сразу предлагается установить приложение и перечислено, что оно даёт. «Позже» скрывает предложение только до следующего захода. В установленном приложении предлагается включить уведомления, пока они не будут разрешены; если они запрещены в системе, показано, где их включить.',type:'feature',priority:'important'});
+SITE_CHANGELOG.push({version:'20.1',date:'2026-10-25',author:'Руслан',title:'Аватар Telegram в шапке и единый вход',description:'После входа фотография из Telegram показывается не только в профиле, но и в кнопке аккаунта в шапке. На телефоне и компьютере используется единый официальный безопасный вход Telegram без отдельного перехода в Telegram Web.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'17.8',date:'2026-10-25',author:'Руслан',title:'Официальные соцсети и регулярные напоминания',description:'В подвале сразу доступны официальные страницы Апсуа Тур во ВКонтакте и Instagram. Сервер проверяет поездки каждые 15 минут, чтобы напоминание накануне не зависело от посещений сайта.',type:'improvement',priority:'normal'});
 
 /* ==========================================================================
