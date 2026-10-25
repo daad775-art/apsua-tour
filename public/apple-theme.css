@@ -1,0 +1,172 @@
+/* ==========================================================================
+   Apple-style theme (13.8). Loaded last, after user-theme.css and responsive-layout.css.
+   Palette: Apple neutrals (#f5f5f7 … #1d1d1f), one accent blue (#0071e3), iOS system
+   green / orange / red for status. Shapes: pill buttons and chips, 18 px cards with soft
+   shadows and no outlines, 12 px fields, 22–28 px photos. Materials: translucent bars
+   with saturate + blur. Motion: instant press feedback, no looping animation.
+   Admin «Оформление» values still apply to --control-* tokens and panels.
+   ========================================================================== */
+
+:root,html[data-theme=light]{
+  --apple-bg:#f5f5f7;--apple-surface:#ffffff;--apple-surface-2:#f5f5f7;--apple-fill:rgba(120,120,128,.12);--apple-fill-strong:rgba(120,120,128,.2);
+  --apple-ink:#1d1d1f;--apple-ink-2:#6e6e73;--apple-hairline:rgba(0,0,0,.1);--apple-blue:#0071e3;--apple-blue-hover:#0077ed;--apple-link:#0066cc;
+  --apple-blue-soft:rgba(0,113,227,.1);--apple-green:#34c759;--apple-orange:#ff9500;--apple-red:#ff3b30;
+  --apple-bar:rgba(251,251,253,.92);--apple-card-shadow:0 2px 12px rgba(0,0,0,.06);--apple-card-shadow-hover:0 10px 30px rgba(0,0,0,.1);
+  --apple-font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","Segoe UI",Roboto,Manrope,Arial,sans-serif;
+  --bg:var(--apple-bg);--surface:var(--apple-surface);--surface-2:var(--apple-surface-2);--ink:var(--apple-ink);--muted:var(--apple-ink-2);--line:var(--apple-hairline);
+  --sea:var(--apple-blue);--sea-ink:#fff;--sea-soft:var(--apple-blue-soft);--accent:var(--apple-blue);--accent-ink:#fff;--accent-soft:var(--apple-blue-soft);
+  --leaf:var(--apple-green);--danger:var(--apple-red);
+  --shadow:var(--apple-card-shadow-hover);--shadow-sm:var(--apple-card-shadow);
+  --g-bg:rgba(255,255,255,.8);--g-line:transparent;--g-edge:transparent;
+  --r-lg:28px;--r:18px;--r-sm:12px;
+  --f-display:var(--apple-font);--f-body:var(--apple-font);
+  --control-bg:#e8e8ed;--control-hover:#dcdce1;--control-ink:#1d1d1f;--control-line:transparent;--control-shadow:none;
+  --control-accent:#0071e3;--control-accent-hover:#0077ed;--control-accent-ink:#ffffff;--control-accent-line:transparent;
+  --control-radius:22px;--control-blur:20px;--control-border-width:0px;--control-weight:500;--control-motion:200ms cubic-bezier(.22,1,.36,1);
+  --custom-panel-bg:#ffffff;--custom-panel-ink:#1d1d1f;--custom-panel-line:transparent;
+}
+
+
+/* ---------- Page and type ---------- */
+html body{background:var(--apple-bg);color:var(--apple-ink);font-family:var(--apple-font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+html body :is(h1,h2,h3,h4){font-family:var(--apple-font);font-weight:700}
+html body h1{letter-spacing:-.025em;line-height:1.07}
+html body h2{letter-spacing:-.02em;line-height:1.12}
+html body h3{letter-spacing:-.01em;line-height:1.2;font-weight:600}
+html body :is(.sub,.hint,small,.muted){color:var(--apple-ink-2)}
+html body .eyebrow{text-transform:none;letter-spacing:0;font-weight:600;font-size:max(13px,1em);color:var(--apple-orange)}
+html body :is(.prose,.tour-about,.block) a:not(.btn){color:var(--apple-link)}
+html body ::selection{background:var(--apple-blue-soft)}
+
+/* ---------- Bars: header, bottom tabs, booking bar ---------- */
+html body .header{background:var(--apple-bar)!important;background-image:none!important;-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:0;border-bottom:1px solid var(--apple-hairline);box-shadow:none}
+html body .header .nav a{color:var(--apple-ink);opacity:.8;font-weight:400}
+html body .header .nav a:is(.on,[aria-current]){opacity:1;font-weight:600}
+html body .mnav{background:var(--apple-bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:0;border-top:1px solid var(--apple-hairline);box-shadow:none}
+html body .mnav a{background:none!important;box-shadow:none!important;color:var(--apple-ink-2);font-size:11px;font-weight:500;border-radius:0}
+html body .mnav a :is(svg,.icon){color:inherit}
+html body .mnav a:is(.on,[aria-current]){color:var(--apple-blue)}
+html body .mbar{background:var(--apple-bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:0;border-top:1px solid var(--apple-hairline);box-shadow:none}
+html body.has-mbar .mnav{border-top-color:transparent}
+html body .mbar::after{content:"";position:absolute;left:0;right:0;top:100%;height:6px;background:var(--apple-bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+
+/* ---------- Buttons ---------- */
+html body .btn{border-radius:980px;border:0;box-shadow:none;font-family:var(--apple-font);font-weight:500;letter-spacing:-.01em;background-image:none;transition:transform .1s ease-out,background-color .2s ease,opacity .2s ease}
+html body :is(.btn-sea,.btn-accent,.btn-primary){background:var(--apple-blue)!important;color:#fff!important;border:0!important;box-shadow:none!important}
+html body :is(.btn-sea,.btn-accent,.btn-primary):hover{background:var(--apple-blue-hover)!important}
+html body :is(.btn-ghost,.btn-light,.btn-secondary,.theme-toggle){background:var(--apple-fill);color:var(--apple-ink);border:0;box-shadow:none;background-image:none}
+html body :is(.btn-ghost,.btn-light,.btn-secondary):hover{background:var(--apple-fill-strong)}
+html body .btn-glass{background:rgba(255,255,255,.78);color:#1d1d1f;border:0;box-shadow:none;-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+html body .hero .btn-glass{background:rgba(255,255,255,.82)!important;color:#1d1d1f!important;border:0!important;box-shadow:none!important}
+html body .hero .hero-buttons .btn:first-child{background:var(--apple-blue)!important;color:#fff!important}
+html body .hero .hero-buttons .btn:first-child:hover{background:var(--apple-blue-hover)!important}
+html body .linkbtn{color:var(--apple-link)}
+html body .fav-count{background:var(--apple-red);color:#fff;border-radius:980px}
+html body .fav-count[hidden]{display:none}
+
+/* Press feedback on touch-down for everything tappable (Apple: respond on press, not on release). */
+html body :is(.btn,.chip,.seg button,.mnav a,.card-photo-arrow,.theme-toggle,.tag[role=button],button):active{transform:scale(.97);transition:transform .1s ease-out}
+html body .card:active{transform:scale(.99)}
+
+/* ---------- Chips, segmented controls, tags ---------- */
+html body .chip{border-radius:980px;border:0;box-shadow:none;background:var(--apple-fill);background-image:none;color:var(--apple-ink);font-weight:500;font-size:max(13px,1em)}
+html body .chip:is(.on,.active,[aria-pressed=true],[aria-selected=true]){background:var(--apple-ink);color:var(--apple-bg)}
+html body .seg{background:var(--apple-fill);border:0;border-radius:10px;padding:2px;box-shadow:none}
+html body .seg :is(button,a,label){border-radius:8px;border:0;box-shadow:none;background:transparent;color:var(--apple-ink)}
+html body .seg :is(button,a,label):is(.on,.active,[aria-pressed=true],[aria-selected=true]){background:var(--apple-surface);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+html body :is(.card,.story,.hero) .tag{background:rgba(0,0,0,.45);color:#fff;border:0;border-radius:980px;-webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px);font-weight:500}
+html body .tag{border-radius:980px}
+
+/* ---------- Surfaces: cards, panels, blocks ---------- */
+html body :is(.card,.panel,.glass,.booking,.search-panel,.review,.story,.map-side,.popover,.sheet,.orders-empty,.comfort-panel,.adm-card){border:0;border-radius:var(--r);box-shadow:var(--apple-card-shadow);background-image:none}
+html body :is(.card,.panel,.glass,.booking,.search-panel,.review,.story,.map-side,.orders-empty,.comfort-panel){background-color:var(--apple-surface)}
+html body .popover,html body .sheet{background:var(--apple-surface);box-shadow:0 12px 40px rgba(0,0,0,.18);border-radius:14px}
+@media (hover:hover){html body .card{transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s cubic-bezier(.22,1,.36,1)}html body .card:hover{transform:translateY(-2px);box-shadow:var(--apple-card-shadow-hover)}}
+html body .block{border-color:var(--apple-hairline)}
+html body :is(hr,.divider){border-color:var(--apple-hairline)}
+html body .hero{border-radius:var(--r-lg);box-shadow:none}
+
+/* ---------- Photos ---------- */
+html body :is(.card-media,.card-image,.card-photo,.chip-img){border-radius:var(--r) var(--r) 0 0}
+html body :is(.gallery-preview,.story-hero,.preview-img,.mod-photo,.service-detail-photo){border-radius:var(--r)}
+html body .card-photo-arrow{background:rgba(255,255,255,.78);color:#1d1d1f;border:0;border-radius:980px;box-shadow:0 1px 6px rgba(0,0,0,.15);-webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px)}
+html body .card-dots i{background:rgba(255,255,255,.55)}
+html body .card-dots i.on{background:#fff}
+
+/* ---------- Forms ---------- */
+html body :is(.input,input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=number],input[type=search],select,textarea){border-radius:12px;border:1px solid var(--apple-hairline);background:var(--apple-surface);color:var(--apple-ink);box-shadow:none;font-family:var(--apple-font)}
+html body :is(.input,input,select,textarea):focus{outline:none;border-color:var(--apple-blue);box-shadow:0 0 0 4px var(--apple-blue-soft)}
+html body .field > span{color:var(--apple-ink-2);font-weight:500}
+html body :is(input[type=checkbox],input[type=radio]){accent-color:var(--apple-blue)}
+html body .err{color:var(--apple-red)}
+
+/* ---------- Status colours ---------- */
+html body :is(.ok,.success,.status-ok){color:var(--apple-green)}
+html body :is(.warn,.status-warn){color:var(--apple-orange)}
+
+/* ---------- Floating back button: compact glass circle that clears the page title ---------- */
+html body .floating-page-back{border-radius:980px;border:0;background:var(--apple-bar);box-shadow:0 1px 6px rgba(0,0,0,.12);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);color:var(--apple-blue)}
+@media (max-width:760px){
+  html body .floating-page-back .floating-back-label{display:none}
+  html body:has(.floating-page-back) .tour-head{padding-top:44px}
+}
+
+/* ---------- Theme switch: ease light/dark instead of a brightness jump ---------- */
+html body,html body :is(.header,.mnav,.mbar,.card,.panel,.booking){transition-property:background-color,color,border-color,box-shadow,transform;transition-duration:.25s}
+
+/* ---------- Accessibility preferences ---------- */
+@media (prefers-reduced-transparency:reduce){
+  html body :is(.header,.mnav,.mbar,.btn-glass,.floating-page-back,.card-photo-arrow){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--apple-surface)}
+}
+@media (prefers-contrast:more){
+  :root{--apple-ink-2:#3a3a3c;--apple-hairline:rgba(0,0,0,.45)}
+
+  html body :is(.card,.panel,.booking,.search-panel,.review,.story){border:1px solid var(--apple-hairline)}
+}
+@media (prefers-reduced-motion:reduce){
+  html body *:active{transform:none!important}
+  html body .card:hover{transform:none}
+}
+
+/* ---------- Search form: values read left to right, next to their icons ---------- */
+html body .search-panel :is(select,.input,button:not(.btn)){text-align:left;justify-content:flex-start}
+
+/* ---------- Sign-in with Telegram ---------- */
+html body .tg-login{display:grid;gap:12px;justify-items:start;margin:8px 0 20px}
+html body .tg-login .sub{max-width:46ch;line-height:1.45}
+html body .tg-login-button{min-height:48px}
+
+/* ---------- Request stages: pickup, guide, driver, plate, QR payment, rejection, cancel ---------- */
+html body .pickup-card{display:grid;gap:2px;padding:16px;border-radius:var(--r);background:var(--apple-blue);color:#fff;margin:12px 0}
+html body .pickup-card small{opacity:.85;font-size:14px;color:#fff!important}
+html body .pickup-card :is(strong,span){color:#fff!important}
+html body .pickup-card strong{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+html body .pickup-card span{font-size:15px}
+html body .staff-card{display:grid;gap:10px;padding:14px;border-radius:var(--r);background:var(--apple-surface);box-shadow:var(--apple-card-shadow);margin:12px 0}
+html body .staff-card > small{color:var(--apple-ink-2);font-size:13px}
+html body .staff-row{display:flex;align-items:center;gap:12px}
+html body .staff-row strong{display:block;font-size:17px}
+html body .staff-row small{color:var(--apple-ink-2);font-size:14px}
+html body .staff-photo{width:52px;height:52px;border-radius:999px;object-fit:cover;flex:none}
+html body .staff-photo-empty{display:flex;align-items:center;justify-content:center;background:var(--apple-fill);color:var(--apple-ink-2)}
+html body .staff-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+html body .staff-actions .btn{min-height:44px;justify-content:center}
+html body :is(.staff-card,.request-result-dialog,.request-receipt) .btn.staff-whatsapp{background:#25d366!important;color:#fff!important}
+html body .vehicle-main{display:flex;align-items:center;justify-content:space-between;gap:12px}
+html body .vehicle-main strong{display:block;font-size:17px}
+html body .vehicle-main small{color:var(--apple-ink-2);font-size:14px}
+html body .plate{flex:none;padding:6px 12px;border:2.5px solid var(--apple-ink);border-radius:8px;font-size:22px;font-weight:700;letter-spacing:.05em;font-variant-numeric:tabular-nums;background:var(--apple-surface);color:var(--apple-ink)}
+html body .sbp-payment{display:grid;justify-items:center;gap:10px;padding:18px;border-radius:var(--r);background:var(--apple-surface);box-shadow:var(--apple-card-shadow);margin:12px 0;text-align:center}
+html body .sbp-amount{font-size:36px;font-weight:700;letter-spacing:-.02em}
+html body .sbp-payment .payment-qr{width:min(220px,70vw);height:auto;padding:12px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px var(--apple-hairline)}
+html body .sbp-hint{display:flex;gap:8px;align-items:center;margin:0;color:var(--apple-ink-2);font-size:14px}
+html body .sbp-hint b{padding:3px 8px;border-radius:6px;background:var(--apple-fill);color:var(--apple-ink)}
+html body .sbp-deadline{margin:0;color:var(--apple-orange);font-weight:600}
+html body .rejection-card{display:grid;gap:8px;padding:16px;border-radius:var(--r);background:var(--apple-surface);box-shadow:var(--apple-card-shadow);margin:12px 0}
+html body .rejection-card small{color:var(--apple-ink-2)}
+html body .rejection-card p{margin:0;font-size:16px;line-height:1.45}
+html body .order-cancel{display:grid;gap:6px;margin-top:16px;text-align:center}
+html body .order-cancel-btn{color:var(--apple-red)!important}
+html body .order-cancel small{color:var(--apple-ink-2)}
+html body .receipt-details{margin-top:12px;border-radius:var(--r);background:var(--apple-surface);box-shadow:var(--apple-card-shadow);padding:0 14px}
+html body .receipt-details > summary{cursor:pointer;padding:14px 0;font-weight:600;list-style-position:inside}

@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import ts from 'typescript';
+const js=ts.transpileModule(readFileSync(new URL('../lib/order-notify.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+const {orderNotification}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const n=(before,after,kind='bookings')=>orderNotification(before,after,'AT-1',kind);
+assert.equal(n({status:'pending'},{status:'confirmed'}).title,'Заявка AT-1 подтверждена');
+assert.match(n({status:'confirmed'},{status:'awaiting_payment',payment:{amount:7300}}).body,/7\s300 ₽/);
+assert.equal(n({status:'pending'},{status:'rejected',rejectionReason:'Мест нет'}).body,'Мест нет');
+assert.match(n({status:'awaiting_payment'},{status:'paid'},'transfers').body,/24 часа/);
+assert.equal(n({status:'pending'},{status:'cancelled',cancelledBy:'customer'}),null,'the customer is not notified about their own cancellation');
+assert.equal(n({status:'paid'},{status:'paid',assignedVehicle:{title:'Toyota Camry',registration:'Т 715 ММ'},pickupTime:'09:30'},'transfers').title,'Водитель назначен');
+assert.match(n({status:'paid'},{status:'paid',assignedVehicle:{title:'Toyota Camry',registration:'Т 715 ММ'},pickupTime:'09:30'},'transfers').body,/Т 715 ММ.*09:30/);
+assert.equal(n({status:'paid'},{status:'paid',assignedGuide:{name:'Астамур'}}).title,'Экскурсовод назначен');
+assert.equal(n({status:'paid',assignedGuide:{name:'Астамур'}},{status:'paid',assignedGuide:{name:'Астамур'}}),null,'no repeat when nothing changed');
+assert.equal(n({status:'pending'},{status:'confirmed',dispatchNumber:'D-77'}).title,'Заявка D-77 подтверждена','the server-issued number is used');
+console.log('PASS: status, payment, rejection, assignment and pickup notifications; no duplicates or self-notifications; server number shown.');

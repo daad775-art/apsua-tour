@@ -1,0 +1,161 @@
+/* Shared sizing rules, after the retained theme and component styles. */
+:root{--layout-gap:clamp(12px,1.8vw,24px);--layout-gutter:clamp(16px,2.5vw,28px)}
+.wrap{width:100%;min-width:0;padding-inline:max(var(--layout-gutter),env(safe-area-inset-left,0px)) max(var(--layout-gutter),env(safe-area-inset-right,0px))}
+#app,#app>*,.wrap>*,.section>*,.page-head>*,.section-head>*,.panel>*,.card-body>*,.footer-main>*,.adm-head>*{min-width:0}
+#app :is(h1,h2,h3,p,dd,.sub,.hint,.field>span,.comfort-panel>summary,.account-section>summary){overflow-wrap:anywhere}
+html body .btn{min-width:0;max-width:100%;white-space:normal;text-align:center;line-height:1.35;flex-shrink:1}
+html body :is(.head-btns,.comfort-actions,.partner-actions,.profile-actions,.account-actions){align-items:stretch;gap:8px;flex-wrap:wrap}
+html body :is(.head-btns,.comfort-actions,.partner-actions,.profile-actions,.account-actions)>.btn{display:inline-flex;min-height:40px}
+.page-head,.section-head,.adm-head{align-items:center;gap:12px;flex-wrap:wrap}
+.page-head>div,.section-head>div{max-width:100%}
+.input,select,textarea,fieldset,.grid2,.adm-grid,.adm-grid3{min-inline-size:0;max-inline-size:100%;box-sizing:border-box}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid2>.field,.grid2>label{min-width:0;align-content:start}
+html body button.sbtn{display:flex!important;align-items:center;justify-content:center;gap:7px}
+button.sbtn b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+button.sbtn>svg{flex:none}
+/* Explicit width prevents max-height + aspect-ratio from narrowing this banner. */
+html body #popular #pop{width:100%;max-width:100%;min-width:0;height:clamp(340px,36vw,470px);min-height:0;max-height:none;aspect-ratio:auto;box-sizing:border-box;margin-inline:0}
+#popular .slide{width:100%;max-width:100%;min-width:0}
+#popular .slide-copy{width:100%;max-width:740px;padding:clamp(18px,3vw,34px);gap:10px;grid-template-rows:auto}
+#popular .slide-copy h3{font-size:clamp(22px,2.7vw,34px);line-height:1.2;max-width:100%;overflow-wrap:anywhere}
+#popular .slide-copy>p{max-width:58ch;line-height:1.5}
+#popular .slide-row{min-width:0;flex-wrap:wrap;align-items:center;gap:10px}
+#popular .slide-copy .slide-row:last-child{display:flex;justify-content:flex-start;gap:12px;align-items:center}
+#popular .slide-row .price{min-width:0;max-width:100%;white-space:normal;margin:0;font-size:clamp(20px,2.3vw,28px);line-height:1.2}
+#popular .slide-copy .btn{flex:none;min-height:44px;padding:10px 18px;font-size:14px}
+#popular .pop-controls{right:16px;top:16px;gap:8px}
+#popular .pop-controls .circle{width:44px;height:44px;flex:none;padding:0}
+#popular .pop-dots{width:100%;margin:4px 0 0;gap:5px;align-items:center;justify-content:center;flex-wrap:wrap}
+html body #popular .pop-dots button{position:relative;flex:0 1 30px;width:30px;max-width:30px;min-width:16px;height:28px;min-height:28px;padding:0;border:0!important;background:transparent!important;box-shadow:none!important;overflow:hidden}
+#popular .pop-dots button::before{content:'';position:absolute;inset:12px 0 auto;height:4px;border-radius:4px;background:var(--line)}
+#popular .pop-dots button.on::after{inset:12px 0 auto;height:4px;border-radius:4px}
+/* Card feet line up without fixed text heights or overflowing long prices. */
+.cards{align-items:stretch;gap:var(--layout-gap)}
+.card{min-width:0;height:100%}.card-body{flex:1;min-width:0}
+html body .card .card-bottom{margin-top:auto!important;padding-top:12px!important;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:10px}
+html body .card .card-bottom .price{white-space:normal;font-size:18px!important;line-height:1.3;overflow-wrap:anywhere}
+html body .card .card-bottom .btn{min-height:40px!important;padding:9px 12px!important;font-size:12px!important;align-self:end}
+.story-link,.story,.service-card,.theatre-event,.fleet-card{min-width:0}
+.services-grid,.reviews,.stories,.theatre-grid,.fleet-grid{align-items:stretch}
+.service-card-body,.story-body,.theatre-event>div{min-width:0}
+.review header,.story-top,.order-card>header,.trip-order>header{min-width:0;flex-wrap:wrap}
+.review header>div,.story-top>*,.order-card-title{min-width:0}
+html body .tour-gallery{width:100%;max-width:100%}
+html body :is(.tour-gallery>button,.fleet-cover){display:block!important;padding:0!important;border:0!important}
+.tour-layout,.tr-layout,.map-grid,.partner-layout,.service-detail-grid,.acc-grid{min-width:0}
+.map-grid{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+#trForm .grid2{align-items:start}
+#trForm .field>span{line-height:1.4}
+#trForm .grid2>.field>span{min-height:2.8em;display:flex;align-items:flex-end}
+#trForm .grid2 .err:empty{display:none}
+html body #trForm button.sbtn{justify-content:flex-start;padding:9px 10px!important;font-size:14px!important}
+#trForm button.sbtn b{flex:1;font-size:14px}
+#trForm .classes{grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));align-items:stretch}
+#trForm .class{min-width:0;display:flex}
+#trForm .class>span{width:100%;height:100%;min-height:76px;overflow-wrap:anywhere}
+#trForm .tr-passengers{align-items:center}
+.rate-item{min-width:0;flex-wrap:wrap;gap:6px 12px}.rate-item>span{min-width:0;overflow-wrap:anywhere}.rate-item>b{margin-left:auto;max-width:100%;white-space:normal;text-align:right}
+.footer-main{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.footer-links{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 20px}
+.footer-links a{white-space:normal;min-width:0;overflow-wrap:anywhere}
+.footer-contact .footer-phone{white-space:normal}.footer-bottom>div{min-width:0}
+/* About, contacts and partnership are one destination. */
+.company-page{padding-block:24px 40px;display:grid;gap:18px}
+.company-back{justify-self:start}
+.company-top{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.company-overview,.company-contact,.company-story,.company-partners{border:1px solid var(--line);border-radius:22px;background:var(--g-bg);box-shadow:var(--shadow-sm);padding:clamp(18px,2.5vw,30px);min-width:0}
+.company-overview{display:flex;flex-direction:column;align-items:start;gap:16px}
+.company-page .eyebrow{font-size:11px;line-height:1.5}
+.company-page h1{font-size:clamp(28px,3.6vw,42px);line-height:1.15;letter-spacing:-.025em}
+.company-page h2{font-size:clamp(21px,2.3vw,27px);line-height:1.25}
+.company-page p{font-size:14px;line-height:1.7;overflow-wrap:anywhere}
+.company-overview .sub{font-size:16px;line-height:1.6;color:var(--muted)}
+.company-overview>.btn{margin-top:auto}
+.company-contact{display:flex;flex-direction:column;gap:13px;background:var(--surface-2)}
+.company-contact-list{display:grid;gap:12px;margin:0}
+.company-contact-list>div{display:grid;gap:3px;min-width:0}
+.company-contact-list dt{font-size:11px;color:var(--muted)}
+.company-contact-list dd{margin:0;min-width:0;line-height:1.4;overflow-wrap:anywhere}
+.company-contact-list a{font-size:clamp(15px,1.6vw,20px);font-weight:600;text-decoration:none;overflow-wrap:anywhere}
+.company-contact-list a:hover{color:var(--sea)}
+.company-contact-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.company-contact-actions .btn{flex:1 1 130px;min-height:44px;font-size:13px}
+.company-services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.company-service{display:flex;align-items:center;gap:12px;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);text-decoration:none;min-width:0;transition:box-shadow .22s,border-color .22s}
+.company-service:hover{box-shadow:var(--shadow-sm);border-color:var(--sea)}
+.company-service>svg:first-child{width:28px;height:28px;flex:none;color:var(--sea)}
+.company-service>span{display:grid;gap:3px;flex:1;min-width:0}
+.company-service b{font-size:14px;line-height:1.35;overflow-wrap:anywhere}.company-service small{font-size:11px;color:var(--muted);line-height:1.5}
+.company-service>svg:last-child{width:16px;height:16px;flex:none}
+.company-story{display:grid;gap:16px}.company-story-copy{columns:2;column-gap:28px}.company-story-copy>p{break-inside:avoid;margin:0 0 12px}
+.company-partners{display:grid;gap:14px}.company-partners-copy{display:grid;gap:10px;max-width:82ch}
+.company-partner-contacts{display:flex;flex-wrap:wrap;gap:8px}
+.company-partner-contacts a{display:grid;gap:4px;flex:1 1 210px;min-width:0;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;text-decoration:none;overflow-wrap:anywhere}
+.company-partner-contacts small{font-size:11px;color:var(--muted)}.company-partner-contacts b{font-size:13px;line-height:1.4}
+/* Keep narrow admin cards usable; intentionally wide data tables scroll locally. */
+.adm-main,.adm-body,.adm-card,.adm-row-main,.news-card,.news-filter-grid{min-width:0}
+.adm-main :is(.adm-grid,.adm-grid3,.prog-row,.tbl-row)>*{min-width:0}
+.adm-main .head-btns,.adm-row-act,.admin-save-bar{flex-wrap:wrap;gap:8px}
+.adm-main :is(.table-wrap,.admin-orders-scroll){min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.adm-main textarea{width:100%;min-width:0;max-width:100%;resize:vertical}
+@media(min-width:901px) and (max-width:1150px){
+ .header-in{gap:10px}.nav{gap:0}.nav a{font-size:12px;padding:8px 7px}.header .logo-img{max-width:130px;height:auto}.header-actions{gap:5px}
+ .header-actions [data-acc-label]{display:inline-block;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .search.search-departures{grid-template-columns:repeat(2,minmax(0,1fr)) minmax(90px,.7fr) auto!important}
+ .search.search-departures>.departure-filter{grid-column:1/-1}
+}
+@media(max-width:900px){
+ .map-grid{grid-template-columns:minmax(0,1fr)}
+ .company-top{grid-template-columns:minmax(0,1fr)}.company-overview{gap:12px}.company-story-copy{columns:auto}
+ .company-contact-list{grid-template-columns:repeat(2,minmax(0,1fr))}.company-contact-actions{margin-top:0}
+ .company-services{gap:8px}.company-service{padding:12px;gap:8px}.company-service>svg:first-child{width:23px;height:23px}
+ html body .search.search-departures{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px 44px!important;gap:8px!important}
+ .search.search-departures>.departure-filter{grid-column:1/-1;min-width:0}
+ .search.search-departures .sbtn b{font-size:12px}.search.search-departures>.departure-filter>select{font-size:16px!important}
+ .toolbar .sort{min-width:0;width:100%;display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px}
+ .toolbar .sort .input{width:100%;min-width:0}
+ .card-body .desc{line-height:1.55}
+ .adm-main input.input,.adm-main select.input,.adm-main textarea.input{font-size:16px}
+}
+@media(max-width:600px){
+ :root{--layout-gap:12px;--layout-gutter:16px}
+ html body #popular #pop{height:clamp(300px,78vw,400px);border-radius:20px}
+ #popular .slide-copy{padding:16px;gap:9px;max-width:100%}
+ #popular .slide-copy h3{font-size:21px;line-height:1.22;max-width:100%}
+ #popular .slide-copy>p{display:none}#popular .slide-copy .slide-row:last-child{gap:10px;flex-wrap:wrap}
+ #popular .slide-copy .btn{font-size:13px;padding:10px 14px;min-height:42px}
+ #popular .slide-row .price{font-size:22px;line-height:1.3}
+ #popular .slide-row:first-child{gap:6px}.pop-controls{top:12px;right:12px}
+ .page-head{align-items:flex-start}.page-head .btn{width:auto;max-width:100%;min-height:42px}
+ .section-head{align-items:flex-start;gap:12px}.section-head>div{gap:7px}
+ .hero-buttons{align-items:stretch}.hero-buttons .btn{flex:1 1 150px!important;min-height:44px!important}
+ .comfort-actions>.btn{flex:1 1 140px}
+ html body .card .card-bottom .btn{min-height:42px!important}
+ .service-detail-grid,.partner-layout{grid-template-columns:minmax(0,1fr)}
+ .partner-visual{position:static}.partner-visual b{font-size:21px}
+ .company-page{gap:12px;padding-block:18px 28px}.company-top{gap:12px}
+ .company-overview,.company-contact,.company-story,.company-partners{padding:18px;border-radius:18px}
+ .company-contact-list{grid-template-columns:minmax(0,1fr);gap:11px}
+ .company-services{grid-template-columns:minmax(0,1fr)}.company-service{padding:13px 15px}
+ .company-service small{font-size:12px}.company-page p{font-size:14px}.company-overview .sub{font-size:15px}
+ .company-partner-contacts{display:grid;grid-template-columns:minmax(0,1fr)}
+ .footer-main{grid-template-columns:minmax(0,1fr)}.footer-links{gap:4px 14px!important;font-size:12px!important}
+ .footer-brand b{font-size:18px}.footer-contact{font-size:13px}.footer-contact .footer-phone{font-size:16px}
+ .footer-bottom{font-size:11px;line-height:1.5}
+ html body :is(#bkForm,#trForm,.auth,.profile-form,.order-answer-form,.comfort-body) :is(input,select,textarea){font-size:16px!important}
+ .request-result-dialog>header,.profile-dialog>header{gap:10px;align-items:flex-start}
+ .request-result-dialog>footer{gap:8px}.request-result-dialog>footer .btn{flex:1 1 100%;min-height:44px}
+ .trip-status{max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center}
+}
+@media(max-width:380px){
+ html body .header-in{gap:5px;padding-inline:12px}.header .logo-img{max-width:96px;height:auto}.header-actions{gap:3px}
+ .header-actions #favBtn{gap:4px;padding-inline:6px}.header-actions #accBtn{width:34px;padding-inline:5px}
+ html body #trForm .grid2:has(#tr-name){grid-template-columns:minmax(0,1fr)!important}
+ #trForm .classes{grid-template-columns:minmax(0,1fr)!important}
+ .review-details,.pretrip-grid,.trip-order-data{grid-template-columns:minmax(0,1fr)}
+ html body .search.search-departures{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ html body .search.search-departures>.btn{width:100%!important;font-size:13px}
+ .search.search-departures>.btn span{display:inline}
+ .adm-main .news-filter-grid,.appearance-colors{grid-template-columns:minmax(0,1fr)}
+}

@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+const source=readFileSync(new URL('../public/user-app.js',import.meta.url),'utf8');
+const helpers=source.slice(source.indexOf('function appearanceDefault('),source.indexOf('function applyAppearance('));
+const ctx=vm.createContext({});vm.runInContext(helpers,ctx);
+const bad=ctx.appearanceNormalize({blur:999,opacity:-5,angle:999,weight:800,neutral:{start:'red;}</style><script>',text:'#abcdef'}});
+assert.equal(bad.blur,40);assert.equal(bad.opacity,20);assert.equal(bad.angle,360);assert.equal(bad.weight,600);assert.equal(bad.neutral.start,'#e8e8ed','invalid colour falls back to the Apple default');assert.equal(bad.neutral.text,'#abcdef');
+const light=ctx.appearanceVariables({opacity:70,blur:12,neutral:{start:'#ffffff',end:'#eeeeee'},accent:{text:'#112233'}});
+assert.ok(light['--control-bg'].includes(',0.7)'));assert.equal(light['--control-blur'],'12px');assert.equal(light['--control-accent-ink'],'#112233');
+assert.notEqual(ctx.appearanceVariables({},true)['--control-ink'],ctx.appearanceVariables({})['--control-ink']);
+assert.ok(source.includes('adminDirty&&adminBaseline?adminBaseline:C'));
+assert.ok(source.includes("window.addEventListener('admin-content-saved',applyAppearance)"));
+assert.ok(source.includes("window.addEventListener('admin-content-discarded',applyAppearance)"));
+console.log('PASS: invalid CSS is rejected, bounds and real font weights enforced, theme defaults independent; draft preview does not replace saved site appearance.');

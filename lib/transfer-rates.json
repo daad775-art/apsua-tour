@@ -1,0 +1,31 @@
+{
+  "source": "https://apsuatur.ru/transfer/",
+  "checked": "2026-10-08",
+  "destinations": {
+    "gagra": {
+      "group": 1000,
+      "standard": 5500,
+      "van": 6600
+    },
+    "pitsunda": {
+      "group": 1000,
+      "standard": 5700,
+      "van": 7200
+    },
+    "gudauta": {
+      "group": 1300,
+      "standard": 6500,
+      "van": 8400
+    },
+    "afon": {
+      "group": 1500,
+      "standard": 7000,
+      "van": 9600
+    },
+    "suhum": {
+      "group": 1600,
+      "standard": 7000,
+      "van": 9600
+    }
+  }
+}

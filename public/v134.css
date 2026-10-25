@@ -1,0 +1,324 @@
+/* ==========================================================================
+   14.5–14.9 · Minimal Apple-style redesign (loaded after apple-theme.css).
+   One accent blue for the main action, hairline separators, thin 1.7 px icons,
+   photos with 18–28 px radii, horizontal rails that scroll with snap.
+   ========================================================================== */
+html body{--v4-gap:16px;--v4-radius:22px}
+
+/* ---------- Header: logo, centred sections, quiet icons ---------- */
+html body .header{background:var(--apple-bar);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--apple-hairline);box-shadow:none}
+html body .header-in{min-height:56px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
+html body .header .logo{justify-self:start}
+html body .header .logo-img{height:38px;width:auto}
+html body .header .nav{display:flex;gap:28px;justify-content:center}
+html body .header .nav a{font-size:13.5px;font-weight:500;color:var(--apple-ink);opacity:.82;padding:6px 2px;border-radius:0;background:none!important;text-decoration:none}
+html body .header .nav a:hover,html body .header .nav a[aria-current=page],html body .header .nav a.on{opacity:1}
+html body .header-actions{justify-self:end;display:flex;align-items:center;gap:4px}
+html body .header-actions>.btn.btn-ghost.small,html body .header-actions .v4-orders{min-height:36px;min-width:36px;padding:0 8px;border-radius:999px;background:transparent!important;box-shadow:none!important;border:0!important;color:var(--apple-ink);position:relative}
+html body .header-actions>.btn.btn-ghost.small:hover{background:var(--apple-fill)!important}
+html body .header-actions #accBtn{background:var(--apple-fill)!important;padding:0 12px 0 8px;gap:6px;font-size:13px;font-weight:500}
+html body .header-actions .hide-m{display:none!important}
+html body .v4-orders .v4i{width:19px;height:19px}
+html body .v4-orders-dot{position:absolute;right:6px;top:6px;width:8px;height:8px;border-radius:999px;background:#ff8a00;box-shadow:0 0 0 2px var(--apple-surface)}
+@media (max-width:900px){html body .header-in{grid-template-columns:auto 1fr;gap:12px}html body .header .nav{display:none}html body .header .logo-img{height:34px}}
+
+/* ---------- Bottom tab bar on phones ---------- */
+@media (max-width:760px){html body .mnav{background:var(--apple-bar);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--apple-hairline);box-shadow:none}
+ html body .mnav a{font-size:10.5px;font-weight:500;color:#8e8e93;background:none!important}
+ html body .mnav a.on,html body .mnav a[aria-current=page]{color:var(--apple-blue)}}
+
+/* ---------- Shared pieces ---------- */
+html body .v4i{width:18px;height:18px;flex:none}
+html body .v4-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 26px;border-radius:999px;font-size:17px;font-weight:600;text-decoration:none;white-space:nowrap}
+html body .v4-btn-white{background:#fff;color:#1d1d1f}
+html body .v4-btn-glass{background:rgba(255,255,255,.2);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);color:#fff}
+html body .v4-btn-gray{min-height:40px;padding:0 16px;font-size:15px;background:var(--apple-fill);color:var(--apple-ink)}
+html body .v4-head{display:flex;align-items:center;gap:12px;margin:0 0 18px}
+html body .v4-head h2{flex:1;margin:0;font-size:clamp(22px,2.6vw,32px);font-weight:700;letter-spacing:-.025em}
+html body .v4-head>a{font-size:clamp(15px,1.3vw,17px);color:var(--apple-link);text-decoration:none;white-space:nowrap}
+html body .v4-arrows{display:flex;gap:8px}
+html body .v4-arrow{width:40px;height:40px;border-radius:999px;border:0;background:var(--apple-fill);color:var(--apple-ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
+html body .v4-arrow svg{width:18px;height:18px}
+@media (max-width:760px){html body .v4-arrows{display:none}}
+html body .v4-sec{padding-top:clamp(32px,6vw,72px)}
+html body .v4-center{text-align:center;font-size:clamp(26px,4vw,48px);font-weight:700;letter-spacing:-.03em;margin:0 0 clamp(20px,4vw,48px)}
+html body .v4-rail{display:flex;gap:clamp(12px,1.6vw,20px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:2px;scrollbar-width:none;padding:2px 2px 6px;margin:0 -2px}
+html body .v4-rail::-webkit-scrollbar{display:none}
+html body .v4-rail>*{scroll-snap-align:start;flex:none}
+@media (max-width:760px){html body .v4-rail{margin:0 -16px;padding-inline:16px;scroll-padding-inline:16px}}
+html body .v4-meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:clamp(15px,1.3vw,17px);font-weight:500;color:var(--apple-ink)}
+html body .v4-meta>span{display:inline-flex;align-items:center;gap:6px}
+html body .v4-stars{display:inline-flex;gap:2px;color:#ff9500}
+html body .v4star{width:14px;height:14px}
+
+/* ---------- Home ---------- */
+html body .v4-home{padding-bottom:clamp(40px,6vw,80px)}
+html body .v4-hero{position:relative;margin:16px auto 0;max-width:calc(var(--wrap) + 0px);min-height:clamp(470px,58vw,640px);border-radius:clamp(26px,3vw,32px);overflow:hidden;color:#fff;display:flex;align-items:flex-end;margin-inline:max(16px,calc((100% - var(--wrap)) / 2 + 24px))}
+html body .v4-hero-media,html body .v4-hero-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+html body .v4-hero-media img{opacity:0;transition:opacity .8s}
+html body .v4-hero-media img.on{opacity:1}
+html body .v4-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.6) 100%)}
+html body .v4-hero-copy{position:relative;z-index:1;width:100%;min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:clamp(20px,5vw,56px);max-width:760px}
+html body .v4-hero-copy>p{margin:0;font-size:clamp(15px,1.6vw,20px);opacity:.92}
+html body .v4-hero h1{margin:6px 0 0;color:#fff;font-size:clamp(36px,6vw,76px);line-height:1.03;font-weight:800;letter-spacing:-.035em;max-width:100%;overflow-wrap:break-word}
+html body .v4-hero .v4-lead{margin-top:12px;font-size:clamp(15px,1.6vw,19px);line-height:1.45}
+html body .v4-hero-buttons{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+@media (max-width:760px){html body .v4-hero-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}html body .v4-hero .v4-btn{border-radius:14px;min-width:0;padding:12px;font-size:16px;white-space:normal;text-align:center}html body .v4-hero .v4-lead{display:none}}
+html body .v4-place{position:relative;display:block;width:clamp(170px,23vw,290px);aspect-ratio:290/370;border-radius:clamp(18px,2vw,24px);overflow:hidden;color:#fff;text-decoration:none}
+html body .v4-place img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}
+html body .v4-place:hover img{transform:scale(1.03)}
+html body .v4-place::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.6) 100%)}
+html body .v4-place strong{position:absolute;z-index:1;left:clamp(14px,1.8vw,22px);right:clamp(14px,1.8vw,22px);bottom:clamp(14px,1.8vw,22px);font-size:clamp(20px,2.2vw,28px);line-height:1.1;font-weight:700;letter-spacing:-.02em}
+html body .v4-tour{width:clamp(250px,25vw,300px);text-decoration:none;color:var(--apple-ink)}
+html body .v4-tour img{width:100%;aspect-ratio:5/6;object-fit:cover;border-radius:22px}
+html body .v4-tour strong{display:block;margin-top:14px;font-size:clamp(20px,2vw,24px);line-height:1.15;font-weight:700;letter-spacing:-.02em}
+html body .v4-rating{display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:clamp(16px,2vw,22px) clamp(18px,2.4vw,26px);margin-bottom:14px;border-radius:clamp(18px,2vw,24px);background:var(--apple-surface)}
+html body .v4-rating>strong{font-size:clamp(40px,4vw,52px);line-height:1;font-weight:700;letter-spacing:-.02em}
+html body .v4-rating>span{flex:1;min-width:150px;display:grid;gap:4px}
+html body .v4-rating small{font-size:14px}
+html body .v4-review{width:clamp(280px,30vw,380px);padding:18px;border-radius:clamp(18px,2vw,24px);background:var(--apple-surface);display:flex;flex-direction:column;gap:10px}
+html body .v4-review header{display:flex;align-items:center;justify-content:space-between}
+html body .v4-review header small{font-size:12px}
+html body .v4-review p{margin:0;font-size:15px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+html body .v4-review footer{display:flex;align-items:center;gap:10px;margin-top:auto}
+html body .v4-review footer b{display:block;font-size:14px}
+html body .v4-review footer small{font-size:13px}
+html body .v4-ava{width:34px;height:34px;border-radius:999px;background:var(--apple-fill);display:flex;align-items:center;justify-content:center;font-weight:600;overflow:hidden;flex:none}
+html body .v4-ava img{width:100%;height:100%;object-fit:cover}
+html body .v4-story{width:clamp(260px,30vw,380px);text-decoration:none;color:var(--apple-ink)}
+html body .v4-story img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:clamp(18px,2vw,24px)}
+html body .v4-story strong{display:block;margin-top:10px;font-size:clamp(16px,1.5vw,19px);line-height:1.3}
+html body .v4-story small{display:block;margin-top:3px;font-size:13px}
+html body .v4-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 32px}
+html body .v4-steps li{text-align:center;color:var(--apple-ink)}
+html body .v4-steps svg{width:64px;height:64px}
+html body .v4-steps strong{display:block;margin-top:20px;font-size:21px;font-weight:600}
+html body .v4-steps span{display:block;margin-top:6px;font-size:17px;color:var(--apple-ink-2)}
+@media (max-width:760px){html body .v4-steps-sec{display:none}}
+html body .v4-useful{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+@media (max-width:900px){html body .v4-useful{grid-template-columns:1fr 1fr;gap:10px}}
+html body .v4-use{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:clamp(150px,17vw,220px);padding:clamp(16px,2vw,24px);border-radius:clamp(18px,2vw,24px);text-decoration:none;color:#1d1d1f}
+html body .v4-use>.v4i{width:clamp(30px,3vw,40px);height:clamp(30px,3vw,40px)}
+html body .v4-use-ghost{position:absolute;right:-14px;bottom:-20px;opacity:.12}
+html body .v4-use-ghost .v4i{width:clamp(96px,11vw,150px);height:clamp(96px,11vw,150px)}
+html body .v4-use strong{position:relative;display:block;font-size:clamp(16px,1.7vw,21px);font-weight:600;letter-spacing:-.01em}
+html body .v4-use small{position:relative;display:block;margin-top:3px;font-size:clamp(13px,1.2vw,15px);color:#424245}
+html body .v4-use-0{background:#fff1e0;color:#1d1d1f}html body .v4-use-0 .v4i{color:#ff8a00}
+html body .v4-use-1{background:#f1ecfb}html body .v4-use-1 .v4i{color:#8e5bd8}
+html body .v4-use-2{background:#e7f5ec}html body .v4-use-2 .v4i{color:#2e9d55}
+html body .v4-use-3{background:#e6f0fd}html body .v4-use-3 .v4i{color:#0071e3}
+
+
+/* ---------- Catalogue cards ---------- */
+html body .card.v4-card{border-radius:24px;overflow:hidden;background:var(--apple-surface);box-shadow:none;border:0}
+html body .card.v4-card .card-media img{aspect-ratio:4/3;object-fit:cover;border-radius:0}
+html body .card.v4-card .card-body{padding:18px 20px 22px;display:block}
+html body .v4-cat{display:block;font-size:13px;font-weight:600;color:#b25400}
+
+html body .card.v4-card h3{margin:3px 0 0;font-size:clamp(19px,1.8vw,22px);line-height:1.2;font-weight:700;letter-spacing:-.02em}
+html body .card.v4-card h3 a{color:inherit;text-decoration:none}
+html body .card.v4-card .desc{margin:6px 0 0;font-size:15px;color:var(--apple-ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html body .v4-routeline{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:14px;color:#424245;min-width:0}
+
+html body .v4-routeline>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .card.v4-card .fav{top:14px;right:14px;width:38px;height:38px;border-radius:999px;background:rgba(255,255,255,.92);color:#1d1d1f;box-shadow:none;border:0}
+
+/* ---------- Tour page ---------- */
+html body .tour-page .tour-head h1{font-size:clamp(30px,4.6vw,48px);letter-spacing:-.035em}
+html body .tour-page .facts{display:flex;border-radius:22px;background:var(--apple-surface);padding:18px 0}
+html body .tour-page .facts .fact{flex:1;background:none;box-shadow:none;border:0;padding:0 18px;border-left:.5px solid var(--apple-hairline);border-radius:0}
+html body .tour-page .facts .fact:first-child{border-left:0}
+html body .tour-page .facts .fact span{font-size:13px;color:var(--apple-ink-2)}
+html body .tour-page .facts .fact b{font-size:17px}
+@media (max-width:760px){html body .tour-page .facts{flex-wrap:wrap;row-gap:12px}html body .tour-page .facts .fact{flex:1 1 45%}html body .tour-page .facts .fact:nth-child(3){border-left:0}}
+html body .tour-page .block h2{font-size:clamp(22px,2.4vw,28px)}
+html body .road-route{border-radius:24px;background:var(--apple-surface);padding:12px;overflow:hidden}
+html body .road-route>h2{padding:8px 8px 4px}
+html body .road-route.v4-has-ymap .tour-route-map{display:none}
+html body .v4-ymap{height:clamp(240px,40vw,460px);border-radius:16px;overflow:hidden}
+html body .v4-route-panel{margin-top:8px}
+html body .road-route.v4-route-ready>.route-stops,html body .road-route.v4-route-ready>.road-route-note{display:none}
+html body .v4-route-stats{display:flex;gap:8px;padding:14px 8px;border-bottom:.5px solid var(--apple-hairline)}
+html body .v4-route-stats>span{flex:1;display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center}
+html body .v4-route-stats .v4i{grid-row:span 2;width:22px;height:22px}
+html body .v4-route-stats b{font-size:clamp(16px,1.6vw,19px);font-weight:600}
+html body .v4-route-stats small{font-size:12px}
+html body .v4-route-stops{list-style:none;margin:0;padding:14px 8px 6px}
+html body .v4-stop{position:relative;display:flex;align-items:center;gap:14px;min-height:52px}
+html body .v4-stop>img{width:56px;height:56px;border-radius:14px;object-fit:cover;flex:none}
+html body .v4-stop-dot{width:24px;height:24px;border-radius:999px;background:var(--apple-blue);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 0 0 2px var(--apple-surface)}
+html body .v4-stop>img+.v4-stop-dot{position:absolute;left:-6px;top:-4px}
+html body .v4-stop-home .v4-stop-dot{background:var(--apple-ink);color:var(--apple-surface)}
+html body .v4-stop-dot svg{width:14px;height:14px}
+html body .v4-stop strong{display:block;font-size:17px;font-weight:600}
+html body .v4-stop small{display:block;font-size:14px}
+html body .v4-stop em{display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:2px 9px;border-radius:999px;background:var(--apple-fill);font-style:normal;font-size:12px}
+html body .v4-stop em .v4i{width:13px;height:13px}
+html body .v4-leg{display:flex;align-items:center;gap:8px;min-height:34px;margin-left:11px;padding-left:22px;border-left:2px dashed #c7c7cc;font-size:13px;color:var(--apple-ink-2)}
+html body .v4-leg .v4i{width:15px;height:15px}
+
+/* ---------- Bottom bar that follows the steps ---------- */
+html body .mbar{background:var(--apple-bar);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--apple-hairline);box-shadow:none;padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+html body .v4-bar{display:grid;grid-template-columns:1fr auto;grid-template-areas:"dots dots" "copy btn";align-items:center;gap:8px 12px;width:100%}
+html body .v4-dots{grid-area:dots;display:flex;justify-content:center;gap:4px}
+html body .v4-dots i{width:6px;height:6px;border-radius:999px;background:#d2d2d7;transition:width .2s}
+html body .v4-dots i.on{background:var(--apple-ink)}
+html body .v4-dots i.cur{width:18px}
+html body .v4-bar-copy{grid-area:copy;min-width:0}
+html body .v4-bar-copy b{display:block;font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .v4-bar-copy small{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .v4-bar .btn{grid-area:btn;min-height:48px;border-radius:14px;padding:0 20px;font-size:17px}
+html body .v4-link{border:0;background:none;padding:0;font:inherit;color:var(--apple-link);cursor:pointer}
+@media (min-width:1001px){html body .mbar{display:none!important}}
+
+/* ---------- Transfer form ---------- */
+html body #trPanel.panel{background:transparent;box-shadow:none;border:0;padding:0}
+html body #trForm .field>span:first-child,html body #trForm legend{font-size:12px;color:var(--apple-ink-2);font-weight:500}
+html body #trForm .input{min-height:56px;border-radius:14px;background:var(--apple-surface);box-shadow:inset 0 0 0 1px #d2d2d7;border:0;font-size:17px}
+
+html body #trForm .tr-direction{display:inline-grid;grid-template-columns:1fr 1fr;padding:3px;border-radius:12px;background:var(--apple-fill);border:0;min-width:min(100%,360px)}
+html body #trForm .tr-direction legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+html body #trForm .tr-direction label{position:relative}
+html body #trForm .tr-direction input{position:absolute;opacity:0}
+html body #trForm .tr-direction span{display:flex;align-items:center;justify-content:center;min-height:38px;border-radius:9px;font-size:15px;font-weight:500;cursor:pointer}
+html body #trForm .tr-direction input:checked+span{background:var(--apple-surface);box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
+html body #trForm .tr-departure-warning{background:none;border:0;padding:0;font-size:14px;color:var(--apple-ink)}
+html body #trForm .classes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+html body #trForm .class{border-radius:18px;background:var(--apple-surface);box-shadow:none;border:0;padding:16px}
+html body #trForm .class:has(input:checked){box-shadow:inset 0 0 0 2px var(--apple-blue)}
+html body #trRates{border-radius:24px;background:var(--apple-surface);box-shadow:0 8px 30px rgba(0,0,0,.06);border:0}
+
+/* ---------- Booking card ---------- */
+html body .tour-page .booking{border-radius:24px;background:var(--apple-surface);box-shadow:0 8px 30px rgba(0,0,0,.06);border:0}
+
+/* ---------- Sign-in ---------- */
+html body .v4-signin-wrap{display:grid;place-items:center;min-height:min(78vh,760px)}
+html body .v4-signin{width:min(100%,420px);padding:40px 32px 26px;border-radius:28px;background:var(--apple-surface);box-shadow:0 30px 80px rgba(0,0,0,.12);text-align:left}
+html body .v4-signin-logo{height:56px;width:auto;margin:0 auto}
+html body .v4-signin h1{margin:22px 0 0;text-align:center;font-size:28px;font-weight:700;letter-spacing:-.025em}
+html body .v4-signin-sub{margin:8px 0 0;text-align:center;font-size:16px;color:var(--apple-ink-2)}
+html body .v4-perks{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
+html body .v4-perks li{display:flex;align-items:center;gap:14px;font-size:15px;color:var(--apple-ink)}
+html body .v4-perks .v4i{width:22px;height:22px}
+html body .v4-tg{margin-top:26px;display:flex;justify-content:center;min-height:48px}
+html body .v4-legal{margin:16px 0 0;text-align:center;font-size:12px;color:#86868b}
+html body .v4-staff{margin:18px 0 0;padding-top:16px;border-top:.5px solid var(--apple-hairline);text-align:center;font-size:13px}
+html body .v4-staff a{color:var(--apple-link);text-decoration:none}
+html body .v4-legacy{margin-top:18px;font-size:14px}
+html body .v4-legacy summary{cursor:pointer;color:var(--apple-link)}
+@media (max-width:760px){html body .v4-signin{padding:32px 22px 22px;box-shadow:none}}
+
+/* ---------- Admin: Finder-like sidebar, quiet cards ---------- */
+html body.is-admin .adm-nav a,html body.is-admin .adm-tabs a,html body.is-admin .adm-side a{border-radius:9px;background:transparent;color:var(--apple-ink);font-weight:400;box-shadow:none}
+html body.is-admin .adm-nav a[aria-current],html body.is-admin .adm-tabs a[aria-current],html body.is-admin .adm-side a[aria-current],html body.is-admin .adm-nav a.on,html body.is-admin .adm-tabs a.on,html body.is-admin .adm-side a.on{background:var(--apple-fill-strong);color:var(--apple-ink);font-weight:600}
+html body.is-admin .adm-card{border-radius:16px;background:var(--apple-surface);box-shadow:none;border:0}
+html body.is-admin .adm-card>header h3{font-size:17px}
+html body.is-admin .route-editor li{display:grid;grid-template-columns:minmax(0,1fr) 170px auto;gap:10px;align-items:end}
+@media (max-width:760px){html body.is-admin .route-editor li{grid-template-columns:1fr}}
+html body .road-route.v4-route-ready .road-route-status{display:none}
+/* Shared spacing and safe areas: the header owns the top inset exactly once. */
+html{background:var(--apple-bg);padding:0;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
+html body .header{top:0;padding-top:env(safe-area-inset-top,0px);background:var(--apple-bg)!important}
+html body .header-in{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+html body #app>.wrap{padding-top:24px;padding-bottom:32px}
+html body .page-head{margin-top:0;margin-bottom:20px;align-items:flex-start}
+html body .page-head>div{min-width:0;gap:8px}
+html body .page-head .sub{font-size:16px;line-height:1.5;max-width:65ch}
+html body .search-departures{grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:12px;padding:16px;margin:16px 0}
+html body .search-departures .field,html body .toolbar>*,html body .price-filter{min-width:0}
+html body .search-departures .input{width:100%;min-width:0;min-height:48px;font-size:16px}
+html body .toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:end;margin:16px 0 18px}
+html body .toolbar>.category-rail{grid-column:1/-1;width:100%;min-width:0}
+html body .toolbar>.sort{display:grid;gap:6px}
+html body .section>.price-filter{width:100%;max-width:none;margin:0 0 20px}
+html body .toolbar .input{width:100%;min-width:0;min-height:46px}
+html body .toolbar .price-filter{margin:0;padding:12px 14px;border-radius:18px}
+html body .toolbar .price-values{gap:8px}
+html body .tr-layout{gap:24px;margin-top:20px}
+html body #trForm{display:grid;gap:16px;padding:16px;border-radius:22px;background:var(--apple-surface)}
+
+
+
+html body #trForm .grid2{gap:12px;align-items:start}
+html body #trForm .field{min-width:0;gap:6px}
+html body #trForm .field>span:first-child,html body #trForm legend{font-size:14px;line-height:1.4}
+html body #trForm .input{min-height:48px;height:48px;width:100%;min-width:0;font-size:16px;padding:10px 12px}
+html body #trForm .tr-address-block{padding:14px;display:grid;gap:12px;border-radius:18px}
+html body #trForm .classes{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+html body #trForm .class{padding:0;overflow:hidden;border-radius:16px}
+html body #trForm .class>span{padding:12px 14px;border:0;border-radius:16px;gap:5px;min-height:86px;align-content:center;background:transparent}
+html body #trForm .class>span b{font-size:16px;line-height:1.3}
+html body #trForm .class>span small{font-size:14px;line-height:1.35}
+html body :is(.panel,.booking,.empty,.auth){overflow-wrap:break-word}
+html body .v4-tg{width:fit-content;max-width:100%;margin-inline:auto;border-radius:22px;overflow:hidden;isolation:isolate;background:transparent;color-scheme:light}
+html body .v4-tg iframe{display:block;border:0;border-radius:22px;max-width:100%;background:transparent}
+html body .v4-rail{scroll-snap-type:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-y pinch-zoom;scroll-behavior:auto}
+html body .v4-tour-photo{display:block;overflow:hidden;border-radius:22px;aspect-ratio:5/6}
+html body .v4-tour-photo img{width:100%;height:100%;object-fit:cover;border-radius:0}
+html body .v4-yandex{max-width:620px;margin-inline:auto}
+html body .v4-yandex-frame{border-radius:20px;overflow:hidden;background:var(--apple-surface);border:1px solid var(--apple-hairline)}
+html body .v4-yandex-frame iframe{display:block;width:100%;height:540px;border:0;background:#fff;color-scheme:light}
+
+
+
+
+html body .fleet-trip{gap:12px;margin-top:16px}
+html body .fleet-teaser{background:var(--apple-surface);border:1px solid var(--apple-hairline);border-radius:16px;box-shadow:none}
+html body .fleet-teaser>summary{padding:14px;gap:12px}
+html body .fleet-teaser b{font-size:15px;line-height:1.35;color:var(--apple-ink)}
+html body .fleet-teaser small{font-size:13px;color:var(--apple-ink-2)}
+html body .fleet-preference{font-size:14px;line-height:1.4;gap:8px;padding:14px;border:1px solid var(--apple-hairline);border-radius:16px;background:var(--apple-surface)}
+html body .fleet-preference .input{min-height:48px;padding:10px 12px;border:1px solid var(--apple-hairline)!important;border-radius:12px!important;background:var(--apple-surface-2)!important;color:var(--apple-ink)!important;box-shadow:none!important;font-size:16px!important}
+html body .fleet-preference small{font-size:12px;line-height:1.5;color:var(--apple-ink-2)}
+html body .fleet-inline-list .fleet-card{background:var(--apple-surface-2);border-color:var(--apple-hairline)}
+html body .fleet-mini-photos>span{background:var(--apple-surface-2);border-color:var(--apple-hairline)}
+html body #booking select.input{background:var(--apple-surface-2)!important;color:var(--apple-ink)!important;border:1px solid var(--apple-hairline)!important;box-shadow:none!important;border-radius:12px;font-size:16px;min-height:46px}
+html body #trForm .class:has(input:checked){background:var(--apple-surface-2)!important;box-shadow:inset 0 0 0 1px var(--apple-ink)!important}
+html body #trForm .class input:checked+span{background:transparent!important;color:var(--apple-ink)!important}
+html body .telegram-signin-dialog{width:min(400px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:24px;border:1px solid var(--apple-hairline);border-radius:24px;background:var(--apple-surface);color:var(--apple-ink);box-shadow:0 24px 80px #0004}
+html body .telegram-signin-dialog::backdrop{background:#0006;backdrop-filter:blur(8px)}
+html body .telegram-signin-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+html body .telegram-signin-dialog h2{font-size:24px;margin:0}
+html body .telegram-signin-dialog>p{margin:12px 0 20px;font-size:15px;color:var(--apple-ink-2)}
+html body .telegram-signin-dialog .receipt-close{position:static;width:36px;height:36px;flex:none;opacity:1;background:var(--apple-fill);color:var(--apple-ink)}
+html body [data-tg-login] .tg-app-open{width:100%;min-height:48px;justify-content:center;border-radius:16px}
+html body .tg-app-status{margin:12px 0 0;font-size:14px;line-height:1.5;color:var(--apple-ink-2);text-align:center}
+html body .v4-yandex-note{font-size:13px;line-height:1.5;color:var(--apple-ink-2);padding:10px 4px 0}
+html body .v4-yandex-note a{color:var(--apple-link)}
+@keyframes v4-photo-drift{from{transform:scale(1)}to{transform:scale(1.13)}}
+html body .v4-hero-media img{animation:v4-photo-drift 12s linear infinite alternate!important;transform-origin:center}
+html body :is(.v4-place,.v4-tour-photo) img{animation:v4-photo-drift 14s linear infinite alternate!important}
+
+@media(max-width:1000px){html body .search-departures{grid-template-columns:repeat(2,minmax(0,1fr))}html body .search-departures>button{grid-column:1/-1}html body .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}html body .toolbar .price-filter{grid-column:1/-1}}
+@media(max-width:760px){
+ html body .header-in{min-height:58px;gap:8px}
+ html body .header .logo-img{height:32px;max-width:120px;object-fit:contain}
+ html body .header-actions{min-width:0;gap:2px}
+ html body .header-actions #accBtn{padding:0 8px}
+ html body .mnav{left:0;right:0;width:100%;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));background:var(--apple-bg)}
+ html body .mnav a{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;min-height:50px;padding:4px 0;gap:4px;text-align:center;line-height:1.2}
+ html body .mnav a svg{display:block;flex:none;width:22px;height:22px;margin:0}
+ html body #app>.wrap{padding:20px 16px 28px}
+ html body .page-head h1{font-size:30px;line-height:1.15}
+ html body .page-head .sub{font-size:15px}
+ html body .search-departures{gap:10px;padding:12px;border-radius:18px}
+ html body .search-departures .field>span{font-size:12px;line-height:1.3}
+ html body .search-departures .sbtn{padding:10px;font-size:14px;gap:6px}
+ html body .search-departures .sbtn b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+ html body .toolbar{gap:10px;margin-top:14px}
+ html body .toolbar label>span{font-size:13px}
+ html body .toolbar .price-values .input{font-size:16px}
+ html body .tr-layout{gap:18px;margin-top:16px}
+ html body #trForm{gap:14px}
+ html body #trForm .classes{grid-template-columns:1fr}
+ html body #trForm .class>span{min-height:68px;padding:12px 14px}
+ html body #trForm .tr-passengers{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+ html body #trForm .grid2:has(#tr-name){grid-template-columns:minmax(0,1fr)}
+ html body #trRates{padding:16px}
+}
+html body .v4-route-stats b{white-space:nowrap}
+@media (max-width:420px){html body .v4-route-stats b{font-size:15px}html body .v4-route-stats{gap:4px}}
+html body #trForm .class>span{display:grid;gap:2px;background:none!important;color:var(--apple-ink)!important;box-shadow:none!important;border:0!important;padding:0!important;text-align:left;border-radius:0!important}
+html body #trForm .class>span small{color:var(--apple-ink-2)!important}
+html body #trForm .class input{position:absolute;opacity:0;pointer-events:none}
+html body #trForm .class{position:relative;cursor:pointer;display:block;min-height:76px}

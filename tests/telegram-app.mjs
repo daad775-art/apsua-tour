@@ -1,0 +1,57 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+import ts from 'typescript';
+
+const source=readFileSync(new URL('../lib/telegram-auth.ts',import.meta.url),'utf8');
+const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+const {telegramAppAPI,telegramIdentity}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync(new URL('../drizzle/0000_demonic_black_cat.sql',import.meta.url),'utf8'));
+const DB={prepare(sql){let values=[];return{bind(...v){values=v;return this},async first(){return sqlite.prepare(sql).get(...values)||null},async run(){const r=sqlite.prepare(sql).run(...values);return{meta:{changes:Number(r.changes)}}}}},async batch(items){return Promise.all(items.map(x=>x.run()))}};
+const env={DB,TELEGRAM_BOT_TOKEN:'test-token',TELEGRAM_WEBHOOK_SECRET:'test-webhook-secret'};
+const sent=[];globalThis.fetch=async(url,options)=>{sent.push({method:url.split('/').pop(),data:JSON.parse(options.body)});return Response.json({ok:true,result:{message_id:1}})};
+async function call(path,method='GET',{cookie='',origin='https://test.example',secret='',data={}}={}){
+ const response=await telegramAppAPI(new Request('https://test.example'+path,{method,headers:{cookie,origin,'X-Telegram-Bot-Api-Secret-Token':secret,'cf-connecting-ip':'192.0.2.1'},...(method!=='GET'?{body:JSON.stringify(data)}:{})}),env);
+ return{response,status:response.status,data:await response.json(),cookie:response.headers.get('Set-Cookie')?.split(';')[0]};
+}
+const start=()=>call('/api/telegram-login/start','POST');
+assert.equal((await call('/api/telegram-login/start','POST',{origin:'https://evil.example'})).status,403);
+const first=await start(),cookie=first.cookie,id=new URL(first.data.url).searchParams.get('start').slice(6);
+assert.equal(first.status,200);assert.match(first.data.code,/^\d{6}$/);assert.match(first.data.url,/^https:\/\/t.me\/ApsuaturBot\?start=login_[a-f0-9]{32}$/);
+assert.match(first.response.headers.get('Set-Cookie'),/Secure; HttpOnly; SameSite=Lax/);
+assert.equal((await call('/api/telegram-login/status')).status,410);
+assert.equal((await call('/api/telegram-login/status','GET',{cookie:cookie.slice(0,-1)+'x'})).status,410);
+assert.equal((await call('/api/telegram-login/finish','POST',{cookie})).status,409);
+const reused=await call('/api/telegram-login/start','POST',{cookie});assert.equal(reused.data.url,first.data.url);
+const user={id:12345,first_name:'Тест <имя>',username:'example'};
+const message={message_id:1,chat:{id:user.id,type:'private'},from:user,text:'/start login_'+id};
+const webhook=data=>call('/api/telegram-bot-webhook','POST',{secret:env.TELEGRAM_WEBHOOK_SECRET,data});
+assert.equal((await call('/api/telegram-bot-webhook','POST',{data:{message}})).status,401);
+await webhook({message:{...message,chat:{...message.chat,type:'group'}}});assert.equal(sent.length,0);
+await webhook({message});assert.equal(sent[0].method,'sendMessage');assert.ok(sent[0].data.text.includes(first.data.code));
+assert.equal((await call('/api/telegram-login/status','GET',{cookie})).data.status,'awaiting');
+const callback={id:'callback',from:user,message,data:'login_yes_'+id};
+await webhook({callback_query:{...callback,from:{id:999},message:{...message,chat:{id:999,type:'private'}}}});
+assert.equal((await call('/api/telegram-login/status','GET',{cookie})).data.status,'awaiting');
+await webhook({callback_query:callback});
+const approved=await call('/api/telegram-login/status','GET',{cookie});assert.equal(approved.data.status,'approved');assert.equal(approved.data.name,user.first_name);assert.equal(approved.data.user,undefined);
+assert.equal((await call('/api/telegram-login/finish','POST',{cookie,origin:'https://evil.example'})).status,403);
+const second=await start();assert.equal((await call('/api/telegram-login/finish','POST',{cookie:second.cookie})).status,409);
+const finish=await call('/api/telegram-login/finish','POST',{cookie});assert.equal(finish.status,200);assert.equal(finish.data.ok,true);
+const sessionCookie=finish.response.headers.get('Set-Cookie').match(/__Host-apsua_tg=[a-f0-9]{64}/)[0];
+const identity=await telegramIdentity(new Request('https://test.example',{headers:{cookie:sessionCookie}}),env);assert.equal(identity.id,'tg:'+user.id);
+assert.equal((await call('/api/telegram-login/finish','POST',{cookie})).status,409);
+// Concurrent callbacks from a different account never replace the first account.
+const third=await start(),thirdId=new URL(third.data.url).searchParams.get('start').slice(6);
+await webhook({message:{...message,text:'/start login_'+thirdId}});
+await webhook({message:{...message,from:{id:999,first_name:'Other'},chat:{id:999,type:'private'},text:'/start login_'+thirdId}});
+assert.equal(JSON.parse(sqlite.prepare('SELECT body FROM records WHERE id=?').get('tg-login:'+thirdId).body).user.id,'tg:'+user.id);
+await webhook({callback_query:{...callback,data:'login_no_'+thirdId}});
+assert.equal((await call('/api/telegram-login/status','GET',{cookie:third.cookie})).data.status,'denied');
+const renewed=await call('/api/telegram-login/start','POST',{cookie:third.cookie});assert.notEqual(renewed.data.url,third.data.url);
+const renewedId=new URL(renewed.data.url).searchParams.get('start').slice(6);
+const record=sqlite.prepare('SELECT body FROM records WHERE id=?').get('tg-login:'+renewedId);const expired={...JSON.parse(record.body),expires:Date.now()-1};sqlite.prepare('UPDATE records SET body=? WHERE id=?').run(JSON.stringify(expired),'tg-login:'+renewedId);
+assert.equal((await call('/api/telegram-login/status','GET',{cookie:renewed.cookie})).status,410);
+await webhook({message:{...message,text:'/start login_'+renewedId}});assert.equal((await call('/api/telegram-login/finish','POST',{cookie:renewed.cookie})).status,410);
+for(let i=0;i<6;i++)await start();assert.equal((await start()).status,429);
+console.log('PASS: app login cookie binding, same-origin checks, private signed webhook, explicit confirmation, wrong-account protection, session issuance, replay/expiry/denial, renewal and rate limits. No real users contacted.');
