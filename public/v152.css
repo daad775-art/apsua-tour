@@ -332,3 +332,110 @@ html body .adm-palette-field input,html body .adm-palette-field input:focus,html
 }
 html body #admTabbar>a,html body #admTabbar>button{color:var(--apple-ink-2,#6e6e73)!important;font-size:11px!important;font-weight:500!important;letter-spacing:0!important}
 html body #admTabbar>a[aria-current=page],html body #admTabbar>button.is-current,html body #admTabbar>button[aria-expanded=true]{color:var(--apple-blue,#0071e3)!important;font-weight:600!important}
+
+/* ==========================================================================
+   Customer tickets, build 152 — «Мои заказы» and «Мои бронирования».
+   White ticket, mint stub for excursions, blue for transfers; the stub is always on the right.
+   The look follows data-ticket-visual, which the app sets from the real order.status.
+   ========================================================================== */
+html body #app .apsua-ticket{--at-accent:#2fb37d;--at-soft:#e9f8f0;--at-stub:linear-gradient(160deg,#a6ecc4 0%,#79dcc0 100%);--at-stub-ink:#0f3b2f;--at-badge:#20a46c;--ticket-bg:var(--apple-bg,#f5f5f7);--at-line:#e6eaf0;position:relative;display:block!important;margin:0 0 28px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--apple-ink,#1d1d1f);line-height:1.4}
+html body #app .apsua-ticket[data-ticket-kind="transfers"]{--at-accent:#1a86f0;--at-soft:#eaf4ff;--at-stub:linear-gradient(160deg,#bfe0fd 0%,#8cc6f8 100%);--at-stub-ink:#0a3463;--at-badge:#0a84ff}
+html body #app .account-section .apsua-ticket,html body #app .panel .apsua-ticket{--ticket-bg:var(--apple-surface,#fff)}
+html body #app .apsua-ticket-paper{display:grid;grid-template-columns:minmax(0,1fr) clamp(124px,24%,220px);align-items:stretch;min-width:0;padding-right:10px;filter:drop-shadow(0 12px 28px rgba(20,38,60,.07)) drop-shadow(0 2px 6px rgba(20,38,60,.04))}
+
+/* Main part */
+html body #app .apsua-ticket-main{position:relative;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;gap:0;padding:22px 28px 20px 30px;border:1px solid var(--at-line);border-right:0;border-radius:22px 0 0 22px;background:#fff}
+html body #app .apsua-ticket-main::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:5px;border-radius:22px 0 0 22px;background:var(--at-accent)}
+html body #app .apsua-ticket-main::after{content:"";position:absolute;right:0;top:16px;bottom:16px;border-right:2px dashed #d7dee8}
+html body #app .apsua-ticket-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 10px;margin:0;padding:0;border:0}
+html body #app .apsua-ticket-kind{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#68758a;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+html body #app .apsua-ticket-badge{position:relative;display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:10px;background:var(--at-soft);color:var(--at-badge);overflow:visible}
+html body #app .apsua-ticket-badge img{width:100%;height:100%;border-radius:10px;object-fit:cover}
+html body #app .apsua-ticket-badge svg{width:18px;height:18px}
+html body #app .apsua-ticket-badge .order-unread-dot{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:var(--apple-orange,#ff9500)}
+html body #app .apsua-ticket-state{flex:none;max-width:100%;padding:5px 11px;border-radius:999px;background:var(--at-soft);color:#24684a;font-size:12px;font-weight:600;line-height:1.35;white-space:normal;text-align:center}
+html body #app .apsua-ticket[data-ticket-kind="transfers"] .apsua-ticket-state{color:#0b5aa8}
+html body #app .apsua-ticket:is([data-ticket-status="awaiting_payment"],[data-ticket-status="needs_info"]) .apsua-ticket-state{background:#fff4e2;color:#8a4d00}
+html body #app .apsua-ticket:is([data-ticket-status="cancelled"],[data-ticket-status="rejected"]) .apsua-ticket-state{background:#ffeeee;color:#b3261e}
+html body #app .apsua-ticket[data-ticket-status="completed"] .apsua-ticket-state{background:#f1f2f4;color:#4b5563}
+html body #app .apsua-ticket-title{margin:14px 0 4px!important;font-size:clamp(21px,2.3vw,28px)!important;font-weight:700!important;line-height:1.18!important;letter-spacing:-.03em;overflow-wrap:anywhere}
+html body #app .apsua-ticket-code{display:block;color:#6b7686;font-size:12px;font-weight:600;letter-spacing:.02em;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+html body #app .apsua-ticket-facts{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 16px!important;margin:18px 0 0!important;padding:16px 0 0!important;border:0!important;border-top:1px solid var(--at-line)!important}
+html body #app .apsua-ticket-facts>div{min-width:0}
+html body #app .apsua-ticket-facts .apsua-ticket-wide{grid-column:1/-1}
+html body #app .apsua-ticket-facts dt{margin:0 0 5px;color:#6b7686;font-size:11px!important;font-weight:500;line-height:1.3}
+html body #app .apsua-ticket-facts dd{margin:0!important;color:var(--apple-ink,#1d1d1f);font-size:14px!important;font-weight:600;line-height:1.4!important;overflow-wrap:anywhere}
+html body #app .apsua-ticket-total{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-top:auto;padding-top:16px;text-align:right}
+html body #app .apsua-ticket-total b{color:var(--apple-ink,#1d1d1f)!important;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.1;overflow-wrap:anywhere}
+html body #app .apsua-ticket-total span{color:#6b7686;font-size:12px}
+
+/* Stub: two die-cut notches, soft rings, dark ink for legibility */
+html body #app .apsua-ticket-stub{position:relative;min-width:0;box-sizing:border-box;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:14px;padding:20px 18px 18px;border-radius:0 22px 22px 0;background:radial-gradient(circle at 115% 42%,transparent 0 62px,rgba(255,255,255,.22) 63px 64px,transparent 65px 96px,rgba(255,255,255,.16) 97px 98px,transparent 99px),var(--at-stub);color:var(--at-stub-ink);transition:transform .45s var(--v152-ease)}
+html body #app .apsua-ticket-stub::before,html body #app .apsua-ticket-stub::after{content:"";position:absolute;left:-11px;width:22px;height:22px;border-radius:50%;background:var(--ticket-bg)}
+html body #app .apsua-ticket-stub::before{top:-11px}
+html body #app .apsua-ticket-stub::after{bottom:-11px}
+html body #app .apsua-ticket-stub-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+html body #app .apsua-ticket-stub-top span{flex:none;font-size:13px;font-weight:700;letter-spacing:-.01em}
+html body #app .apsua-ticket-stub-top small{min-width:0;font-size:11px;font-weight:600;line-height:1.35;text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+html body #app .apsua-ticket-stub-date{display:flex;flex-direction:column;gap:6px}
+html body #app .apsua-ticket-stub-date b{font-size:48px;font-weight:700;line-height:.9;letter-spacing:-.05em}
+html body #app .apsua-ticket-stub-date span{font-size:12px;font-weight:700;letter-spacing:.18em}
+html body #app .apsua-ticket-stub-foot{padding-top:9px;border-top:1px solid rgba(0,0,0,.14);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+/* The stamp has its own slot between the date and the footer, so it never covers the number or the date. */
+html body #app .apsua-ticket-stamp{position:relative;z-index:3;align-self:center;max-width:100%;box-sizing:border-box;margin:2px 0;padding:6px 9px;border:2.5px solid #d4202c;border-radius:6px;background:rgba(255,255,255,.85);color:#c4161f;outline:1px solid rgba(212,32,44,.45);outline-offset:3px;font-size:15px;font-weight:800;letter-spacing:.08em;line-height:1;white-space:nowrap;transform:rotate(-9deg)}
+
+/* Completed: the stub is torn off along the perforation and sits a little apart */
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{transform:translate(8px,5px) rotate(2.6deg);transform-origin:10% 50%;border-radius:2px 22px 22px 2px;clip-path:polygon(7% 0,100% 0,100% 100%,7% 100%,9.5% 96%,5% 91%,9% 86%,4.5% 81%,8.5% 76%,5% 71%,9.5% 66%,4% 61%,8% 56%,5% 51%,9.5% 46%,4.5% 41%,8.5% 36%,5% 31%,9% 26%,4% 21%,8.5% 16%,5% 11%,9% 6%,5.5% 2%)}
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub::before,html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub::after{display:none}
+/* The torn edge eats into the left side, so its content moves right to stay whole. */
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{padding-left:calc(18px + 9%)}
+html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-main::after{border-right-style:dotted;border-right-color:#cfd7e2}
+
+/* Under the ticket */
+html body #app .apsua-ticket>.order-card-note{margin:14px 0 0!important;color:#5f6b7a;font-size:13px!important;line-height:1.45}
+html body #app .apsua-ticket>.trip-manager-note,html body #app .apsua-ticket>.fleet-assigned-summary{margin:8px 0 0!important;font-size:13px}
+html body #app .apsua-ticket>.order-answer-form{margin-top:12px}
+html body #app .apsua-ticket>.order-card-actions{display:flex!important;flex-wrap:wrap;gap:8px!important;margin:12px 0 0!important}
+html body #app .apsua-ticket>.order-card-actions .btn{min-height:40px;white-space:normal}
+
+@media (max-width:840px){
+ html body #app .apsua-ticket-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:600px){
+ html body #app .apsua-ticket-paper{grid-template-columns:minmax(0,1fr) clamp(100px,31%,132px);padding-right:6px}
+ html body #app .apsua-ticket-main{padding:16px 12px 16px 17px;border-radius:18px 0 0 18px}
+ html body #app .apsua-ticket-main::before{border-radius:18px 0 0 18px}
+ html body #app .apsua-ticket-heading{align-items:flex-start}
+ html body #app .apsua-ticket-kind{gap:8px;font-size:10px;letter-spacing:.08em}
+ html body #app .apsua-ticket-badge{width:28px;height:28px;border-radius:9px}
+ html body #app .apsua-ticket-state{padding:4px 9px;font-size:11px}
+ html body #app .apsua-ticket-title{margin-top:12px!important;font-size:19px!important}
+ html body #app .apsua-ticket-code{font-size:11px}
+ html body #app .apsua-ticket-facts{gap:12px 10px!important;margin-top:14px!important;padding-top:13px!important}
+ html body #app .apsua-ticket-facts dd{font-size:13px!important}
+ html body #app .apsua-ticket-total b{font-size:20px}
+ html body #app .apsua-ticket-stub{padding:14px 10px 14px 12px;border-radius:0 18px 18px 0}
+ html body #app .apsua-ticket-stub-top{flex-direction:column;gap:8px}
+ html body #app .apsua-ticket-stub-top small{font-size:10px;text-align:left}
+ html body #app .apsua-ticket-stub-date b{font-size:34px}
+ html body #app .apsua-ticket-stub-date span{font-size:11px;letter-spacing:.14em}
+ html body #app .apsua-ticket-stub-foot{font-size:9px;letter-spacing:.08em}
+ html body #app .apsua-ticket-stamp{padding:4px 5px;border-width:2px;outline-offset:2px;font-size:10.5px;letter-spacing:.02em}
+ html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{padding-left:calc(12px + 9%)}
+ html body #app .apsua-ticket[data-ticket-visual="completed"] .apsua-ticket-stub{transform:translate(5px,4px) rotate(2deg)}
+}
+@media (max-width:360px){
+ html body #app .apsua-ticket-paper{grid-template-columns:minmax(0,1fr) 96px}
+ html body #app .apsua-ticket-main{padding-left:14px;padding-right:9px}
+ html body #app .apsua-ticket-facts{grid-template-columns:minmax(0,1fr)}
+ html body #app .apsua-ticket-stub{padding:13px 8px 13px 11px}
+ html body #app .apsua-ticket-stamp{font-size:9.5px;letter-spacing:0;padding:3px 4px}
+}
+@media (prefers-reduced-motion:reduce){html body #app .apsua-ticket-stub{transition:none}}
+@media print{
+ html body #app .apsua-ticket{break-inside:avoid}
+ html body #app .apsua-ticket-paper{filter:none}
+ html body #app .apsua-ticket-main{border-right:1px dashed #9aa4b2}
+ html body #app .apsua-ticket-stub{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ html body #app .apsua-ticket>.order-card-actions{display:none!important}
+}
