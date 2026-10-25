@@ -333,13 +333,20 @@ const old={...fields,auth_date:String(Math.floor(Date.now()/1000)-2*86400)};r=aw
 r=await tgCall({...fields,hash:sign(fields)});assert.equal(r.status,302);assert.equal(r.location,"https://test.example/#/account");
 const cookie=r.cookie.split(";")[0];assert.match(cookie,/^__Host-apsua_tg=[a-f0-9]{64}$/);assert.match(r.cookie,/HttpOnly/);
 let state=(await call("/api/state","","GET",undefined,{cookie})).data;assert.equal(state.user.id,"tg:987654321");assert.equal(state.user.name,"Ирина Тестова");assert.equal(state.user.authKind,"telegram");assert.equal(state.user.telegram,"irina_t");assert.equal(state.admin,false);
-response=await call("/api/list","","POST",{kind:"bookings",items:[{tour:"ritsa",date:FUTURE_DATE,time:"09:00",adults:1,kids:0,name:"Ирина",phone:"+79400000002",city:"Сухум",format:"group",requestToken:"tg-booking-1"}]},{cookie});assert.equal(response.status,200,"a Telegram user can send a request");
+response=await call("/api/list","","POST",{kind:"bookings",items:[{tour:"ritsa",date:FUTURE_DATE,time:"09:00",adults:1,kids:0,name:"Ирина",phone:"+79400000002",city:"Сухум",format:"group",requestToken:"tg-booking-1"}]},{cookie});assert.equal(response.status,200,"a Telegram user can send a request");const tgBookingCode=response.data.records[0].code;
 assert.equal((await call("/api/my-orders","","GET",undefined,{cookie})).data.orders.length,1);
+let staff=await call("/api/admin/staff","owner");assert.equal(staff.status,200);assert.equal(staff.data.staff.find(x=>x.id==="tg:987654321").username,"irina_t");assert.equal((await call("/api/admin/staff","","GET",undefined,{cookie})).status,403);
+response=await call("/api/admin/staff","owner","PUT",{userId:"tg:987654321",role:"dispatcher"});assert.equal(response.status,200);assert.equal(response.data.staff.find(x=>x.id==="tg:987654321").role,"dispatcher");
+state=(await call("/api/state","","GET",undefined,{cookie})).data;assert.equal(state.admin,true);assert.equal(state.staffRole,"dispatcher");assert.ok(state.lists.bookings.length>1,"dispatcher sees all requests");
+response=await call("/api/order-status","","PUT",{id:tgBookingCode,kind:"bookings",status:"confirmed"},{cookie});assert.equal(response.status,200,"dispatcher can update a request");
+response=await call("/api/content","","PUT",{content:state.content,revision:state.revision},{cookie});assert.equal(response.status,403,"dispatcher cannot edit site content");
+await call("/api/admin/staff","owner","PUT",{userId:"tg:987654321",role:"observer"});state=(await call("/api/state","","GET",undefined,{cookie})).data;assert.equal(state.staffRole,"observer");assert.equal((await call("/api/order-status","","PUT",{id:tgBookingCode,kind:"bookings",status:"completed"},{cookie})).status,403,"observer is read-only");
+await call("/api/admin/staff","owner","PUT",{userId:"tg:987654321",role:""});state=(await call("/api/state","","GET",undefined,{cookie})).data;assert.equal(state.admin,false);assert.equal(state.staffRole,"");
 response=await call("/api/telegram-logout","","POST",{}, {cookie,origin:"https://evil.example"});assert.equal(response.status,403);
 response=await call("/api/telegram-logout","","POST",{}, {cookie});assert.equal(response.status,200);assert.match(response.cookie,/Max-Age=0/);
 assert.equal((await call("/api/state","","GET",undefined,{cookie})).data.user,null,"the session ends on logout");
 delete env.TELEGRAM_BOT_TOKEN;
-console.log("PASS: Telegram sign-in verifies the signature and age, creates a private session, lets the tourist send requests and ends on logout.");}
+console.log("PASS: Telegram sign-in verifies the signature and age, staff search data is private, dispatcher/observer rights are enforced and revocation is immediate.");}
 
 // 14.0: a tourist cancels their own request before payment; paid requests stay with the dispatcher.
 {const base={tour:"ritsa",date:FUTURE_DATE,time:"09:00",adults:1,kids:0,name:"Ирина",phone:"+79400000009",city:"Сухум",format:"group"};
