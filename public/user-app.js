@@ -3266,6 +3266,9 @@ SITE_CHANGELOG.push({version:'19.4',date:'2026-10-25',author:'Руслан',titl
 SITE_CHANGELOG.push({version:'19.5',date:'2026-10-25',author:'Руслан',title:'Просмотры и рейтинг в историях на главной',description:'В ленте «Истории из дневника» у каждой истории видно число просмотров и средняя оценка; если оценок ещё нет, рейтинг не показывается. Длинные названия аккуратно переносятся в две строки.',type:'improvement',priority:'normal'});
 SITE_CHANGELOG.push({version:'19.6',date:'2026-10-25',author:'Руслан',title:'Новая страница истории',description:'Заголовок, автор, просмотры и рейтинг собраны в одну строку. Фото показываются целиком со скруглёнными углами, несколько фото листаются, по нажатию открываются на весь экран. Текст стал крупнее, цитаты выделены. Оценка — пять звёзд в одну строку, комментарии — единый список с временем, поле комментария растёт по мере ввода.',type:'improvement',priority:'important'});
 SITE_CHANGELOG.push({version:'19.7',date:'2026-10-25',author:'Руслан',title:'«Куда поехать» без прокрутки',description:'Все направления помещаются целиком: на компьютере — в один ряд, на телефоне — сеткой в две колонки. На каждой плитке показано, сколько экскурсий в категории; число обновляется само при добавлении или снятии экскурсий.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'19.8',date:'2026-10-25',author:'Руслан',title:'Форма трансфера во всю ширину карточки',description:'На телефоне поля трансфера, переключатель «Встреча / Отъезд» и выбор автомобиля стали шире: отступы карточки такие же, как у поиска экскурсий.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'19.9',date:'2026-10-25',author:'Руслан',title:'Низ страницы не прячется под меню',description:'На телефоне в конце каждой страницы, включая админку, остаётся место под нижним меню с учётом полоски «Домой» на iPhone — последние кнопки и строки видны целиком.',type:'fix',priority:'important'});
+SITE_CHANGELOG.push({version:'20.0',date:'2026-10-25',author:'Руслан',title:'Предложение установить приложение и включить уведомления',description:'При первом заходе с телефона сразу предлагается установить приложение и перечислено, что оно даёт. «Позже» скрывает предложение только до следующего захода. В установленном приложении предлагается включить уведомления, пока они не будут разрешены; если они запрещены в системе, показано, где их включить.',type:'feature',priority:'important'});
 SITE_CHANGELOG.push({version:'17.8',date:'2026-10-25',author:'Руслан',title:'Официальные соцсети и регулярные напоминания',description:'В подвале сразу доступны официальные страницы Апсуа Тур во ВКонтакте и Instagram. Сервер проверяет поездки каждые 15 минут, чтобы напоминание накануне не зависело от посещений сайта.',type:'improvement',priority:'normal'});
 
 /* ==========================================================================
@@ -3378,6 +3381,51 @@ function v152Autosize(area){area.style.height='auto';area.style.height=Math.min(
 document.addEventListener('input',e=>{if(e.target.matches?.('[data-v152-autosize]'))v152Autosize(e.target)});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)&&e.target.matches?.('[data-v152-autosize]')&&e.target.value.trim()){e.preventDefault();e.target.form?.requestSubmit()}});
 document.addEventListener('focusin',e=>{if(e.target.matches?.('[data-v152-autosize]')&&matchMedia('(max-width: 900px)').matches)setTimeout(()=>e.target.scrollIntoView({block:'center',behavior:'smooth'}),300)});
+
+/* Build 152 · the page end always clears the bottom tab bar. The bar's real height is
+   measured, so the iPhone home-indicator area is included. */
+let v152PageEndFrame=0;
+function v152PageEnd(){v152PageEndFrame=0;const bars=[$('.mnav'),$('#admTabbar')].filter(n=>n&&getComputedStyle(n).display!=='none'&&!n.hidden&&n.getBoundingClientRect().height>0);
+ const height=bars.reduce((max,n)=>Math.max(max,innerHeight-n.getBoundingClientRect().top),0);document.documentElement.style.setProperty('--v152-tab-space',Math.ceil(height+16)+'px');
+ const footer=$('#contacts'),candidate=footer&&getComputedStyle(footer).display!=='none'&&footer.getBoundingClientRect().height>0?footer:app;
+ for(const node of $$('.v152-page-end'))if(node!==candidate){node.classList.remove('v152-page-end');node.style.removeProperty('padding-bottom')}
+ if(!candidate)return;candidate.style.removeProperty('padding-bottom');if(!height){candidate.classList.remove('v152-page-end');return}
+ // Space the page already leaves below its last visible block (paddings, margins), so the bar is cleared without doubling it.
+ let node=candidate,trailing=0;for(let depth=0;depth<10;depth++){const child=[...node.children].reverse().find(c=>{const cs=getComputedStyle(c);return cs.display!=='none'&&cs.position!=='fixed'&&cs.position!=='absolute'&&c.getBoundingClientRect().height>0});if(!child)break;trailing+=Math.max(0,node.getBoundingClientRect().bottom-child.getBoundingClientRect().bottom);node=child}
+ const pad=Math.max(0,Math.ceil(height+20-trailing+(parseFloat(getComputedStyle(candidate).paddingBottom)||0)));candidate.classList.add('v152-page-end');candidate.style.setProperty('padding-bottom',pad+'px','important')}
+function v152QueuePageEnd(){if(v152PageEndFrame||typeof requestAnimationFrame!=='function')return;v152PageEndFrame=requestAnimationFrame(v152PageEnd)}
+if(typeof MutationObserver!=='undefined'&&typeof app!=='undefined'&&app)new MutationObserver(v152QueuePageEnd).observe(app,{childList:true});
+addEventListener('resize',v152QueuePageEnd);addEventListener('hashchange',v152QueuePageEnd);addEventListener('load',v152QueuePageEnd);v152QueuePageEnd();
+
+/* Build 152 · on a phone: offer to install on the first visit and on every new visit until
+   installed; in the installed app, ask for notifications on every new visit until allowed.
+   «Позже» only hides the offer for the current visit. */
+v17InstallEligible=function(){if(isStandalone())return false;const s=v17Store.get(INSTALL_KEY,{});if(s.installed)return false;
+ const mobile=window.matchMedia?.('(pointer: coarse)').matches||/android|iphone|ipad|ipod/i.test(navigator.userAgent||'');if(!mobile)return false;
+ return !v17Session.get('apsua-install-shown',false)};
+v17InstallBusy=function(){return ['admin','tour','transfer'].includes(current)||!!window.apsuaRequestSending||!!window.apsuaRequestResultOpen||!!window.apsuaAuthPending||!!document.querySelector('dialog[open],.lightbox,#push-welcome')||v17MenuOpen||!!document.activeElement?.matches?.('input,textarea,select')};
+const v152ScheduleInstallBefore=v17ScheduleInstall;v17ScheduleInstall=function(delay=1200){return v152ScheduleInstallBefore(delay)};
+const v152ShowInstallBefore=v17ShowInstall;v17ShowInstall=function(manual){v152ShowInstallBefore(manual);const box=v17InstallBox;if(!box)return;
+ const title=$('#installOfferTitle',box),text=$('#installOfferText',box);if(title)title.textContent='Установите приложение';
+ if(text)text.innerHTML='Так будет доступно больше:<ul class="v152-install-perks"><li>уведомления о статусе заявки и напоминание о поездке</li><li>вход в одно касание</li><li>открывается с экрана «Домой», как обычное приложение</li></ul>';
+ const later=$('.install-offer-actions [data-install-later]',box);if(later)later.textContent='Позже'};
+/* «Позже» and a declined system prompt no longer hide the offer for good. */
+document.addEventListener('click',e=>{if(v17InstallBox&&e.target.closest?.('[data-install-later]')&&v17InstallBox.contains(e.target)){setTimeout(()=>{const s=v17Store.get(INSTALL_KEY,{});if(s.dismissed&&!s.installed){delete s.dismissed;v17Store.set(INSTALL_KEY,s)}},0)}},true);
+window.addEventListener('appinstalled',()=>{try{sessionStorage.removeItem('apsua-push-later')}catch{}});
+
+function v152PushSteps(){if(isIOS())return 'Откройте «Настройки» → «Уведомления» → «Апсуа Тур» и включите «Допуск уведомлений».';return 'Нажмите и подержите значок «Апсуа Тур» → «О приложении» → «Уведомления» и включите их.'}
+function v152PushNudge(){
+ const guestNudge=$('.v152-push-nudge[data-kind="guest"]');if(guestNudge&&serverIdentity){guestNudge.remove();v152PushWelcomeBefore()}
+ if(!serverReady)return;
+ if(!pushInstalled()||!pushAvailable()||pushDeviceEnabled||pushDeviceChanging||current==='account'||current==='admin'||$('#push-welcome'))return;
+ try{if(sessionStorage.getItem('apsua-push-later')==='1')return}catch{}
+ if(serverIdentity&&Notification.permission!=='denied')return; // the regular prompt handles this case
+ if(serverIdentity&&pushOptedOut())return;
+ const denied=Notification.permission==='denied';
+ document.body.insertAdjacentHTML('beforeend',`<aside id="push-welcome" class="push-welcome panel is-ready v152-push-nudge" data-kind="${denied?'denied':'guest'}" aria-label="Уведомления"><div><h2>${denied?'Уведомления выключены':'Будьте в курсе'}</h2><p class="sub">${denied?'Без них вы не узнаете о подтверждении заявки и назначении водителя. '+v152PushSteps():'Войдите, чтобы получать уведомления о подтверждении заявки, назначении водителя и напоминание о поездке.'}</p></div><div class="push-welcome-actions">${denied?'':'<a class="btn btn-sea small" href="#/account" data-v152-push-login>Войти и включить</a>'}<button type="button" class="btn small" id="push-later">${denied?'Понятно':'Позже'}</button></div></aside>`)}
+const v152PushWelcomeBefore=pushWelcome;pushWelcome=function(){v152PushWelcomeBefore();v152PushNudge()};
+window.addEventListener('site-ready',()=>{v152PushNudge();setTimeout(v152PushNudge,1500)});window.addEventListener('pageshow',v152PushNudge);window.addEventListener('hashchange',()=>setTimeout(v152PushNudge,0));
+document.addEventListener('click',e=>{if(e.target.closest?.('[data-v152-push-login]'))$('#push-welcome')?.remove()});
 
 hostedBoot();
 })();

@@ -818,3 +818,27 @@ html body #app .v152-story-track{background:transparent!important}
 html body #app .v152-story-photo{background:transparent!important;box-shadow:none!important;min-height:0!important;height:auto;border:0!important}
 html body #app .v152-story-track .v152-story-photo{height:min(68vh,620px)}
 @media (max-width:640px){html body #app .v152-story-track .v152-story-photo{height:auto}}
+
+/* ==========================================================================
+   Build 152 · transfer card as wide as the excursion search card; page end clears the tab bar
+   ========================================================================== */
+@media (max-width:900px){
+ html body #app .tr-layout #trPanel{padding:0!important;border-radius:22px!important;background:transparent!important;box-shadow:none!important}
+ html body #app #trForm{padding:8px!important;gap:8px!important;border-radius:22px!important}
+ html body #app #trForm .tr-direction{margin:0!important;border-radius:16px!important}
+ html body #app #trForm .tr-direction label span{border-radius:13px!important}
+ html body #app #trForm .v152-group{border-radius:16px!important}
+ html body #app #trForm .field:has(>.v152-cars){margin:6px 0 0!important}
+ html body #app #trForm .field:has(>.v152-cars)>span{padding:0 6px}
+ html body #app #trForm>:is(.total,.trip-review,#transferReview,.hint,p,label.check,.btn,button[type=submit]){margin-left:6px!important;margin-right:6px!important}
+ html body #app #trForm>:is(.btn,button[type=submit]){width:calc(100% - 12px)!important}
+}
+/* The last block of every page ends above the tab bar (height measured, so iPhone's home bar is included) */
+@media (max-width:900px){
+ html body .v152-page-end>:last-child{margin-bottom:0!important}
+}
+/* Install offer: what the app adds */
+.install-offer .v152-install-perks{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:3px}
+.install-offer .v152-install-perks li{position:relative;padding-left:20px;color:#3a3a3c;font-size:14px;line-height:1.35}
+.install-offer .v152-install-perks li::before{content:"";position:absolute;left:2px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--apple-blue,#0071e3) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3.2 6.2 5 8 8.8 4.2' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat}
+.v152-push-nudge .sub{font-size:14px;line-height:1.4}
