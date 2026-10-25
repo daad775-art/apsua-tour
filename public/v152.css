@@ -440,6 +440,67 @@ html body #app .apsua-ticket>.order-card-actions .btn{min-height:40px;white-spac
  html body #app .apsua-ticket>.order-card-actions{display:none!important}
 }
 
+/* 19.1 — compact mobile booking and transfer flow. */
+html body .time[aria-pressed="true"] small{color:rgba(255,255,255,.88)!important;opacity:1!important}
+html body:has(#app .tour-page) #contacts,
+html body:has(#app .tr-layout) #contacts,
+html body:has(#app #search2) #contacts{display:none!important}
+html body .tr-layout{grid-template-columns:minmax(0,760px)!important;justify-content:center!important}
+html body #trRates{display:none!important}
+html body #trForm .vehicle-icon{display:grid;place-items:center;width:34px;height:25px;color:var(--apple-ink,#1d1d1f)}
+html body #trForm .vehicle-icon svg{display:block;width:32px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+html body #trForm .class>span{align-content:center;justify-items:start}
+
+@media(max-width:900px){
+ html body:not(.is-admin):not(:has(#app .tour-page)):not(:has(#app .tr-layout)):not(:has(#app #search2)) #contacts{margin-top:36px!important;padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
+ html body:not(.is-admin) #contacts .footer-compact{padding-bottom:0!important}
+}
+
+@media(max-width:700px){
+ html body .tour-page .booking{padding:14px!important;gap:12px!important;border-radius:20px!important}
+ html body .tour-page .booking-price{gap:6px!important}
+ html body .tour-page .booking .booking-calendar{margin-top:2px!important}
+ html body .tour-page .booking .calendar-head{margin-bottom:6px!important}
+ html body .tour-page .booking .days{gap:4px!important}
+ html body .tour-page .booking .times{gap:7px!important}
+ html body .tour-page .booking .time{min-height:44px!important;padding:7px 10px!important}
+ html body .tour-page .booking .people{gap:7px!important}
+ html body .tour-page .booking .person{padding-block:5px!important}
+ html body .tour-page .booking .total{padding-top:10px!important;margin-top:2px!important}
+ html body .tour-page .booking .assure{gap:5px!important;font-size:11px!important;line-height:1.35!important}
+
+ html body .acc-grid:has(.account-section){gap:7px!important;margin-bottom:20px!important}
+ html body .acc-grid .account-section{border-radius:17px!important}
+ html body .acc-grid .account-section>summary{min-height:54px!important;padding:10px 14px!important;font-size:14px!important}
+ html body .acc-grid .account-section>summary small{width:24px!important;min-width:24px!important;height:24px!important}
+
+ html body .category-rail .chips,
+ html body .catalog-selects{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;width:100%!important;max-width:100%!important;gap:7px!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;touch-action:pan-x;scrollbar-width:none}
+ html body .category-rail .chips::-webkit-scrollbar,
+ html body .catalog-selects::-webkit-scrollbar{display:none}
+ html body .category-rail .chip,
+ html body .catalog-selects>*{flex:0 0 auto!important;scroll-snap-align:start}
+ html body .catalog-selects .sort-format{width:150px!important}
+ html body .catalog-selects .catalog-price{width:120px!important;margin-top:0!important;align-self:end}
+ html body .catalog-selects .sort-order{width:176px!important}
+
+ html body #trPanel{padding:13px!important;border-radius:20px!important}
+ html body #trForm{gap:10px!important}
+ html body #trForm>.grid2:has(#tr-time){align-items:stretch!important}
+ html body #trForm>.grid2:has(#tr-time)>.field{display:grid!important;grid-template-rows:minmax(34px,auto) 42px auto!important;align-content:start!important}
+ html body #trForm>.grid2:has(#tr-time) .field>span{min-height:34px!important;align-items:end!important;line-height:1.25!important}
+ html body #trForm .tr-address-block{padding:0!important;border:0!important;background:transparent!important;gap:9px!important}
+ html body #trForm .classes{gap:7px!important}
+ html body #trForm .class{min-height:76px!important;padding:0!important;border:1px solid var(--line)!important;border-radius:14px!important;background:var(--apple-surface,#fff)!important;overflow:hidden}
+ html body #trForm .class>span{min-height:76px!important;padding:7px 6px!important;border:0!important;display:grid!important;grid-template-rows:25px auto auto!important;justify-items:center!important;text-align:center!important;gap:1px!important}
+ html body #trForm .class:has(input:checked){box-shadow:inset 0 0 0 1.5px var(--apple-ink,#1d1d1f)!important}
+ html body #trForm .class b{font-size:11px!important;line-height:1.15!important}
+ html body #trForm .class small{font-size:9.5px!important;line-height:1.2!important;color:var(--apple-ink-2,#6e6e73)!important}
+ html body #trForm .tr-passengers{padding-block:1px!important}
+ html body #trForm .tr-passengers .person{padding:4px 0!important}
+ html body #trForm .check{min-height:38px!important}
+ html body #trForm>.total{padding:8px 0!important}
+}
 /* ==========================================================================
    Build 152 · compact forms: excursion booking, transfer, draft offer, account, catalog rails.
    ========================================================================== */
@@ -542,17 +603,6 @@ html body #app #booking>p.hint:last-child{margin:-6px 0 0!important;padding:0!im
 }
 @media (prefers-reduced-transparency:reduce){html body #app #booking .v152-cta{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}}
 
-/* ---------- 3. Draft offer: one quiet line ---------- */
-html body #app .request-draft-offer{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:6px!important;min-height:44px;margin:0 0 4px!important;padding:5px 5px 5px 14px!important;border:0!important;border-radius:14px!important;background:var(--apple-blue-soft,rgba(0,113,227,.1))!important;box-shadow:none!important}
-html body #app .request-draft-offer>span{flex:1;min-width:0;overflow:hidden;color:var(--apple-ink,#1d1d1f)!important;font-size:14px!important;font-weight:500;text-overflow:ellipsis;white-space:nowrap}
-html body #app .request-draft-offer .linkbtn{flex:none;height:34px!important;min-height:0!important;margin:0!important;padding:0 12px!important;border:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;color:var(--apple-ink-2,#6e6e73)!important;font-size:14px!important;font-weight:500!important;text-decoration:none!important;white-space:nowrap}
-html body #app .request-draft-offer [data-draft-continue]{order:2;background:var(--apple-blue,#0071e3)!important;color:#fff!important;font-weight:600!important}
-html body #app .request-draft-offer [data-draft-discard]{order:1}
-.v152-undo{position:fixed;z-index:1100;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:14px;max-width:calc(100vw - 32px);padding:6px 6px 6px 18px;border-radius:999px;background:rgba(29,29,31,.94);color:#fff;font:500 14px/1.3 var(--apple-font,-apple-system,BlinkMacSystemFont,sans-serif);box-shadow:0 12px 40px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .2s ease,transform .3s var(--v152-ease)}
-.v152-undo.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
-.v152-undo button{height:34px;padding:0 14px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-weight:600;cursor:pointer}
-@media (max-width:900px){.v152-undo{bottom:calc(var(--v152-tab-h,63px) + env(safe-area-inset-bottom,0px) + 14px)}}
-@media (prefers-reduced-motion:reduce){.v152-undo,.v152-undo.on{transform:translate(-50%,0);transition:opacity .15s ease}}
 
 /* ---------- 4. Account: one grouped list ---------- */
 html body #app .acc-head .account-actions{display:flex!important;flex-wrap:wrap;gap:8px!important;width:auto!important;grid-template-columns:none!important}
@@ -618,13 +668,12 @@ html body #app :is(#trForm,#booking) .v152-rows>:first-child,html body #app :is(
 html body #app :is(#trForm,#booking) .v152-rows>label.check.v152-switch{display:flex!important;flex-direction:row-reverse!important;justify-content:space-between!important;align-items:center!important;grid-template-columns:none!important}
 html body #app :is(#trForm,#booking) .v152-rows>label.check.v152-switch span{flex:1;text-align:left!important}
 html body #app #trForm .v152-rows>label.field:has(.v152-seg)>.v152-seg{justify-self:end}
-@media (max-width:900px){html body:has(.orders-banner) #app #booking .v152-cta{bottom:calc(var(--v152-tab-h,63px) + env(safe-area-inset-bottom,0px) + 74px)}}
+@media (max-width:900px){html body:has(.orders-banner:not([hidden])) #app #booking .v152-cta{bottom:calc(var(--v152-tab-h,63px) + env(safe-area-inset-bottom,0px) + 74px)}}
 html body #app :is(#trForm,#booking) .v152-rows>:is(.field,label.field)>select.input{padding-right:22px!important}
 html body #app :is(#trForm,#booking) .v152-rows select.v152-native{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important}
 html body #app .field:has(>.v152-native){position:relative}
 html body #app :is(#trForm,#booking) .v152-native{top:0!important;left:0!important;right:auto!important;bottom:auto!important}
 html body #app .v152-cars label.class small,html body #app .v152-cars label.class b{width:auto!important;max-width:100%!important}
-@media (max-width:900px){html body:has(.orders-banner) .v152-undo{bottom:calc(var(--v152-tab-h,63px) + env(safe-area-inset-bottom,0px) + 78px)}}
 html body #app :is(#trForm,#booking) .v152-rows>*{align-items:center!important}
 html body #app :is(#trForm,#booking) .v152-rows>*>:is(span,div):first-child{align-self:center!important}
 html body #app .acc-head:has(~.acc-grid .v152-account-list),html body #app .acc-grid:has(.v152-account-list)~.acc-head{box-sizing:border-box;width:100%;max-width:900px;margin-inline:auto}
@@ -640,3 +689,7 @@ html body #app .acc-grid:has(.v152-account-list){margin-top:16px!important}
  html body #app :is(#trForm,#booking) .v152-rows .v152-seg button{flex:1}
 }
 @media (max-width:374px){html body #app :is(#trForm,#booking) .v152-rows>.person.field{grid-template-columns:minmax(0,1fr) auto!important;padding:3px 0!important}html body #app :is(#trForm,#booking) .v152-rows>.person.field>div:first-child{color:var(--apple-ink,#1d1d1f)!important;font-size:15px!important;align-self:center!important}}
+/* Rows win over the 19.1 two-row field template and the label outline on car tiles */
+html body #app :is(#trForm,#booking) .v152-rows>:is(.field,label.field){grid-template-rows:none!important;align-content:center!important}
+html body #app :is(#trForm,#booking) .v152-rows>:is(.field,label.field)>span:first-child{min-height:0!important;align-items:center!important}
+html body #app .v152-cars label.class{min-height:0!important;overflow:visible!important;box-shadow:none!important;border:0!important}
