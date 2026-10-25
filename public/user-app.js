@@ -1346,11 +1346,15 @@ function setupCategoryRails(){$$('.category-rail').forEach(rail=>{const list=$('
 function syncPriceControls(){const b=priceBounds(),low=ui.priceMin??b.min,high=ui.priceMax??b.max;for(const [id,value] of [['priceMin',low],['priceMax',high],['priceFromInput',low],['priceToInput',high]]){const el=$('#'+id);if(el)el.value=value}const range=$('.price-range');if(range){const span=b.max-b.min||1;range.style.setProperty('--range-start',(low-b.min)/span*100+'%');range.style.setProperty('--range-end',(high-b.min)/span*100+'%')}const min=$('#priceMin'),max=$('#priceMax');if(min){min.setAttribute('aria-valuetext',rub(low));min.setAttribute('aria-valuemax',high);min.style.zIndex=low>=b.max-1?'4':'2'}if(max){max.setAttribute('aria-valuetext',rub(high));max.setAttribute('aria-valuemin',low)}$$('[data-price-summary]').forEach(node=>{node.textContent=priceSummaryText();node.closest('.catalog-price')?.classList.toggle('is-active',priceFiltered())})}
 /* Price panel: a popover on a computer, a bottom sheet on a phone. It leaves the way it came. */
 function closePricePanel(panel){if(!panel?.open||panel.classList.contains('is-closing'))return;if(reduce){panel.open=false;return}panel.classList.add('is-closing');const done=()=>{panel.classList.remove('is-closing');panel.open=false};const sheet=$('fieldset',panel);let finished=false;const finish=()=>{if(finished)return;finished=true;done()};sheet?.addEventListener('animationend',finish,{once:true});setTimeout(finish,320)}
+/* A drag on the price thumbs that ends outside the panel still produces a click; it must not close the panel. */
+let pricePressInside=false;
+document.addEventListener('pointerdown',e=>{pricePressInside=!!e.target.closest?.('.catalog-price>fieldset')},true);
 document.addEventListener('click',e=>{
- const panel=e.target.closest('.catalog-price');
- if(e.target.closest('.catalog-price>summary')&&panel?.open){e.preventDefault();closePricePanel(panel);return}
+ const panel=e.target.closest('.catalog-price'),pressedInside=pricePressInside;pricePressInside=false;
+ if(e.target.closest('.catalog-price>summary')&&panel?.open){e.preventDefault();if(!pressedInside)closePricePanel(panel);return}
  if(e.target.closest('[data-price-done]')){closePricePanel(panel);return}
  if(e.target.closest('[data-price-reset]')){ui.priceMin=null;ui.priceMax=null;syncPriceControls();renderCards();syncCatalogHash();return}
+ if(pressedInside)return;
  $$('.catalog-price[open]').forEach(open=>{if(open!==panel)closePricePanel(open)});
 });
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const open=$('.catalog-price[open]');if(!open)return;closePricePanel(open);$('summary',open)?.focus({preventScroll:true})});
