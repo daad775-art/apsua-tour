@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Build 152 · catalog search and filters. Loaded after v146.css.
+   Scope: the «Экскурсии» search form (#search2), the quick actions under the page title
+   and the catalog toolbar (categories, format, price, sorting). Nothing else is restyled.
+   Light theme only. Uses the existing --apple-* and --control-* tokens.
+   ========================================================================== */
+
+:root{
+  --v152-chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%236e6e73' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-chev-up:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 7.5 6 4l3.5 3.5' fill='none' stroke='%236e6e73' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-chev-blue:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%230071e3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-sort:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5 13V3M2.5 5.5 5 3l2.5 2.5M11 3v10M8.5 10.5 11 13l2.5-2.5' fill='none' stroke='%231d1d1f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --v152-pill-h:40px;
+  --v152-pill-line:inset 0 0 0 1px var(--apple-hairline,rgba(0,0,0,.1));
+  --v152-ease:cubic-bezier(.22,1,.36,1);
+}
+
+/* ---------- Quick actions under the title: one row of equal chips ---------- */
+html body #app .page-head+.comfort-actions{display:flex!important;flex-wrap:nowrap!important;gap:8px!important;margin:14px 0 0!important;padding:2px 0!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+html body #app .page-head+.comfort-actions::-webkit-scrollbar{display:none}
+html body #app .page-head+.comfort-actions>.btn{flex:none!important;display:inline-flex!important;align-items:center;gap:6px;width:auto!important;height:36px!important;min-height:36px!important;padding:0 14px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff)!important;color:var(--apple-ink,#1d1d1f)!important;box-shadow:var(--v152-pill-line)!important;font-size:14px!important;font-weight:500!important;line-height:1!important;letter-spacing:-.01em;white-space:nowrap!important;transition:background-color .15s ease,transform .1s ease-out}
+html body #app .page-head+.comfort-actions>.btn [data-compare-count]:not(:empty){display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--apple-blue,#0071e3);color:#fff;font-size:11px;font-weight:600}
+html body #app .page-head+.comfort-actions>.btn:active{transform:scale(.97);transition-duration:60ms}
+@media (hover:hover){html body #app .page-head+.comfort-actions>.btn:hover{background:var(--apple-surface-2,#f5f5f7)!important}}
+
+/* ---------- Search: one bar on a computer ---------- */
+html body #app #search2.search.search-departures{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,.8fr) auto!important;align-items:center!important;gap:0!important;margin:20px 0 0!important;padding:6px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff)!important;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body #app #search2 .field{position:relative!important;display:block!important;border:0!important;box-shadow:none!important;grid-column:auto!important;grid-row:auto!important;order:0!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important}
+html body #app #search2>.btn{grid-column:auto!important;grid-row:auto!important;order:0!important}
+html body #app #search2 .field>span{display:block!important;position:absolute!important;z-index:2;top:11px;left:22px;right:40px;margin:0!important;color:var(--apple-ink-2,#6e6e73)!important;font-size:12px!important;font-weight:500!important;line-height:16px!important;letter-spacing:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+html body #app #search2 .field .sbtn{position:relative!important;display:flex!important;align-items:flex-end!important;justify-content:flex-start!important;gap:0!important;width:100%!important;height:60px!important;min-height:60px!important;margin:0!important;padding:27px 40px 10px 22px!important;border:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;color:var(--apple-ink,#1d1d1f)!important;text-align:left!important;cursor:pointer;transition:background-color .15s ease}
+html body #app #search2 .field .sbtn>.icon:not(.chev){display:none!important}
+html body #app #search2 .field .sbtn>.chev{position:absolute!important;right:16px;top:50%;width:16px!important;height:16px!important;margin:-8px 0 0!important;color:var(--apple-ink-2,#6e6e73)!important;transition:transform .2s var(--v152-ease)}
+html body #app #search2 .field .sbtn[aria-expanded=true]>.chev{transform:rotate(180deg)}
+html body #app #search2 .field .sbtn b{display:block!important;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px!important;font-weight:600!important;line-height:22px!important;letter-spacing:-.01em}
+html body #app #search2 .field .people-open b::after{content:" чел.";font-weight:400;color:var(--apple-ink-2,#6e6e73)}
+html body #app #search2 .field .sbtn[aria-expanded=true]{background:var(--apple-surface-2,#f5f5f7)!important}
+html body #app #search2 .field .sbtn:focus-visible{outline:2px solid var(--apple-blue,#0071e3)!important;outline-offset:-2px}
+@media (hover:hover){html body #app #search2 .field .sbtn:hover{background:var(--apple-surface-2,#f5f5f7)!important}}
+/* Hairline dividers between segments; they step aside for the hovered or open segment. */
+html body #app #search2 .field+.field::before{content:"";position:absolute;z-index:1;left:0;top:18px;bottom:18px;width:1px;background:var(--apple-hairline,rgba(0,0,0,.1));transition:opacity .15s ease}
+html body #app #search2 .field:has(.sbtn[aria-expanded=true])::before,html body #app #search2 .field:has(.sbtn[aria-expanded=true])+.field::before{opacity:0}
+@media (hover:hover){html body #app #search2 .field:hover::before,html body #app #search2 .field:hover+.field::before{opacity:0}}
+html body #app #search2>.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:auto!important;height:48px!important;min-height:48px!important;margin:0 0 0 6px!important;padding:0 24px!important;border-radius:999px!important;font-size:16px!important;font-weight:600!important;white-space:nowrap}
+html body #app #search2>.btn span{display:inline!important}
+html body #app #search2>.btn:active{transform:scale(.97);transition:transform 60ms ease-out}
+
+/* ---------- Search: a grouped card on tablets and phones ---------- */
+@media (max-width:1000px){
+ html body #app #search2.search.search-departures{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;padding:8px!important;border-radius:22px!important}
+ html body #app #search2 .field+.field::before{display:none}
+ html body #app #search2 .field>span{top:9px;left:16px;right:36px}
+ html body #app #search2 .field .sbtn{height:58px!important;min-height:58px!important;padding:26px 36px 9px 16px!important;border-radius:14px!important;background:var(--apple-surface-2,#f5f5f7)!important}
+ html body #app #search2 .field .sbtn>.chev{right:12px}
+ html body #app #search2 .field:nth-child(odd){grid-column:1!important}
+ html body #app #search2 .field:nth-child(even){grid-column:2!important}
+ html body #app #search2>.btn{grid-column:1/-1!important;width:100%!important;height:50px!important;min-height:50px!important;margin:2px 0 0!important;border-radius:14px!important}
+}
+@media (max-width:640px){
+ html body #app #search2.search.search-departures{margin-top:16px!important}
+ html body #app #search2 .field:nth-child(1),html body #app #search2 .field:nth-child(2){grid-column:1/-1!important}
+ html body #app #search2 .field:nth-child(3){grid-column:1!important}
+ html body #app #search2 .field:nth-child(4){grid-column:2!important}
+}
+
+/* ---------- Catalog toolbar ---------- */
+html body #app .catalog-compact-toolbar{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;margin:0 0 20px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+html body #app .catalog-compact-toolbar>*{min-width:0;margin:0!important}
+
+/* Categories: a scroller that fades only on the side where more chips are hidden. */
+html body #app .catalog-compact-toolbar .category-rail{--fade-l:56px;--fade-r:56px;position:relative!important;display:block!important;width:100%!important;padding:0!important}
+html body #app .catalog-compact-toolbar .category-rail:has([data-category-scroll="-1"]:disabled){--fade-l:0px}
+html body #app .catalog-compact-toolbar .category-rail:has([data-category-scroll="1"]:disabled){--fade-r:0px}
+html body #app .catalog-compact-toolbar .category-rail .chips{display:flex!important;flex-wrap:nowrap!important;flex:none!important;width:100%!important;max-width:none!important;min-width:0!important;gap:8px!important;margin:0!important;padding:2px 0!important;overflow-x:auto!important;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade-l),#000 calc(100% - var(--fade-r)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade-l),#000 calc(100% - var(--fade-r)),transparent 100%)}
+html body #app .catalog-compact-toolbar .category-rail .chips::-webkit-scrollbar{display:none}
+html body #app .catalog-compact-toolbar .category-rail .chip{flex:none!important;height:38px!important;min-height:38px!important;margin:0!important;padding:0 16px!important;border:0!important;border-radius:999px!important;background:var(--control-bg,#e8e8ed)!important;color:var(--apple-ink,#1d1d1f)!important;box-shadow:none!important;font-size:15px!important;font-weight:500!important;line-height:38px!important;letter-spacing:-.01em;white-space:nowrap;scroll-snap-align:start;transition:background-color .15s ease,color .15s ease,transform .1s ease-out}
+html body #app .catalog-compact-toolbar .category-rail .chip[aria-pressed=true]{background:var(--control-accent,#0071e3)!important;color:var(--control-accent-ink,#fff)!important}
+html body #app .catalog-compact-toolbar .category-rail .chip:active{transform:scale(.96);transition-duration:60ms}
+@media (hover:hover){html body #app .catalog-compact-toolbar .category-rail .chip:not([aria-pressed=true]):hover{background:var(--control-hover,#dcdce1)!important}}
+html body #app .catalog-compact-toolbar .category-arrow{position:absolute!important;z-index:2;top:50%;display:grid!important;place-items:center;width:34px!important;height:34px!important;min-height:0!important;margin:-17px 0 0!important;padding:0 0 2px!important;border:0!important;border-radius:50%!important;background:var(--apple-surface,#fff)!important;color:var(--apple-ink,#1d1d1f)!important;box-shadow:0 0 0 1px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.12)!important;font-size:22px!important;line-height:1!important;cursor:pointer;transition:opacity .2s ease,transform .1s ease-out}
+html body #app .catalog-compact-toolbar .category-arrow[data-category-scroll="-1"]{left:0}
+html body #app .catalog-compact-toolbar .category-arrow[data-category-scroll="1"]{right:0}
+html body #app .catalog-compact-toolbar .category-arrow:disabled{opacity:0!important;pointer-events:none}
+html body #app .catalog-compact-toolbar .category-arrow:active{transform:scale(.92)}
+/* Touch screens scroll with a finger; the arrows only cover chips there. */
+@media (hover:none){html body #app .catalog-compact-toolbar .category-arrow{display:none!important}}
+
+/* Format · price · sorting: one row of pills. */
+html body #app .catalog-compact-toolbar .catalog-selects{position:relative!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;width:100%!important;margin:0!important;padding:0!important;grid-template-columns:none!important}
+html body #app .catalog-selects>.sort{position:relative!important;display:block!important;flex:none!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important}
+html body #app .catalog-selects>.sort>span{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+html body #app .catalog-selects>.sort-order{margin-left:auto!important}
+html body #app .catalog-selects select.input{-webkit-appearance:none!important;appearance:none!important;field-sizing:content;display:block!important;width:auto!important;max-width:100%;height:var(--v152-pill-h)!important;min-height:var(--v152-pill-h)!important;margin:0!important;padding:0 34px 0 16px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff) var(--v152-chev) no-repeat right 14px center/12px 12px!important;box-shadow:var(--v152-pill-line)!important;color:var(--apple-ink,#1d1d1f)!important;font-size:15px!important;font-weight:500!important;line-height:var(--v152-pill-h)!important;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;transition:background-color .15s ease,box-shadow .15s ease}
+html body #app .catalog-selects #sort.input{padding-left:38px!important;background:var(--v152-sort) no-repeat left 14px center/16px 16px,var(--v152-chev) no-repeat right 14px center/12px 12px,var(--apple-surface,#fff)!important}
+html body #app .catalog-selects select[data-format-filter]:has(option[value=""]:not(:checked)){background-color:var(--apple-blue-soft,rgba(0,113,227,.1))!important;background-image:var(--v152-chev-blue)!important;box-shadow:none!important;color:var(--apple-blue,#0071e3)!important}
+html body #app .catalog-selects select.input:focus-visible{outline:2px solid var(--apple-blue,#0071e3)!important;outline-offset:2px}
+@media (hover:hover){html body #app .catalog-selects select.input:hover{background-color:var(--apple-surface-2,#f5f5f7)!important}}
+
+/* Price: a pill like the others. Its panel is a popover anchored to the pill. */
+html body #app .catalog-selects>.catalog-price{position:relative!important;flex:none!important;overflow:visible!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+html body #app .catalog-price>summary{position:relative;z-index:31;display:flex!important;align-items:center!important;gap:0!important;height:var(--v152-pill-h)!important;min-height:var(--v152-pill-h)!important;margin:0!important;padding:0 34px 0 16px!important;border:0!important;border-radius:999px!important;background:var(--apple-surface,#fff) var(--v152-chev) no-repeat right 14px center/12px 12px!important;box-shadow:var(--v152-pill-line)!important;color:var(--apple-ink,#1d1d1f)!important;font-size:15px!important;font-weight:500!important;line-height:1!important;white-space:nowrap;list-style:none!important;cursor:pointer;-webkit-user-select:none;user-select:none;transition:background-color .15s ease,transform .1s ease-out}
+html body #app .catalog-price>summary::-webkit-details-marker{display:none}
+html body #app .catalog-price>summary::marker{content:""}
+html body #app .catalog-price>summary::after{content:none!important;display:none!important}
+html body #app .catalog-price>summary:active{transform:scale(.97);transition-duration:60ms}
+html body #app .catalog-price>summary:focus-visible{outline:2px solid var(--apple-blue,#0071e3)!important;outline-offset:2px}
+html body #app .catalog-price[open]>summary{background-color:var(--apple-surface-2,#f5f5f7)!important;background-image:var(--v152-chev-up)!important}
+html body #app .catalog-price.is-active>summary{background-color:var(--apple-blue-soft,rgba(0,113,227,.1))!important;background-image:var(--v152-chev-blue)!important;box-shadow:none!important;color:var(--apple-blue,#0071e3)!important}
+@media (hover:hover){html body #app .catalog-price:not(.is-active)>summary:hover{background-color:var(--apple-surface-2,#f5f5f7)!important}}
+/* An invisible layer behind the open panel: a tap outside lands on the summary and closes it. */
+html body #app .catalog-price[open]>summary::before{content:"";position:fixed;inset:0;z-index:-1;cursor:default;background:transparent}
+
+html body #app .catalog-price>fieldset{position:absolute!important;z-index:32;top:calc(100% + 8px);left:0;display:grid!important;gap:16px!important;width:360px!important;max-width:calc(100vw - 32px);margin:0!important;padding:18px 20px 16px!important;border:0!important;border-radius:22px!important;background:var(--apple-surface,#fff)!important;box-shadow:0 0 0 1px rgba(0,0,0,.05),0 18px 50px rgba(0,0,0,.16)!important;transform-origin:24px 0;animation:v152-pop-in .24s var(--v152-ease) both}
+html body #app .catalog-price.is-closing>fieldset{animation:v152-pop-out .16s ease-in both}
+@keyframes v152-pop-in{from{opacity:0;transform:translateY(-4px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes v152-pop-out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-4px) scale(.96)}}
+html body #app .catalog-price legend{float:left;display:grid!important;gap:2px;width:100%;margin:0!important;padding:0!important;color:var(--apple-ink,#1d1d1f)!important}
+html body #app .catalog-price legend b{font-size:17px;font-weight:600;letter-spacing:-.02em;line-height:22px}
+html body #app .catalog-price legend small{color:var(--apple-ink-2,#6e6e73);font-size:13px;font-weight:400;line-height:18px}
+html body #app .catalog-price .price-values{clear:both;display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:8px!important;margin:0!important}
+html body #app .catalog-price .price-values>span{color:var(--apple-ink-2,#6e6e73)}
+html body #app .catalog-price .price-values>label{display:grid!important;gap:1px!important;min-width:0;margin:0!important;padding:8px 12px!important;border:0!important;border-radius:12px!important;background:var(--apple-surface-2,#f5f5f7)!important;box-shadow:none!important;cursor:text;transition:box-shadow .15s ease}
+html body #app .catalog-price .price-values>label:focus-within{box-shadow:inset 0 0 0 2px var(--apple-blue,#0071e3)!important}
+html body #app .catalog-price .price-values>label>span{color:var(--apple-ink-2,#6e6e73)!important;font-size:12px!important;font-weight:500!important;line-height:16px!important}
+html body #app .catalog-price .price-values input{width:100%!important;min-width:0;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;color:var(--apple-ink,#1d1d1f)!important;font-size:17px!important;font-weight:600!important;line-height:22px!important;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+html body #app .catalog-price .price-values input::-webkit-outer-spin-button,html body #app .catalog-price .price-values input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+/* Two thumbs on one track. The track spans the thumb centres, so the fill lines up with them. */
+html body #app .catalog-price .price-range{position:relative!important;height:28px!important;margin:0!important;padding:0!important}
+html body #app .catalog-price .price-range-track{position:absolute!important;left:14px!important;right:14px!important;top:50%!important;height:4px!important;margin:-2px 0 0!important;border-radius:2px!important;background:linear-gradient(90deg,var(--apple-fill-strong,rgba(120,120,128,.2)) var(--range-start),var(--apple-blue,#0071e3) var(--range-start),var(--apple-blue,#0071e3) var(--range-end),var(--apple-fill-strong,rgba(120,120,128,.2)) var(--range-end))!important}
+html body #app .catalog-price .price-range input[type=range]{position:absolute!important;inset:0!important;width:100%!important;height:28px!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;-webkit-appearance:none!important;appearance:none!important;pointer-events:none;outline:0}
+html body #app .catalog-price .price-range input[type=range]::-webkit-slider-runnable-track{height:28px;background:transparent;border:0}
+html body #app .catalog-price .price-range input[type=range]::-moz-range-track{height:28px;background:transparent;border:0}
+html body #app .catalog-price .price-range input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;margin:0;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);pointer-events:auto;cursor:grab;transition:transform .12s ease-out}
+html body #app .catalog-price .price-range input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);pointer-events:auto;cursor:grab}
+html body #app .catalog-price .price-range input[type=range]:active::-webkit-slider-thumb{transform:scale(1.1);cursor:grabbing}
+html body #app .catalog-price .price-range input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px rgba(0,113,227,.35),0 3px 8px rgba(0,0,0,.15)}
+html body #app .catalog-price .price-actions{display:flex;justify-content:space-between;gap:8px;margin:0;padding-top:4px}
+html body #app .catalog-price .price-actions .btn{height:36px!important;min-height:36px!important;padding:0 16px!important;border-radius:999px!important;font-size:15px!important;font-weight:500!important}
+html body #app .catalog-price .price-actions [data-price-done]{min-width:96px}
+
+/* Results line above the cards. */
+html body #app .section>.section-head:has(#resCount){align-items:center!important;margin:0 0 12px!important;min-height:32px}
+html body #app .section>.section-head #resCount{margin:0!important;color:var(--apple-ink-2,#6e6e73)!important;font-size:15px!important}
+
+/* ---------- Phones ---------- */
+@media (max-width:640px){
+ /* Rows of chips run to the screen edges, like a native scroller. */
+ html body #app .page-head+.comfort-actions,html body #app .catalog-compact-toolbar .category-rail,html body #app .catalog-compact-toolbar .catalog-selects{margin-inline:calc(-1 * var(--v152-gutter,16px))!important;width:auto!important}
+ html body #app .page-head+.comfort-actions,html body #app .catalog-compact-toolbar .category-rail .chips{padding-inline:var(--v152-gutter,16px)!important;scroll-padding-inline:var(--v152-gutter,16px)}
+ html body #app .catalog-compact-toolbar .category-rail{--fade-l:28px;--fade-r:28px}
+ html body #app .catalog-compact-toolbar .catalog-selects{padding-inline:var(--v152-gutter,16px)!important;overflow-x:auto;scrollbar-width:none}
+ html body #app .catalog-compact-toolbar .catalog-selects::-webkit-scrollbar{display:none}
+ html body #app .catalog-selects>.sort-order{margin-left:0!important}
+ /* 16 px keeps iOS from zooming the page when a select opens. */
+ html body #app .catalog-selects select.input,html body #app .catalog-price>summary{font-size:16px!important}
+ html body #app .catalog-price .price-values input{font-size:17px!important}
+ /* The price panel becomes a bottom sheet above everything, with a dimmed backdrop. */
+ html body #app .catalog-price>summary{z-index:auto!important}
+ html body #app .catalog-price[open]>summary::before{z-index:1000;background:rgba(0,0,0,.32);animation:v152-fade-in .24s ease both}
+ html body #app .catalog-price.is-closing>summary::before{animation:v152-fade-out .2s ease-in both}
+ html body #app .catalog-price>fieldset{position:fixed!important;z-index:1001;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;max-width:none!important;padding:22px 20px calc(16px + env(safe-area-inset-bottom,0px))!important;border-radius:24px 24px 0 0!important;box-shadow:0 -8px 40px rgba(0,0,0,.18)!important;animation:v152-sheet-in .32s var(--v152-ease) both}
+ html body #app .catalog-price>fieldset::before{content:"";position:absolute;top:7px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--apple-fill-strong,rgba(120,120,128,.2))}
+ html body #app .catalog-price.is-closing>fieldset{animation:v152-sheet-out .22s cubic-bezier(.4,0,1,1) both}
+ html body #app .catalog-price .price-actions .btn{flex:1;height:46px!important;min-height:46px!important;border-radius:14px!important;font-size:16px!important}
+}
+@keyframes v152-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes v152-fade-out{from{opacity:1}to{opacity:0}}
+@keyframes v152-sheet-in{from{transform:translateY(100%)}to{transform:none}}
+@keyframes v152-sheet-out{from{transform:none}to{transform:translateY(100%)}}
+
+/* ---------- Reduced motion: no slides or scaling, a short fade at most ---------- */
+@media (prefers-reduced-motion:reduce){
+ html body #app .catalog-price>fieldset,html body #app .catalog-price.is-closing>fieldset{animation:none!important}
+ html body #app .catalog-price[open]>summary::before{animation:none!important}
+ html body #app .catalog-compact-toolbar .chip:active,html body #app .catalog-selects .catalog-price>summary:active,html body #app #search2>.btn:active,html body #app .page-head+.comfort-actions>.btn:active{transform:none!important}
+}
