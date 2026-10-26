@@ -344,15 +344,19 @@ html body #app .account-section .apsua-ticket,html body #app .panel .apsua-ticke
 html body #app .apsua-ticket-paper{display:grid;grid-template-columns:minmax(0,1fr) clamp(124px,24%,220px);align-items:stretch;min-width:0;padding-right:10px;filter:drop-shadow(0 12px 28px rgba(20,38,60,.07)) drop-shadow(0 2px 6px rgba(20,38,60,.04))}
 
 /* Main part */
-html body #app .apsua-ticket-main{position:relative;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;gap:0;padding:22px 28px 20px 30px;border:1px solid var(--at-line);border-right:0;border-radius:22px 0 0 22px;background:#fff}
+html body #app .apsua-ticket-main{position:relative;isolation:isolate;overflow:hidden;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;gap:0;padding:22px 28px 20px 30px;border:1px solid var(--at-line);border-right:0;border-radius:22px 0 0 22px;background:#fff}
+html body #app .apsua-ticket-photo{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.72) contrast(.9)}
+html body #app .apsua-ticket-photo-wash{position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.86),rgba(255,255,255,.78) 58%,rgba(255,255,255,.72))}
+html body #app .apsua-ticket-main>*:not(.apsua-ticket-photo):not(.apsua-ticket-photo-wash){position:relative;z-index:1}
 html body #app .apsua-ticket-main::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:5px;border-radius:22px 0 0 22px;background:var(--at-accent)}
 html body #app .apsua-ticket-main::after{content:"";position:absolute;right:0;top:16px;bottom:16px;border-right:2px dashed #d7dee8}
 html body #app .apsua-ticket-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 10px;margin:0;padding:0;border:0}
-html body #app .apsua-ticket-kind{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#68758a;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+html body #app .apsua-ticket-kind{position:relative;display:inline-flex;align-items:center;gap:10px;min-width:0;color:#68758a;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 html body #app .apsua-ticket-badge{position:relative;display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:10px;background:var(--at-soft);color:var(--at-badge);overflow:visible}
 html body #app .apsua-ticket-badge img{width:100%;height:100%;border-radius:10px;object-fit:cover}
 html body #app .apsua-ticket-badge svg{width:18px;height:18px}
 html body #app .apsua-ticket-badge .order-unread-dot{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:var(--apple-orange,#ff9500)}
+html body #app .apsua-ticket-kind>.order-unread-dot{width:9px;height:9px;border:2px solid #fff;border-radius:50%;background:var(--apple-orange,#ff9500);box-shadow:0 1px 3px rgba(0,0,0,.15)}
 html body #app .apsua-ticket-state{flex:none;max-width:100%;padding:5px 11px;border-radius:999px;background:var(--at-soft);color:#24684a;font-size:12px;font-weight:600;line-height:1.35;white-space:normal;text-align:center}
 html body #app .apsua-ticket[data-ticket-kind="transfers"] .apsua-ticket-state{color:#0b5aa8}
 html body #app .apsua-ticket:is([data-ticket-status="awaiting_payment"],[data-ticket-status="needs_info"]) .apsua-ticket-state{background:#fff4e2;color:#8a4d00}
@@ -436,7 +440,7 @@ html body #app .apsua-ticket>.order-card-actions .btn{min-height:40px;white-spac
  html body #app .apsua-ticket{break-inside:avoid}
  html body #app .apsua-ticket-paper{filter:none}
  html body #app .apsua-ticket-main{border-right:1px dashed #9aa4b2}
- html body #app .apsua-ticket-stub{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ html body #app .apsua-ticket-stub,html body #app .apsua-ticket-photo{-webkit-print-color-adjust:exact;print-color-adjust:exact}
  html body #app .apsua-ticket>.order-card-actions{display:none!important}
 }
 
@@ -850,3 +854,70 @@ html body #app .v152-story-track .v152-story-photo{height:min(68vh,620px)}
 
 .staff-search{max-width:460px}.staff-list{display:grid;margin-top:14px}.staff-row{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(190px,240px);gap:14px;align-items:center;padding:14px 2px;border-top:1px solid var(--line,#e5e5e8)}.staff-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:#eeeef2;display:grid;place-items:center;font-weight:800}.staff-avatar img{width:100%;height:100%;object-fit:cover}.staff-person,.staff-role{display:grid;gap:2px;min-width:0}.staff-person span,.staff-person small,.staff-role small{color:var(--muted,#777);overflow:hidden;text-overflow:ellipsis}.staff-role small{min-height:1.2em}.staff-observer .order-manager-editor,.staff-observer .order-clarification-editor{opacity:.65}
 @media(max-width:600px){.staff-row{grid-template-columns:44px minmax(0,1fr);gap:10px}.staff-role{grid-column:1/-1}.staff-role .input{width:100%}}
+
+/* ==========================================================================
+   Build 152 · Telegram sign-in through the bot: phone button, desktop QR
+   ========================================================================== */
+html body .telegram-signin-dialog:has(.v152-tg.is-desktop){width:min(560px,calc(100vw - 32px))}
+html body .v152-tg .tg-app-open{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;text-decoration:none!important}
+html body .v152-tg .tg-app-open svg{width:20px;height:20px;flex:none}
+html body .v152-tg .tg-app-open[aria-disabled]{opacity:.45;pointer-events:none}
+html body .v152-tg-steps{margin:10px 2px 0;color:var(--apple-ink-2,#6e6e73);font-size:14px;line-height:1.45;text-align:center}
+html body .v152-tg-alt{display:block;margin:14px auto 0;padding:6px 8px;border:0;background:none;color:var(--apple-link,#0066cc);font:inherit;font-size:14px;cursor:pointer;text-align:center}
+html body .v152-tg-alt:hover{text-decoration:underline}
+html body .v152-tg-alt.is-main{display:inline-flex;width:100%;min-height:48px;margin:0;justify-content:center;align-items:center;gap:8px;border-radius:16px;color:#fff;text-decoration:none!important}
+html body .v152-tg-alt.is-main svg{width:20px;height:20px}
+html body .v152-tg.no-bot :is(.tg-app-open,.v152-tg-steps,.v152-tg-qr){display:none!important}
+html body .v152-tg-qr{display:grid;grid-template-columns:184px minmax(0,1fr);gap:20px;align-items:center}
+html body .v152-tg-qr-box{display:grid;place-items:center;width:184px;height:184px;padding:6px;box-sizing:border-box;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+html body .v152-tg-qr-box .v152-qr-svg{display:block;width:100%;height:100%}
+html body .v152-tg-qr-wait{color:var(--apple-ink-2,#6e6e73);font-size:13px}
+html body .v152-tg-qr-text h3{margin:0 0 6px;color:var(--apple-ink,#1d1d1f);font-size:17px;font-weight:600;letter-spacing:-.01em}
+html body .v152-tg-qr-text p{margin:0 0 14px;color:var(--apple-ink-2,#6e6e73);font-size:14px;line-height:1.45}
+html body .v152-tg-actions{display:flex;flex-wrap:wrap;gap:8px}
+html body .v152-tg-actions .tg-app-open{width:auto!important;min-height:40px!important;padding:0 16px!important;border-radius:999px!important;font-size:15px!important}
+html body .v152-tg.is-desktop .tg-app-status{text-align:left}
+@media (max-width:520px){html body .v152-tg-qr{grid-template-columns:1fr;justify-items:center;text-align:center}html body .v152-tg-actions{justify-content:center}}
+html body [data-tg-login].v152-tg{display:block!important;width:100%;flex-direction:column}
+html body .v152-tg .tg-app-open.btn-primary{width:100%;min-height:50px;border:0!important;border-radius:16px!important;background:var(--apple-blue,#0071e3)!important;color:#fff!important;font-size:17px!important;font-weight:600!important}
+html body .v152-tg .tg-app-open.btn-ghost{background:var(--control-bg,#e8e8ed)!important;color:var(--apple-ink,#1d1d1f)!important;border:0!important}
+html body .v152-tg .v152-tg-alt:not(.is-main){width:auto;min-height:0;border:0!important;border-radius:8px;background:none!important;box-shadow:none!important;color:var(--apple-link,#0066cc)!important;font-weight:500}
+html body .v152-tg .v152-tg-alt.is-main{background:var(--apple-blue,#0071e3)!important;font-size:17px;font-weight:600}
+html body .v152-tg.is-desktop .v152-tg-actions .tg-app-open.btn-primary{width:auto;min-height:40px;font-size:15px!important}
+html body .v152-tg .v152-tg-alt.is-main{color:#fff!important}
+html body .v152-tg .v152-tg-alt.is-main svg{color:#fff}
+html body .v152-tg-qr{grid-template-columns:repeat(auto-fit,minmax(184px,1fr))!important}
+html body .v152-tg-qr-box{justify-self:center}
+
+/* ==========================================================================
+   Build 152 · catalog on phones: title, then categories and filters
+   ========================================================================== */
+@media (max-width:767px){
+ html body #app .wrap:has(>#search2)>.comfort-actions,html body #app .wrap:has(>#search2)>#search2{display:none!important}
+ html body #app .wrap:has(>#search2) #resCount{display:none!important}
+ html body #app .wrap:has(>#search2) .section-head:has(#resCount):not(:has(#resetPlace:not([hidden]))){display:none!important}
+ html body #app .wrap:has(>#search2) .section-head:has(#resCount){justify-content:flex-end!important}
+ html body #app .wrap:has(>#search2)>.page-head{margin-bottom:14px!important}
+}
+
+/* ==========================================================================
+   Build 152 · three rotating seasonal video banners
+   ========================================================================== */
+html body #app .v152-season-sec{margin-top:clamp(8px,1.5vw,16px)!important}
+html body #app .v152-season{position:relative;display:block;overflow:hidden;aspect-ratio:2/1;border-radius:clamp(20px,2.4vw,28px);background:#e9ece8;box-shadow:0 1px 2px rgba(0,0,0,.06),0 14px 34px rgba(30,46,38,.18);transform:translateZ(0);transition:transform .25s var(--v152-ease),box-shadow .25s var(--v152-ease)}
+html body #app .v152-season-slide{position:absolute;inset:0;display:block;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s ease,visibility .55s ease}
+html body #app .v152-season-slide.is-active{opacity:1;visibility:visible;pointer-events:auto}
+html body #app .v152-season video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--v152-ease)}
+html body #app .v152-season:focus-visible{outline:3px solid var(--apple-blue,#0071e3);outline-offset:3px}
+html body #app .v152-season-dots{position:absolute;z-index:3;left:50%;bottom:10px;display:flex;gap:6px;translate:-50% 0;pointer-events:none}
+html body #app .v152-season-dots i{width:7px;height:7px;border-radius:99px;background:rgba(255,255,255,.55);box-shadow:0 1px 4px rgba(0,0,0,.22);transition:width .25s ease,background .25s ease}
+html body #app .v152-season-dots i.is-active{width:22px;background:#fff}
+@media (hover:hover){html body #app .v152-season:hover{box-shadow:0 1px 2px rgba(0,0,0,.06),0 20px 44px rgba(30,46,38,.24)}html body #app .v152-season:hover .v152-season-slide.is-active video{transform:scale(1.018)}}
+html body #app .v152-season:active{transform:scale(.985)}
+@media (min-width:901px){html body #app .v152-season{aspect-ratio:3/1}}
+@media (prefers-reduced-motion:reduce){html body #app .v152-season,html body #app .v152-season-slide,html body #app .v152-season video{transition:none}html body #app .v152-season:hover video{transform:none}}
+html body .v152-season-admin-list{display:grid;gap:14px}
+html body .v152-season-admin{display:grid;grid-template-columns:minmax(180px,32%) minmax(0,1fr);gap:16px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.65)}
+html body .v152-season-admin video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:#ececef}
+html body .v152-season-admin>div{display:grid;gap:10px;min-width:0}
+@media (max-width:640px){html body .v152-season-admin{grid-template-columns:minmax(0,1fr)}html body .v152-season-admin video{max-height:210px}}
