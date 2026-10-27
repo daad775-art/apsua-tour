@@ -250,7 +250,7 @@ console.log('PASS: full in-app admin requires exact invitation plus bound email;
 
 
 // New transfer requests enforce the chosen direction, address, season and deadline.
-const transferPayload={via:'WhatsApp',direction:'arrival',terminalId:'sukhum-rail',cityId:'gagra',clsId:'standard',cls:'Легковой автомобиль',pax:2,address:'Улица 1, дом 2',hotel:'Гостиница',flight:'SU 100',date:'2027-07-10',time:'12:00',name:'Турист',phone:'+79401234567'};
+const transferPayload={via:'WhatsApp',direction:'arrival',terminalId:'sukhum-rail',cityId:'gagra',clsId:'standard',cls:'Легковой автомобиль',pax:2,passengerNames:['Ирина Иванова','Анна Иванова'],address:'Улица 1, дом 2',hotel:'Гостиница',flight:'SU 100',date:'2027-07-10',time:'12:00',name:'Турист',phone:'+79401234567'};
 for(const via of ['', 'SMS']){const rejected=await call('/api/list','tourist','POST',{kind:'transfers',items:[{...transferPayload,via,code:'TR-VIA-'+(via||'EMPTY')}]});assert.equal(rejected.status,400);assert.match(rejected.data.error,/WhatsApp|Telegram/)}
 
 response=await call('/api/list','tourist','POST',{kind:'transfers',items:[{...transferPayload,code:'TR-NEW-ARRIVAL'}]});assert.equal(response.status,200);assert.equal(JSON.parse(sqlite.prepare('SELECT body FROM records WHERE id=?').get('TR-NEW-ARRIVAL').body).address,transferPayload.address);

@@ -18,7 +18,7 @@ export function dispatchPayload(kind: string, code: string, owner: string, d: an
   const base = { siteCode: code, kind, customer: { id: owner, name: d.name || '', phone: d.phone || '' }, date: d.date || '', time: d.time || '', hotel: d.hotel || '', address: d.address || '', note: d.note || '', createdAt: new Date().toISOString() };
   return kind === 'bookings'
     ? { ...base, tour: { id: d.tour || '', title: d.tourTitle || '' }, format: d.format || '', city: d.city || '', adults: Number(d.adults) || 0, kids: Number(d.kids) || 0, total: d.total ?? null }
-    : { ...base, direction: d.direction || '', terminal: d.terminalId || '', city: d.cityId || '', route: d.route || '', flight: d.flight || '', class: d.clsId || '', pax: Number(d.pax) || 0, childSeat: !!d.seat };
+    : { ...base, direction: d.direction || '', terminal: d.terminalId || '', city: d.cityId || '', route: d.route || '', flight: d.flight || '', class: d.clsId || '', pax: Number(d.pax) || 0, passengerNames: Array.isArray(d.passengerNames)?d.passengerNames:[], childSeat: !!d.seat };
 }
 
 /** Sends one event to the dispatcher program. Returns the program's answer or null. Never throws. */

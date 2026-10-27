@@ -961,3 +961,159 @@ html body #app .card.v4-card .v4-meta{margin-top:auto;padding-top:8px}
 html body #app .tour-back-control{min-height:44px;padding:10px 16px;gap:7px;font:600 14px/1.3 var(--f-body);text-decoration:none}
 html body #app .tour-back-control svg{width:18px;height:18px;flex:0 0 18px}
 @media(max-width:700px){html body #app .comparison-picker{width:100%;flex-basis:100%}.comparison-picker-list{max-height:260px}}
+
+/* 22.3 — final responsive corrections requested after mobile and desktop QA. */
+html body #app .wrap:has(.tr-layout){max-width:1240px}
+html body #app .tr-layout{grid-template-columns:minmax(0,980px)!important}
+html body #app #trPanel{width:100%;box-sizing:border-box}
+html body #app #trForm :is(.input,.field,select,textarea){color:var(--apple-ink,#1d1d1f)}
+html body #app #trForm .input{background:#fff!important;border:1px solid #c7c7cc!important;box-shadow:0 1px 2px rgba(0,0,0,.04)!important}
+html body #app #trForm .input:focus{border-color:var(--apple-blue,#0071e3)!important;box-shadow:0 0 0 3px rgba(0,113,227,.14)!important;outline:0}
+html body #app .transfer-kind-field{display:grid;gap:6px}
+html body #app .transfer-kind{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html body #app .transfer-kind label{position:relative;min-width:0;cursor:pointer}
+html body #app .transfer-kind input{position:absolute;opacity:0;pointer-events:none}
+html body #app .transfer-kind label>span{display:grid;gap:3px;min-height:64px;padding:10px 12px;box-sizing:border-box;border:1px solid #c7c7cc;border-radius:14px;background:#fff}
+html body #app .transfer-kind b{font-size:14px}
+html body #app .transfer-kind small{font-size:11px;line-height:1.3;color:var(--apple-ink-2,#6e6e73)}
+html body #app .transfer-kind input:checked+span{border-color:var(--apple-blue,#0071e3);background:rgba(0,113,227,.08);box-shadow:inset 0 0 0 1px var(--apple-blue,#0071e3)}
+html body #app .transfer-kind .is-disabled{opacity:.55;cursor:not-allowed}
+html body #app .transfer-form-title{margin:5px 0 -2px;padding-top:10px;border-top:1px solid var(--line,#e5e5e8);font-size:14px;line-height:1.25;letter-spacing:-.01em}
+html body #app .transfer-kind-field+.transfer-form-title{margin-top:2px}
+html body #app .transfer-route-fields+.field{margin-top:-2px}
+html body #app .transfer-contact-fields+label.field{margin-top:-2px}
+html body #app .transfer-passenger-names{display:grid;gap:8px;margin:0;padding:12px;border:1px solid var(--line,#e5e5e8);border-radius:15px;background:rgba(255,255,255,.68)}
+html body #app .transfer-passenger-names legend{padding:0 5px;font-size:13px;font-weight:700}
+html body #app .transfer-passenger-names>p{margin:0;color:var(--apple-ink-2,#6e6e73);font-size:11px}
+html body #app .transfer-passenger-names>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html body #app #transferReview .transfer-booking-ticket{margin:0 0 12px!important;--ticket-bg:var(--apple-surface,#fff)}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-paper{grid-template-columns:minmax(0,1fr) 112px;padding-right:5px;filter:drop-shadow(0 7px 15px rgba(20,38,60,.07))}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-main{padding:12px 16px 11px 19px;border-radius:16px 0 0 16px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-main::before{border-radius:16px 0 0 16px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-main::after{top:10px;bottom:10px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-badge{width:25px;height:25px;border-radius:8px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-badge svg{width:15px;height:15px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-kind{gap:7px;font-size:9px}
+html body #app #transferReview .transfer-booking-ticket .linkbtn{min-height:28px;padding:3px 7px;font-size:11px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-title{margin:7px 0 1px!important;font-size:17px!important;line-height:1.15!important}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-code{font-size:10px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px 10px!important;margin-top:8px!important;padding-top:8px!important}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-facts dt{margin-bottom:2px;font-size:9px!important}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-facts dd{font-size:11px!important;line-height:1.25!important}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-facts .apsua-ticket-wide{grid-column:span 2}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-total{flex-direction:row-reverse;justify-content:flex-start;align-items:baseline;gap:7px;padding-top:8px;text-align:left}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-total b{font-size:17px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-total span{font-size:10px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub{gap:7px;padding:11px 9px 10px 12px;border-radius:0 16px 16px 0}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-top{gap:3px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-top span{font-size:11px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-top small{font-size:8px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-date{gap:2px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-date b{font-size:30px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-date span{font-size:9px}
+html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-foot{padding-top:5px;font-size:8px}
+@media(max-width:600px){
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-paper{grid-template-columns:minmax(0,1fr) 72px;padding-right:3px}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-main{padding:10px 9px 10px 13px}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-facts .apsua-ticket-wide{grid-column:1/-1}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub{padding:10px 5px 9px 8px}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-top{flex-direction:column}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-stub-top span{font-size:10px}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-total{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px;width:100%;margin-top:8px!important;padding-top:8px;border-top:1px solid var(--at-line);text-align:left}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-total span{grid-column:1;grid-row:1;line-height:1.25}
+ html body #app #transferReview .transfer-booking-ticket .apsua-ticket-total b{grid-column:2;grid-row:1;white-space:nowrap;text-align:right}
+ html body #app #trForm>.field:has(#tr-flight){display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:5px!important;padding:11px 13px!important;border-radius:14px!important;background:var(--apple-surface-2,#f5f5f7)!important}
+ html body #app #trForm>.field:has(#tr-flight)>span{font-size:13px!important;font-weight:600!important}
+ html body #app #trForm>.field:has(#tr-flight)>.input{box-sizing:border-box!important;width:100%!important;min-height:44px!important;padding:0 12px!important;border:1px solid #c7c7cc!important;border-radius:11px!important;background:#fff!important;text-align:left!important}
+ html body #app #trForm .tr-passengers.v152-group{padding:5px 16px!important;border-radius:16px!important}
+ html body #app #trForm .tr-passengers.v152-group>:is(.person,label.check){min-height:58px!important;padding-block:5px!important}
+}
+
+@media(max-width:700px){
+ html body #app .catalog-compact-toolbar .catalog-selects{display:grid!important;grid-template-columns:minmax(0,1.18fr) minmax(0,.72fr) minmax(0,1fr)!important;gap:6px!important;width:100%!important;margin-inline:0!important;padding-inline:0!important;overflow:visible!important;touch-action:auto!important}
+ html body #app .catalog-selects>*{width:auto!important;min-width:0!important;max-width:none!important;flex:none!important}
+ html body #app .catalog-selects .sort-format,html body #app .catalog-selects .catalog-price,html body #app .catalog-selects .sort-order{width:auto!important;margin:0!important}
+ html body #app .catalog-selects select.input,html body #app .catalog-price>summary{width:100%!important;min-width:0!important;height:40px!important;min-height:40px!important;box-sizing:border-box!important;padding:0 24px 0 10px!important;background-position:right 8px center!important;background-size:10px 10px!important;font-size:12px!important;text-overflow:ellipsis!important}
+ html body #app .catalog-selects #sort.input{padding-left:27px!important;background-position:left 8px center,right 8px center,center!important;background-size:14px 14px,10px 10px,auto!important}
+ html body #app .catalog-price[open]>summary::before{position:fixed!important;inset:0!important;z-index:1000!important;background:rgba(0,0,0,.32)!important}
+ html body #app .catalog-price>fieldset{display:grid!important;visibility:visible!important;opacity:1!important;color:var(--apple-ink,#1d1d1f)!important;background:#fff!important}
+ html body #app .catalog-price>fieldset :is(legend,b,small,span,label,input){color:inherit}
+ html body #app .transfer-passenger-names>div{grid-template-columns:minmax(0,1fr)}
+ html body #app .recent-panel{margin-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+ html body #app .recent-panel>summary{position:relative;z-index:1;background:#fff}
+ html body #app .recent-panel .comfort-body{padding-bottom:14px}
+}
+
+/* Personal account dashboard */
+html body #app .account-dashboard-wrap{max-width:1600px!important;width:min(96%,1600px)!important}
+html body #app .account-dashboard{display:grid;grid-template-columns:250px minmax(0,1fr) 285px;gap:18px;align-items:start;margin:26px auto 60px;color:#172033}
+html body #app .account-dashboard-sidebar,html body #app .account-useful,html body #app .account-dashboard-settings{background:#fff;border-radius:16px;box-shadow:0 4px 20px #2331490b}
+html body #app .account-dashboard-sidebar{padding:18px;min-height:650px}
+html body #app .account-dashboard .acc-head{display:block!important;margin:0!important;padding:0 0 18px!important;width:auto!important;max-width:none!important;border-bottom:1px solid #edf0f4}
+html body #app .account-dashboard .acc-head .who{display:flex;align-items:center;gap:12px}
+html body #app .account-dashboard .acc-head .avatar{width:60px;height:60px;flex:none}
+html body #app .account-dashboard .acc-head h1{font-size:17px!important;line-height:1.3;margin:0}
+html body #app .account-dashboard .acc-head .sub{font-size:11px;overflow-wrap:anywhere}
+html body #app .account-dashboard .account-actions{display:flex!important;margin-top:12px}
+html body #app .account-dashboard .account-actions .btn{font-size:12px!important;height:32px!important;min-height:32px!important;padding:0 10px!important}
+html body #app .account-dashboard-nav{display:grid;gap:4px;margin-top:14px}
+html body #app .account-dashboard-nav button,html body #app .account-dashboard-nav a{display:flex;align-items:center;gap:13px;width:100%;padding:12px;border:0;border-radius:10px;background:transparent;color:#566178;text-decoration:none;text-align:left;font-size:17px;cursor:pointer}
+html body #app .account-dashboard-nav span{font-size:14px}
+html body #app .account-dashboard-nav :is(button,a):hover,html body #app .account-dashboard-nav .is-active{background:#edf6ff;color:#0071e3}
+html body #app .account-dashboard-nav button:last-child{border-top:1px solid #edf0f4;border-radius:0;margin-top:12px;padding-top:18px}
+html body #app .account-dashboard-main{min-width:0;display:grid;gap:16px}
+html body #app .account-dashboard-hero{min-height:165px;padding:28px 32px;border-radius:16px;color:#fff;background:linear-gradient(90deg,rgba(18,42,69,.83),rgba(27,66,84,.15)),url('/assets/lake2-card.webp') center 48%/cover}
+html body #app .account-dashboard-hero small{font-size:11px;font-weight:700;letter-spacing:.15em}
+html body #app .account-dashboard-hero h2{font-size:28px;line-height:1.15;margin:15px 0 8px;color:#fff}
+html body #app .account-dashboard-hero p{font-size:15px;line-height:1.5;max-width:480px;margin:0;color:#fff}
+html body #app .account-dashboard-mobile{display:none}
+html body #app .account-dashboard-sections{display:grid;gap:12px;min-width:0}
+html body #app .account-dashboard-sections[hidden],html body #app .account-dashboard-settings[hidden]{display:none!important}
+html body #app .account-dashboard-sections>.account-section{background:#fff!important;border:0!important;border-radius:16px!important;box-shadow:0 4px 20px #2331490b!important;grid-column:auto!important;overflow:hidden}
+html body #app .account-dashboard-sections>.account-section>summary{padding:20px 24px!important;min-height:60px;font-size:18px!important;font-weight:700!important}
+html body #app .account-dashboard-sections>.account-section>.account-section-content{padding:0 24px 22px!important;border:0!important}
+html body #app .account-dashboard-sections .my-order-tools{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}
+html body #app .account-dashboard-right{display:grid;gap:16px;min-width:0}
+html body #app .account-dashboard .push-device{display:grid;gap:14px;align-items:start;margin:0;padding:20px;background:#fff;border-radius:16px}
+html body #app .account-dashboard .push-device h2,html body #app .account-useful h2,html body #app .account-dashboard-settings h2{font-size:18px;margin:0 0 10px}
+html body #app .account-dashboard .push-device p{font-size:13px;line-height:1.5}
+html body #app .account-dashboard .push-device .btn{white-space:normal;min-height:42px}
+html body #app .account-useful{padding:22px}
+html body #app .account-useful a{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #edf0f4;text-decoration:none;color:#526078;font-size:14px}
+html body #app .account-useful a:last-child{border:0}
+html body #app .account-dashboard-settings{padding:24px}
+html body #app .account-settings-block{padding:20px 0;border-top:1px solid #edf0f4}
+html body #app .account-settings-block h3{font-size:16px;margin:0 0 7px}
+html body #app .account-settings-block p{font-size:13px;line-height:1.5;color:#657084;margin:0 0 14px}
+html body #app #accountContactSettings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
+html body #app #accountContactSettings .btn{justify-self:start}
+html body #app .account-settings-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:1100px){html body #app .account-dashboard{grid-template-columns:215px minmax(0,1fr)}html body #app .account-dashboard-right{grid-column:2;grid-template-columns:1fr 1fr}}
+@media(max-width:700px){
+ html body #app .account-dashboard-wrap{width:calc(100% - 24px)!important}
+ html body #app .account-dashboard{display:flex;flex-direction:column;gap:12px;margin:12px auto 35px}
+ html body #app .account-dashboard-sidebar,html body #app .account-dashboard-main,html body #app .account-dashboard-right{width:100%;min-width:0;min-height:0}
+ html body #app .account-dashboard-sidebar{padding:14px}
+ html body #app .account-dashboard .acc-head{display:flex!important;justify-content:space-between;gap:10px;padding:0!important;border:0;align-items:center}
+ html body #app .account-dashboard .acc-head .avatar{width:48px;height:48px}
+ html body #app .account-dashboard .acc-head h1{font-size:16px!important}
+ html body #app .account-dashboard .account-actions{width:auto!important;margin:0;justify-content:flex-end}
+ html body #app .account-dashboard .account-actions [data-logout]{display:none}
+ html body #app .account-dashboard-nav{display:none}
+ html body #app .account-dashboard-main{gap:12px}
+ html body #app .account-dashboard-hero{min-height:135px;padding:20px}
+ html body #app .account-dashboard-hero h2{font-size:22px;margin:10px 0 6px}
+ html body #app .account-dashboard-hero p{font-size:13px}
+ html body #app .account-dashboard-mobile{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#fff;border-radius:15px;padding:6px;gap:2px}
+ html body #app .account-dashboard-mobile button{display:grid;place-items:center;gap:4px;min-width:0;min-height:58px;padding:5px 2px;border:0;border-radius:10px;background:transparent;color:#566178;font-size:21px;cursor:pointer}
+ html body #app .account-dashboard-mobile button span{font-size:10px;line-height:1.15;overflow-wrap:anywhere}
+ html body #app .account-dashboard-mobile button.is-active{background:#edf6ff;color:#0071e3}
+ html body #app .account-dashboard-sections>.account-section>summary{padding:15px!important;font-size:16px!important}
+ html body #app .account-dashboard-sections>.account-section>.account-section-content{padding:0 12px 15px!important}
+ html body #app .account-dashboard-right{display:grid;grid-template-columns:1fr}
+ html body #app .account-dashboard-settings{padding:18px}
+ html body #app #accountContactSettings{grid-template-columns:1fr}
+}
+html body #app .account-dashboard-nav svg{width:22px;height:22px;flex:none}
+html body #app .account-dashboard-mobile svg{width:24px;height:24px;flex:none}
