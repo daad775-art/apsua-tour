@@ -124,7 +124,7 @@ const PIN_LBL={psou:[14,26,'start'],gagra:[-14,24,'end'],pitsunda:[-14,22,'end']
 const DEFAULT={
  site:{name:'Апсуа Тур',logo:'/assets/brand-logo.png',phone:'[номер менеджера]',messenger:'[контакт]',email:'',vk:'https://vk.ru/otdyh_in_abkhazia',instagram:'https://www.instagram.com/apsua_tur',footAbout:'Экскурсии и трансфер по Абхазии',footPlaces:'Гагра · Пицунда · Новый Афон · Сухум',
   footFacts:['Граница: паспорт РФ подходит для въезда','Валюта: российский рубль'],footnote:'Прототип. Цены, расписание и рейтинги — примеры и требуют подтверждения.',
-  guideName:'[Имя гида]',guideText:'Местный гид Апсуа Тур. Добавьте фото, стаж и пару слов о себе.',guidePhoto:'',adminPass:''},
+  guideName:'[Имя гида]',guideText:'Местный гид Апсуа Тур. Добавьте фото, стаж и пару слов о себе.',guidePhoto:''},
  hero:{eyebrow:'Абхазия · экскурсии и трансфер',title:'Абхазия своими глазами',lead:'Маршруты, которые запоминаются, и люди, которые знают здесь каждую тропу.',btn1:'Смотреть экскурсии',btn2:'Заказать трансфер',photo:'',facts:[['{маршруты}','маршрутов'],['7','районов'],['от Псоу','трансфер']]},
  districts:{},
  sec:{
@@ -395,7 +395,7 @@ function allReviews(){const order={ya:0,site:1,demo:2};return [...store.get('rev
 function reviewHTML(r){const t=tourById(r.t),sc=SRC[r.src||'demo']||SRC.demo;const st=Math.max(1,Math.min(5,Number(r.r)||5));return `<article class="review"><header><span class="avatar" ${profileTarget(r.uid)}>${r.avatar?`<img src="${src(r.avatar)}" alt="Аватар ${esc(r.n)}" loading="lazy" decoding="async">`:esc((r.n||'?')[0])}</span><div><b ${profileTarget(r.uid)}>${esc(r.n)}</b><small>${r.c?esc(r.c)+' · ':''}${esc(r.d||'')}</small></div></header><span class="stars" aria-label="${st} из 5">${'★'.repeat(st)}${'☆'.repeat(5-st)}</span>${String(r.x||'').length>220?`<details class="review-text"><summary><q>${esc(r.x)}</q><span>Читать полностью</span><span>Свернуть</span></summary><q>${esc(r.x)}</q></details>`:`<q>${esc(r.x)}</q>`}${r.verified?`<small class="verified-review">✓ Подтверждённая поездка · ${esc(r.excursionDate)}</small>`:''}<div class="rev-foot">${t?`<a href="#/excursions/${t.id}">${esc(t.title)}</a>`:'<span></span>'}<span class="src ${sc[0]}"><i></i>${sc[1]}</span></div></article>`}
 function yandexHTML(){const Y=C.yandex,has=Y.rating&&Y.count;return `<div class="ya glass"><span class="ya-badge"><span class="ya-dot">Я</span>Отзывы на Яндекс Картах</span>${has?`<span class="ya-rating num">${esc(fmtRating(Y.rating))}</span><span class="stars">★★★★★</span><span class="sub">${esc(Y.count)} ${plural(Number(Y.count)||0,'отзыв','отзыва','отзывов')}</span>`:`<span class="sub">Здесь появится рейтинг с Яндекс Карт.</span>`}${Y.url?`<a class="btn btn-ghost small" href="${esc(Y.url)}" target="_blank" rel="noopener" style="margin-left:auto">Все отзывы на Яндексе ${ICON.ext}</a>`:''}</div>`}
 function allStories(){moderateStories();return [...store.get('diary',[]).filter(s=>s.status==='published').map(s=>({...s,user:true})),...C.stories.filter(s=>!s.hidden&&(s.status==='published'||!s.status))]}
-function storyHTML(s){return `<article class="story"><img src="${s.img||src(s.photo,s.scene||['sea',0],1000,625)}" alt="" loading="lazy"><div><small>${esc(s.a)}${s.user?' · <span class="src site"><i></i>с сайта</span>':''}</small><h3>${esc(s.t)}</h3><p>${esc(s.x)}</p></div></article>`}
+function storyHTML(s){return `<article class="story"><img src="${src(s.img)||src(s.photo,s.scene||['sea',0],1000,625)}" alt="" loading="lazy"><div><small>${esc(s.a)}${s.user?' · <span class="src site"><i></i>с сайта</span>':''}</small><h3>${esc(s.t)}</h3><p>${esc(s.x)}</p></div></article>`}
 
 /* ---------- Map: real district boundaries (GADM) with gradation by number of routes ---------- */
 const distCount=id=>C.tours.filter(t=>tourInDistrict(t,id)&&tourPublic(t)).length;
@@ -728,8 +728,8 @@ const F={
 };
 const card=(title,body,extra='')=>`<section class="adm-card"><header><h3>${title}</h3>${extra}</header><div class="adm-body">${body}</div></section>`;
 function adminLogin(){app.innerHTML=`<div class="wrap"><nav class="crumbs"><a href="#/">Главная</a><span>/</span><span>Администратор</span></nav><section class="auth"><div style="display:grid;gap:6px"><h1 style="font-size:30px">Вход для администратора</h1><p class="sub">Управление текстами, экскурсиями, фото и отзывами.</p></div>
- <form id="admLogin" novalidate style="display:grid;gap:14px"><label class="field"><span>Пароль</span><input class="input" type="password" id="adm-pass" autocomplete="current-password"><small class="err" id="e-adm"></small></label><button class="btn btn-accent block" type="submit">Войти</button></form>
- <p class="hint">Временный вход прототипа: пароль проверяется в браузере и не защищает данные по-настоящему. Перед запуском сайта вход переедет на сервер, а кнопка будет скрыта.</p></section></div>`;setTimeout(()=>$('#adm-pass').focus(),50)}
+ <form id="admLogin" novalidate style="display:grid;gap:14px"><button class="btn btn-accent block" type="submit">Войти</button></form>
+ <p class="hint">Вход для сотрудников — через аккаунт. Права доступа проверяет сервер.</p></section></div>`}
 function adminView(parts){
  if(!isAdmin())return adminLogin();
  const tabs=adminCurrentTabs();
@@ -810,7 +810,7 @@ const ADM_RENDER={
   ${card('Загрузить',`<p class="sub">Заменит текущий контент содержимым файла.</p><label class="btn btn-ghost">Выбрать файл<input type="file" accept="application/json,.json" data-import hidden></label>`)}
   ${card('Сбросить',`<p class="sub">Вернуть все тексты, экскурсии и фото к исходному состоянию. Отменить нельзя — сначала скачайте копию.</p><button class="btn btn-ghost danger" type="button" data-adm="reset">Сбросить к исходному</button>`)}`},
  settings(){$('#admMain').innerHTML=`<header class="adm-head"><h1>Настройки</h1></header>
-  ${card('Пароль администратора',`<form id="admPass" novalidate style="display:grid;gap:14px;max-width:420px"><label class="field"><span>Новый пароль</span><input class="input" type="password" id="np1" autocomplete="new-password"></label><label class="field"><span>Повторите</span><input class="input" type="password" id="np2" autocomplete="new-password"><small class="err" id="e-np"></small></label><button class="btn btn-sea" type="submit">Сменить пароль</button></form>`)}
+  
   ${card('Кнопка входа',`<p class="sub">Сейчас ссылка «Вход для администратора» видна в верхней плашке и в подвале сайта. Когда панель будет готова к запуску, её скроем, а вход останется по адресу сайта с #/admin.</p>`)}`}
 };
 function admRerender(){const p=parseHash().parts;const y=scrollY;ADM_RENDER[p[1]&&ADM_RENDER[p[1]]?p[1]:'dash'](p);scrollTo(0,y)}
@@ -948,8 +948,6 @@ document.addEventListener('drop',e=>{const z=e.target.closest&&e.target.closest(
 document.addEventListener('submit',e=>{
  e.preventDefault();const f=e.target;
  if(accSubmit(f))return;
- if(f.id==='admLogin'){const p=$('#adm-pass');if(p.value===String(C.site.adminPass)){sess.set('admin','1');route()}else{$('#e-adm').textContent='Неверный пароль';p.classList.add('invalid');p.select()}return}
- if(f.id==='admPass'){const a=$('#np1').value,b=$('#np2').value;if(a.length<6){$('#e-np').textContent='Минимум 6 символов';return}if(a!==b){$('#e-np').textContent='Пароли не совпадают';return}C.site.adminPass=a;saveContent();$('#e-np').textContent='';f.reset();toast('Пароль изменён');return}
  if(f.id==='search'){location.hash='#/excursions'+qString();return}
  if(f.id==='search2'){renderCards();syncCatalogHash();$('#cards').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});return}
  if(f.id==='bkForm'){
@@ -3764,5 +3762,6 @@ SITE_CHANGELOG.push({version:'22.9',date:'2026-10-27',author:'Руслан',titl
 
 SITE_CHANGELOG.push({version:'23.0',date:'2026-10-30',author:'Руслан',title:'Приватные идентификаторы туристов',description:'В историях, отзывах и комментариях вместо внутреннего номера аккаунта и Telegram ID теперь публичный идентификатор. Карточка туриста по-прежнему открывается, а число поездок видят только сам турист и сотрудники.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'23.1',date:'2026-10-30',author:'Руслан',title:'Цена трансфера считается на сервере',description:'Стоимость трансфера в заявке теперь рассчитывается сервером по действующим тарифам, классу, числу пассажиров и детскому креслу. Цена, присланная браузером, больше не попадает в заявку как итоговая.',type:'fix',priority:'important'});
+SITE_CHANGELOG.push({version:'23.2',date:'2026-10-30',author:'Руслан',title:'Защита ввода и заголовки безопасности',description:'Ошибочные или слишком большие запросы теперь получают понятный ответ 400/413 вместо внутренней ошибки. Страница отдаёт заголовки безопасности, а прототипный вход по паролю, проверявшийся в браузере, удалён — сотрудники входят через аккаунт.',type:'fix',priority:'important'});
 hostedBoot();
 })();
