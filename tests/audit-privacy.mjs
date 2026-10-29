@@ -53,6 +53,7 @@ order=await transfer(guest,'price-group',{clsId:'group',cls:'Групповой'
 {const st=(await call('/api/state','owner')).data;st.content.transfer.seat=300;const saved=await call('/api/content','owner','PUT',{content:st.content,revision:st.revision});assert.equal(saved.status,200,JSON.stringify(saved.data))}
 order=await transfer(guest,'price-seat',{clsId:'van',cls:'Минивэн',seat:true,price:Number(gagra.rates.van)});assert.equal(order.price,Number(gagra.rates.van)+300,'child seat surcharge from the catalogue');assert.equal(order.clientPrice,Number(gagra.rates.van),'browser price without the surcharge is kept apart');
 order=await transfer(guest,'price-on-request',{terminalId:'sukhum-rail',price:999});assert.equal(order.price,null,'no tariff from Sukhum: price on request');assert.equal(order.clientPrice,999);
+order=await transfer(guest,'individual-form',{clsId:'comfort',cls:'Легковой автомобиль',price:Number(gagra.price)});assert.equal(order.clsId,'standard','the form\'s «Индивидуальный» (comfort) is accepted as the first tariff class');assert.equal(order.price,Number(gagra.price));assert.equal(order.clientPrice,undefined);
 console.log('PASS: transfer price is computed on the server from tariffs, class, passengers and child seat; a forged browser price never becomes the order price.');
 
 // Roles: a tourist cannot moderate, change orders or read staff lists.
