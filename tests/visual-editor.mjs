@@ -14,7 +14,7 @@ const before=JSON.stringify(settings);normalize(settings);assert.equal(JSON.stri
 const bad={pages:{'#/':{desktop:{[selector]:{fontSize:9999,color:'red;display:none',backgroundImage:'url(https://evil.test)',width:Infinity,position:'fixed',x:-9999,textAlign:'evil',boxShadow:'url(evil)'},':where(body){display:none}':{fontSize:50}}}}};
 const clean=normalize(bad).pages['#/'].desktop[selector];assert.equal(clean.fontSize,160);assert.equal(clean.x,-1500);assert.equal(clean.color,undefined);assert.equal(clean.width,undefined);assert.equal(clean.backgroundImage,undefined);assert.equal(clean.position,undefined);assert.equal(clean.boxShadow,undefined);
 assert.ok(!cssRules(bad,'#/').includes('evil'));assert.equal(Object.keys(normalize(bad).pages['#/'].desktop).length,1);
-const shell=readFileSync('lib/site-shell.ts','utf8');assert.ok(shell.includes('/visual-editor.js?v=112'));assert.ok(!shell.includes('/visual-editor.css'),'editor panel styles are not loaded for every visitor');assert.match(source,/function open\(\)\{if\(!B\.canEdit\(\)\)return;ensureStyles\(\);/);assert.ok(source.includes("link.href='/visual-editor.css?v=166'"));
+const shell=readFileSync('lib/site-shell.ts','utf8');assert.ok(shell.includes('/visual-editor.js?v=166'));assert.ok(!shell.includes('/visual-editor.css'),'editor panel styles are not loaded for every visitor');assert.match(source,/function open\(\)\{if\(!B\.canEdit\(\)\)return;ensureStyles\(\);/);assert.ok(source.includes("link.href='/visual-editor.css?v=166'"));
 console.log('PASS: per-page and device scopes, shared chrome, bounded styling, no arbitrary CSS/HTML, immutable normalization and shell wiring.');
 
 const {snapAxis,snapMove,snapResize}=context.window.apsuaVisualTools;

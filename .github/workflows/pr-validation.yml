@@ -53,6 +53,18 @@ jobs:
         id: build
         run: npm run build
 
+      # Lint and dependency audit report problems without blocking the merge yet: the existing
+      # code has not been held to these checks before. Make them blocking once they pass on main.
+      - name: npm run lint (report only)
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        continue-on-error: true
+        run: npm run lint
+
+      - name: npm audit, runtime dependencies, high and critical (report only)
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
       - name: node tests/app-icons.mjs
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node tests/app-icons.mjs
