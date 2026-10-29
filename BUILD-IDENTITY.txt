@@ -6,6 +6,6 @@
 Проверочные признаки сборки 166:
 - lib/site-shell.ts подключает user-app.js?v=166, v152.css?v=166, rail-motion.js?v=166, live-updates.js?v=166, visual-editor.js?v=166
 - public/sw.js: кэш apsua-hosted-v166
-- public/user-app.js содержит записи SITE_CHANGELOG 23.0–23.5
+- public/user-app.js содержит записи SITE_CHANGELOG 23.0–23.8
 - tests/audit-privacy.mjs входит в обязательные проверки
 - реальных секретов в репозитории нет
