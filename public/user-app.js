@@ -1222,6 +1222,8 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-logout]')){e.pr
 async function hostedBoot(){
  // Local image caches must never block the first page render.
  renderChrome();
+ // build 166: hold the footer below the fold while the first page loads, so it does not jump down (layout shift).
+ app.style.minHeight='100vh';
  app.innerHTML='<div class="wrap section" role="status"><p class="sub"></p></div>';
  try{
   const data=await api('/api/state',{signal:AbortSignal.timeout(15000)});
@@ -1231,13 +1233,14 @@ async function hostedBoot(){
   Object.assign(serverLists,data.lists||{},{user:data.user});serverReady=true;resetAdminBaseline();
   if(data.admin)sess.set('admin','1');else sess.del('admin');
   favs.clear();(data.user?(data.lists?.favs||[]):localStoreGet('favs',[])).forEach(id=>favs.add(id));
-  renderChrome();route();window.dispatchEvent(new Event("site-ready"));
+  renderChrome();route();app.style.minHeight='';window.dispatchEvent(new Event("site-ready"));
   // Legacy browser media is optional; server media already has direct URLs.
   Promise.race([(async()=>{await idb.open();await idb.loadAll()})(),new Promise(resolve=>setTimeout(resolve,2000))]).then(()=>{
    renderChrome();
    if(!window.apsuaRequestSending&&!window.apsuaRequestResultOpen&&!['admin','account'].includes(current)&&!document.querySelector('input:focus,textarea:focus,select:focus'))route();
   }).catch(()=>{});
  }catch(e){
+  app.style.minHeight='';
   // A weak mobile connection must not look like a lost sign-in: retry quietly before showing the error.
   hostedBoot.attempts=(hostedBoot.attempts||0)+1;if(navigator.onLine===false){app.innerHTML='<div class="wrap section" role="status"><h1>Нет соединения</h1><p>Сайт загрузится автоматически, когда появится интернет. Вход в аккаунт сохранён.</p></div>';window.addEventListener('online',()=>{hostedBoot.attempts=0;hostedBoot()},{once:true});return}if(hostedBoot.attempts<3&&e?.status!==401&&e?.status!==403){setTimeout(hostedBoot,1200*hostedBoot.attempts);return}
   window.addEventListener('online',()=>location.reload(),{once:true});
@@ -2087,7 +2090,9 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-admin-save]')){
 SITE_CHANGELOG.push({version:'6.6',date:'2026-10-12',author:'Руслан',title:'Ручное сохранение изменений в админке',type:'improvement',priority:'important',description:'Общая кнопка «Сохранить» вместо автосохранения контента. При переходе предлагается сохранить изменения или выйти без них. Незавершённые правки защищены от автоматического обновления страницы.'});
 
 function bannerPhotos(target){const item=C[target];return Array.isArray(item?.photos)?item.photos.filter(Boolean):item?.photo?[item.photo]:[]}
-function bannerImages(target,scene,alt){const photos=bannerPhotos(target);return (photos.length?photos:[null]).map((photo,i)=>`<img src="${esc(src(photo,scene,1600,900))}" alt="${esc(alt)}" class="${i?'':'on'}" ${i?'loading="lazy"':''}>`).join('')}
+// build 166: built-in banner photos also ship as WebP at several widths; the first hero photo is the page's main image.
+const BANNER_SRCSET={"assets/lake2.jpg":"assets/opt/lake2-640.webp 640w,assets/opt/lake2-1024.webp 1024w,assets/opt/lake2-1280.webp 1280w,assets/opt/lake2-1600.webp 1600w","assets/ritsa-new.jpg":"assets/opt/ritsa-new-640.webp 640w,assets/opt/ritsa-new-1024.webp 1024w,assets/opt/ritsa-new-1280.webp 1280w,assets/opt/ritsa-new-1500.webp 1500w","assets/ritsa-wide.jpg":"assets/opt/ritsa-wide-640.webp 640w,assets/opt/ritsa-wide-1024.webp 1024w,assets/opt/ritsa-wide-1280.webp 1280w,assets/opt/ritsa-wide-1560.webp 1560w","assets/transfer-coast.webp":"assets/opt/transfer-coast-640.webp 640w,assets/opt/transfer-coast-1024.webp 1024w,assets/opt/transfer-coast-1280.webp 1280w,assets/opt/transfer-coast-1536.webp 1536w","assets/transfer-panorama.webp":"assets/opt/transfer-panorama-640.webp 640w,assets/opt/transfer-panorama-1024.webp 1024w,assets/opt/transfer-panorama-1280.webp 1280w,assets/opt/transfer-panorama-1600.webp 1600w"};
+function bannerImages(target,scene,alt){const photos=bannerPhotos(target);return (photos.length?photos:[null]).map((photo,i)=>{const set=typeof photo==='string'&&Object.hasOwn(BANNER_SRCSET,photo)?BANNER_SRCSET[photo]:'';return `<img src="${esc(src(photo,scene,1600,900))}"${set?` srcset="${esc(set)}" sizes="(min-width: 1200px) 1200px, 100vw"`:''} alt="${esc(alt)}" class="${i?'':'on'}" ${i?'loading="lazy"':target==='hero'?'fetchpriority="high"':''}>`}).join('')}
 function bannerPhotoEditor(target,label,note=''){const photos=bannerPhotos(target);return `<div class="field"><span>${esc(label)}</span><p class="sub">Первое фото показывается первым. Несколько снимков плавно сменяются. ${esc(note)} Изменения применятся после нажатия «Сохранить».</p><div class="tphotos banner-photo-editor" data-banner-drop="${target}">${photos.map((photo,i)=>`<figure><img src="${esc(src(photo))}" alt="Фото ${i+1}"><figcaption>${i===0?'<em>Первое фото</em>':''}<button type="button" class="ibtn" data-banner-action="left" data-banner-target="${target}" data-banner-index="${i}" aria-label="Переместить фото влево" ${i===0?'disabled':''}>${ICON.left}</button><button type="button" class="ibtn" data-banner-action="right" data-banner-target="${target}" data-banner-index="${i}" aria-label="Переместить фото вправо" ${i===photos.length-1?'disabled':''}>${ICON.right}</button><button type="button" class="ibtn danger" data-banner-action="delete" data-banner-target="${target}" data-banner-index="${i}" aria-label="Удалить фото">${ICON.trash}</button></figcaption></figure>`).join('')}<label class="tph-add">${ICON.plus}<span>Добавить фото</span><input type="file" accept="image/*" multiple data-banner-photos="${target}" hidden></label></div></div>`}
 const photoEditorBeforeBanners=F.photo;F.photo=function(key,label,scene,note=''){if(key==='hero.photo'||key==='transfer.photo')return bannerPhotoEditor(key.split('.')[0],label,note);return photoEditorBeforeBanners(key,label,scene,note)};
 function setBannerPhotos(target,photos){if(!['hero','transfer'].includes(target))return;C[target].photos=photos.slice();C[target].photo=photos[0]||'';stageAdminContent()}
@@ -3581,7 +3586,7 @@ async function v152CompressSaved(limit=24){if(v152CompressBusy||serverEditor||ty
 const saveAdminChangesBeforeV152=saveAdminChanges;saveAdminChanges=async function(...a){if(!adminSaving&&adminDirty&&serverAdmin&&!serverEditor){try{await v152CompressSaved()}catch{}}return saveAdminChangesBeforeV152.apply(this,a)};
 // Show the light copies: card copy in lists and rails, full copy in banners and galleries.
 const V152_FULL_ZONE='.v4-hero,.tour-gallery,.gallery,[data-gallery-main],.v152-story-media,.photo-lightbox,.lightbox,.adm,.v152-season';
-const V152_BUILTIN_LIGHT={"assets/lake2.jpg":{t:"assets/lake2-card.webp"},"assets/ritsa-new.jpg":{t:"assets/ritsa-new-card.webp"},"assets/ritsa-wide.jpg":{t:"assets/ritsa-wide-card.webp"}};
+const V152_BUILTIN_LIGHT={"assets/lake2.jpg":{t:"assets/lake2-card.webp"},"assets/ritsa-new.jpg":{t:"assets/ritsa-new-card.webp"},"assets/ritsa-wide.jpg":{t:"assets/ritsa-wide-card.webp"},"assets/athos.jpg":{t:"assets/athos-card.webp"},"assets/ring-new.jpg":{t:"assets/ring-new-card.webp"}};
 function v152UseLight(root=app){const light={...V152_BUILTIN_LIGHT,...(C?.mediaLight&&typeof C.mediaLight==='object'?C.mediaLight:{})};if(!root)return;
  const images=[];if(root.matches?.('img'))images.push(root);if(typeof root.querySelectorAll==='function')images.push(...root.querySelectorAll('img'));
  for(const img of images){const original=img.dataset.v152Src||img.getAttribute('src')||'';const entry=light&&light[original];if(!entry||entry.skip)continue;const full=!!img.closest(V152_FULL_ZONE),target=full?(entry.f||original):(entry.t||entry.f||original);if(target!==img.getAttribute('src')){img.dataset.v152Src=original;img.setAttribute('src',target)}if(!img.hasAttribute('decoding'))img.decoding='async'}}
@@ -3598,9 +3603,9 @@ tourView=v152LightWrap(tourView);catalogView=v152LightWrap(catalogView);renderCa
    seconds. Each one can open its own excursion or a safe external link.
    ========================================================================== */
 const V152_SEASON_MEDIA=[
- {id:'mandarins',title:'Мандариновый сезон',webm:'assets/seasonal/mandarins.webm',mp4:'assets/seasonal/mandarins.mp4',poster:'assets/seasonal/mandarins-poster.jpg'},
- {id:'autumn',title:'Осенние экскурсии',webm:'assets/seasonal/autumn.webm',mp4:'assets/seasonal/autumn.mp4',poster:'assets/seasonal/autumn-poster.jpg'},
- {id:'transfer',title:'Трансфер в Абхазию и обратно',webm:'assets/seasonal/transfer.webm',mp4:'assets/seasonal/transfer.mp4',poster:'assets/seasonal/transfer-poster.jpg'}
+ {id:'mandarins',title:'Мандариновый сезон',webm:'assets/seasonal/mandarins.webm',mp4:'assets/seasonal/mandarins.mp4',poster:'assets/seasonal/mandarins-poster.webp'},
+ {id:'autumn',title:'Осенние экскурсии',webm:'assets/seasonal/autumn.webm',mp4:'assets/seasonal/autumn.mp4',poster:'assets/seasonal/autumn-poster.webp'},
+ {id:'transfer',title:'Трансфер в Абхазию и обратно',webm:'assets/seasonal/transfer.webm',mp4:'assets/seasonal/transfer.mp4',poster:'assets/seasonal/transfer-poster.webp'}
 ];
 const V152_SEASON_DEFAULT={show:true,items:V152_SEASON_MEDIA.map(()=>({mode:'tour',tour:'',url:''}))};
 function v152Season(){const saved=C.seasonBanner&&typeof C.seasonBanner==='object'?C.seasonBanner:{},legacyTour=String(saved.tour||'');const raw=Array.isArray(saved.items)?saved.items:[];return {show:saved.show!==false,items:V152_SEASON_MEDIA.map((media,i)=>{const item=raw[i]&&typeof raw[i]==='object'?raw[i]:{};return {...media,mode:item.mode==='url'?'url':'tour',tour:String(item.tour||(i===0?legacyTour:'')||''),url:String(item.url||'')}})}}
