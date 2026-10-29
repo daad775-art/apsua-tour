@@ -89,6 +89,10 @@ jobs:
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node tests/account-moderation.mjs
 
+      - name: node tests/audit-privacy.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/audit-privacy.mjs
+
       - name: node tests/order-notify.mjs
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node tests/order-notify.mjs

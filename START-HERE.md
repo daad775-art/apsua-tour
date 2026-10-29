@@ -34,6 +34,7 @@ node tests/telegram-key-cache.mjs
 node tests/telegram-web.mjs
 node tests/account-ui.mjs
 node tests/account-moderation.mjs
+node tests/audit-privacy.mjs
 node tests/order-notify.mjs
 node tests/theme.mjs
 node tests/control-appearance.mjs
