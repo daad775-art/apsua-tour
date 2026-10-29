@@ -1222,8 +1222,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-logout]')){e.pr
 async function hostedBoot(){
  // Local image caches must never block the first page render.
  renderChrome();
- // build 166: hold the footer below the fold while the first page loads, so it does not jump down (layout shift).
- app.style.minHeight='100vh';
+ // build 166: the shell keeps #app one screen tall until the first page renders, so the footer never jumps (see site-shell).
  app.innerHTML='<div class="wrap section" role="status"><p class="sub"></p></div>';
  try{
   const data=await api('/api/state',{signal:AbortSignal.timeout(15000)});
@@ -1233,14 +1232,14 @@ async function hostedBoot(){
   Object.assign(serverLists,data.lists||{},{user:data.user});serverReady=true;resetAdminBaseline();
   if(data.admin)sess.set('admin','1');else sess.del('admin');
   favs.clear();(data.user?(data.lists?.favs||[]):localStoreGet('favs',[])).forEach(id=>favs.add(id));
-  renderChrome();route();app.style.minHeight='';window.dispatchEvent(new Event("site-ready"));
+  renderChrome();route();app.classList.add('apsua-ready');window.dispatchEvent(new Event("site-ready"));
   // Legacy browser media is optional; server media already has direct URLs.
   Promise.race([(async()=>{await idb.open();await idb.loadAll()})(),new Promise(resolve=>setTimeout(resolve,2000))]).then(()=>{
    renderChrome();
    if(!window.apsuaRequestSending&&!window.apsuaRequestResultOpen&&!['admin','account'].includes(current)&&!document.querySelector('input:focus,textarea:focus,select:focus'))route();
   }).catch(()=>{});
  }catch(e){
-  app.style.minHeight='';
+  app.classList.add('apsua-ready');
   // A weak mobile connection must not look like a lost sign-in: retry quietly before showing the error.
   hostedBoot.attempts=(hostedBoot.attempts||0)+1;if(navigator.onLine===false){app.innerHTML='<div class="wrap section" role="status"><h1>Нет соединения</h1><p>Сайт загрузится автоматически, когда появится интернет. Вход в аккаунт сохранён.</p></div>';window.addEventListener('online',()=>{hostedBoot.attempts=0;hostedBoot()},{once:true});return}if(hostedBoot.attempts<3&&e?.status!==401&&e?.status!==403){setTimeout(hostedBoot,1200*hostedBoot.attempts);return}
   window.addEventListener('online',()=>location.reload(),{once:true});
@@ -3768,5 +3767,7 @@ SITE_CHANGELOG.push({version:'22.9',date:'2026-10-27',author:'Руслан',titl
 SITE_CHANGELOG.push({version:'23.0',date:'2026-10-30',author:'Руслан',title:'Приватные идентификаторы туристов',description:'В историях, отзывах и комментариях вместо внутреннего номера аккаунта и Telegram ID теперь публичный идентификатор. Карточка туриста по-прежнему открывается, а число поездок видят только сам турист и сотрудники.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'23.1',date:'2026-10-30',author:'Руслан',title:'Цена трансфера считается на сервере',description:'Стоимость трансфера в заявке теперь рассчитывается сервером по действующим тарифам, классу, числу пассажиров и детскому креслу. Цена, присланная браузером, больше не попадает в заявку как итоговая.',type:'fix',priority:'important'});
 SITE_CHANGELOG.push({version:'23.2',date:'2026-10-30',author:'Руслан',title:'Защита ввода и заголовки безопасности',description:'Ошибочные или слишком большие запросы теперь получают понятный ответ 400/413 вместо внутренней ошибки. Страница отдаёт заголовки безопасности, а прототипный вход по паролю, проверявшийся в браузере, удалён — сотрудники входят через аккаунт.',type:'fix',priority:'important'});
+SITE_CHANGELOG.push({version:'23.3',date:'2026-10-30',author:'Руслан',title:'Главная загружается быстрее',description:'Главное фото и баннеры подбираются по размеру экрана в лёгком формате WebP и загружаются первыми, постеры сезонных роликов стали втрое легче. Подвал больше не прыгает при открытии сайта, стили визуального редактора загружаются только у тех, кто его открывает.',type:'improvement',priority:'normal'});
+SITE_CHANGELOG.push({version:'23.4',date:'2026-10-30',author:'Руслан',title:'Плавная прокрутка и удобные кнопки на телефоне',description:'Страница прокручивается без задержки: обработчики свайпов работают только на лентах карточек. При включённой настройке «Уменьшить движение» ленты двигаются без инерции. Мелкие кнопки в шапке, заголовках разделов и подвале стали легче попадать пальцем, внешний вид не изменился.',type:'improvement',priority:'normal'});
 hostedBoot();
 })();
