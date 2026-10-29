@@ -55,7 +55,9 @@ window.addEventListener('focus',resume);window.addEventListener('pageshow',resum
 window.addEventListener('online',resume);window.addEventListener('offline',disconnect);
 window.addEventListener('pagehide',disconnect);
 // Also catches a new release if a proxy closes or buffers the event stream.
-setInterval(check,5000);setInterval(applyPending,1000);
+// build 166: the 5-second poll is only a fallback — it runs while the event stream is missing or reconnecting.
+function streamOpen(){try{return !!stream&&stream.readyState===1}catch{return false}}
+setInterval(()=>{if(!streamOpen())check()},5000);setInterval(applyPending,1000);
 let workerUpdating=false;
 async function updateWorker(){
  if(workerUpdating||document.hidden||navigator.onLine===false||!navigator.serviceWorker)return;

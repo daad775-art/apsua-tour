@@ -36,6 +36,11 @@ for(const viewer of ['',guest])assert.equal((await call('/api/tourist?id='+encod
 response=await call('/api/tourist?id='+encodeURIComponent(telegramUser),'owner');assert.equal(response.status,200);assert.equal(typeof response.data.profile.excursions,'number','staff see counts');
 response=await call('/api/tourist?id='+encodeURIComponent(telegramUser),telegramUser);assert.equal(response.data.profile.canEdit,true);assert.equal(typeof response.data.profile.transfers,'number','the person sees their own counts');
 assert.equal((await call('/api/tourist?id=p'+'0'.repeat(24),'')).status,404,'unknown public ID');
+// Ratings are keyed by public ID; a voter who published nothing does not get a resolvable card.
+assert.equal((await call('/api/story',telegramUser,'POST',{id:'story-privacy',action:'rate',rating:5})).status,200);assert.equal((await call('/api/story','voter-only','POST',{id:'story-privacy',action:'rate',rating:3})).status,200);
+{const st=(await call('/api/state','')).data,story=st.lists.diary.find(s=>s.id==='story-privacy');const keys=Object.keys(story.ratings||{});assert.equal(keys.length,2);assert.ok(keys.every(k=>/^p[a-f0-9]{24}$/.test(k)),'rating keys are public IDs');assert.ok(!JSON.stringify(st).includes('voter-only')&&!JSON.stringify(st).includes(telegramUser),'no internal IDs anywhere in public state');
+ const mine=(await call('/api/state',telegramUser)).data;assert.equal(mine.lists.diary.find(s=>s.id==='story-privacy').ratings[mine.user.publicId],5,'own rating found by own public ID');
+ const voterKey=keys.find(k=>k!==authorPublicId);assert.equal((await call('/api/tourist?id='+voterKey,'')).status,404,'a voter-only public ID does not open a card')}
 console.log('PASS: public lists carry opaque public author IDs (no ChatGPT or Telegram IDs); stories and comments keep their authors; tourist cards open by public ID and trip counts stay private.');
 
 // Transfer price: the server price wins, a forged browser price is kept apart.
@@ -61,3 +66,14 @@ for(const data of [{kind:'diary',items:[],deleted:'story-privacy'},{kind:'diary'
 response=await call('/api/profile',guest,'PUT','{}',{raw:true,headers:{'content-length':'3000000'}});assert.equal(response.status,413);
 assert.equal((await call('/api/tourist?id=p'+'0'.repeat(24),'')).status,404);
 console.log('PASS: malformed or oversized JSON and wrong list shapes return 400/413 instead of an internal error.');
+
+// Staff request list: protected, paginated, filtered; /api/state still carries requests for compatibility.
+for(const viewer of ['',guest])assert.equal((await call('/api/admin/orders',viewer)).status,403,'staff only');
+{const all=(await call('/api/admin/orders?kind=transfers&pageSize=2','owner')).data;assert.equal(all.pagination.pageSize,2);assert.equal(all.data.length,2);assert.ok(all.pagination.totalItems>=5);assert.equal(all.pagination.totalPages,Math.ceil(all.pagination.totalItems/2));assert.ok(all.data[0].createdAt>=all.data[1].createdAt,'newest first');
+ const page2=(await call('/api/admin/orders?kind=transfers&pageSize=2&page=2','owner')).data;assert.ok(page2.data.every(o=>!all.data.some(x=>x.code===o.code)),'pages do not overlap');
+ const code=all.data[0].code,found=(await call('/api/admin/orders?q='+encodeURIComponent(code.slice(0,8)),'owner')).data;assert.ok(found.data.some(o=>o.code===code),'search by request number');
+ assert.equal((await call('/api/admin/orders?q=%25','owner')).data.pagination.totalItems,0,'% is a literal character in search');
+ assert.equal((await call('/api/admin/orders?status=private','owner')).data.data.every(o=>o.status==='private'),true);
+ assert.equal((await call('/api/admin/orders?status=hacked','owner')).status,400);assert.equal((await call('/api/admin/orders?kind=diary','owner')).status,400);
+ assert.ok((await call('/api/state','owner')).data.lists.transfers.length>=5,'compatibility: /api/state still lists requests for staff')}
+console.log('PASS: /api/admin/orders is staff-only, paginated newest first, filters by kind/status, searches literally and leaves /api/state compatible.');
