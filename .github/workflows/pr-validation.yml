@@ -89,6 +89,10 @@ jobs:
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node tests/account-moderation.mjs
 
+      - name: node tests/d1-indexes.mjs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node tests/d1-indexes.mjs
+
       - name: node tests/order-notify.mjs
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node tests/order-notify.mjs
