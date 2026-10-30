@@ -1,6 +1,6 @@
 # Апсуа Тур — инструкция для разработки
 
-Исходный код сайта «Апсуа Тур». Номер сборки в коде — 166: метки `?v=166` в `lib/site-shell.ts` и последняя запись `SITE_CHANGELOG` (23.8). Номер публикации Sites фиксирует Codex при публикации; сверяйте его с `BUILD-IDENTITY.txt`.
+Исходный код сайта «Апсуа Тур». Номер сборки в коде — 166: метки `?v=166` в `lib/site-shell.ts` и последняя запись `SITE_CHANGELOG` (23.9). Номер публикации Sites фиксирует Codex при публикации; сверяйте его с `BUILD-IDENTITY.txt`.
 
 - Рабочий сайт: https://apsua-tour-design.rkviii.chatgpt.site
 - Проект Sites: `apsua-tour-design`
