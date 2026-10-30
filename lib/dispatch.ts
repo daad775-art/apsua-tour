@@ -13,12 +13,20 @@ const text = (v: unknown, n: number) => String(v ?? '').trim().slice(0, n);
 const httpsUrl = (v: unknown) => { try { const u = new URL(String(v || '')); return u.protocol === 'https:' && !u.username && !u.password ? u.href.slice(0, 1000) : ''; } catch { return ''; } };
 const phone = (v: unknown) => String(v ?? '').replace(/[^+0-9]/g, '').slice(0, 20);
 
+function transferFormatFields(d: any) {
+  const format = d.format === 'individual' || d.format === 'group' ? d.format : d.clsId === 'group' || /группов/i.test(String(d.cls || '')) ? 'group' : 'individual';
+  return { format, formatName: format === 'group' ? 'Групповой' : 'Индивидуальный', class: format };
+}
+
 /** The request as the dispatcher program receives it. */
 export function dispatchPayload(kind: string, code: string, owner: string, d: any) {
   const base = { siteCode: code, kind, customer: { id: owner, name: d.name || '', phone: d.phone || '' }, date: d.date || '', time: d.time || '', hotel: d.hotel || '', address: d.address || '', note: d.note || '', createdAt: new Date().toISOString() };
   return kind === 'bookings'
     ? { ...base, tour: { id: d.tour || '', title: d.tourTitle || '' }, format: d.format || '', city: d.city || '', adults: Number(d.adults) || 0, kids: Number(d.kids) || 0, total: d.total ?? null }
-    : { ...base, direction: d.direction || '', terminal: d.terminalId || '', city: d.cityId || '', route: d.route || '', flight: d.flight || '', class: d.clsId || '', pax: Number(d.pax) || 0, passengerNames: Array.isArray(d.passengerNames)?d.passengerNames:[], childSeat: !!d.seat };
+    // build 166: 'format' (individual|group) is the transfer type and 'formatName' its label for people. Old requests stored a car
+    // class id (comfort/standard/van → individual, group → group). 'class' is kept only as a deprecated alias of 'format', so no
+    // car class name reaches the dispatcher. 'price' is the server-computed price (null = on request).
+    : { ...base, direction: d.direction || '', terminal: d.terminalId || '', city: d.cityId || '', route: d.route || '', flight: d.flight || '', ...transferFormatFields(d), price: d.price ?? null, pax: Number(d.pax) || 0, passengerNames: Array.isArray(d.passengerNames)?d.passengerNames:[], childSeat: !!d.seat };
 }
 
 /** Sends one event to the dispatcher program. Returns the program's answer or null. Never throws. */

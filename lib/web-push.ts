@@ -89,7 +89,7 @@ export async function pushAPI(request:Request,env:PushEnv,user:string,owner:bool
  }
  if(path==='/api/admin/push'&&request.method==='POST'){
   if(!enabled)return pushJson({error:'Уведомления пока не настроены'},503);
-  const value:any=await request.json(),title=String(value.title||'').trim(),text=String(value.text||'').trim();
+  const value:any=await request.json().catch(()=>null);if(!value||typeof value!=='object')return pushJson({error:'Некорректный JSON в запросе'},400);const title=String(value.title||'').trim(),text=String(value.text||'').trim();
   if(!title||title.length>80||!text||text.length>700)return pushJson({error:'Заголовок: до 80 символов, текст: до 700 символов'},400);
   if(!/^[a-f0-9-]{36}$/.test(value.id||''))return pushJson({error:'Некорректный идентификатор отправки'},400);
   const id='push-message:'+value.id,existing=await env.DB.prepare("SELECT body,status FROM records WHERE id=? AND kind='push-message'").bind(id).first<any>();if(existing)return pushJson({...pushSummary(JSON.parse(existing.body)),status:existing.status});
@@ -101,7 +101,7 @@ export async function pushAPI(request:Request,env:PushEnv,user:string,owner:bool
   await env.DB.prepare("INSERT OR IGNORE INTO records(id,kind,owner,body,status,created,updated) VALUES(?,'push-message',?,?,'pending',?,?)").bind(id,user,JSON.stringify(job),job.created,job.created).run();return pushJson({...pushSummary(job),status:'pending'})
  }
  if(path==='/api/admin/push/batch'&&request.method==='POST'){
-  const value:any=await request.json(),row=await env.DB.prepare("SELECT body,status,updated FROM records WHERE id=? AND kind='push-message' AND owner=?").bind(value.id,user).first<any>();if(!row)return pushJson({error:'Отправка не найдена'},404);
+  const value:any=await request.json().catch(()=>null);if(!value||typeof value!=='object')return pushJson({error:'Некорректный JSON в запросе'},400);const row=await env.DB.prepare("SELECT body,status,updated FROM records WHERE id=? AND kind='push-message' AND owner=?").bind(value.id,user).first<any>();if(!row)return pushJson({error:'Отправка не найдена'},404);
   const job=JSON.parse(row.body);if(row.status==='done'||Number(value.cursor)!==job.cursor)return pushJson({...pushSummary(job),status:row.status});
   if(row.status==='sending')return pushJson({error:'Эта часть отправки уже выполняется'},409);
   const lock=await env.DB.prepare("UPDATE records SET status='sending',updated=? WHERE id=? AND updated=? AND status='pending'").bind(Date.now(),job.id,row.updated).run();if(!lock.meta.changes)return pushJson({error:'Отправка уже выполняется'},409);

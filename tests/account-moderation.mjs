@@ -27,7 +27,7 @@ response=await call('/api/profile','other','PUT',{name:'Другой',avatar});a
 response=await call('/api/state','other');assert.equal(response.data.user.about,'');assert.equal(response.data.user.avatar,'');
 const story={id:'regression-story',t:'Поездка на Рицу',x:'История поездки с красивыми видами на горы.',img:avatar,a:'Ирина, октябрь',status:'published',uid:'owner'};
 response=await call('/api/list','tourist','POST',{kind:'diary',items:[story]});assert.equal(response.status,200);
-response=await call('/api/state');assert.equal(response.data.lists.diary[0].status,'pending');assert.equal(response.data.lists.diary[0].uid,'tourist');
+response=await call('/api/state');assert.equal(response.data.lists.diary[0].status,'pending');const touristPublicId=response.data.user.publicId;assert.match(touristPublicId,/^p[a-f0-9]{24}$/);assert.equal(response.data.lists.diary[0].uid,touristPublicId,'own story carries the public author ID');assert.doesNotMatch(JSON.stringify(response.data.lists),/"uid":"tourist"/,'internal ID stays private');
 response=await call('/api/state','other');assert.equal(response.data.lists.diary.length,0);
 response=await call('/api/moderation','other');assert.equal(response.status,403);
 response=await call('/api/moderation','owner');assert.equal(response.status,200);assert.equal(response.data.diary[0].id,story.id);assert.equal(response.data.diary[0].status,'pending');assert.equal(response.data.diary[0].img,avatar);
@@ -76,10 +76,12 @@ response=await call('/api/order-status','owner','PUT',{id:futureBooking.code,kin
 response=await call('/api/review','tourist','POST',{...reviewPayload,bookingCode:futureBooking.code,date:futureBooking.date});assert.equal(response.status,400);
 legacy('transfers',{code:'TR-1',date:'2026-01-01'});legacy('transfers',{code:'TR-2',date:'2026-01-02'});
 response=await call('/api/order-status','owner','PUT',{id:'TR-2',kind:'transfers',status:'cancelled'});assert.equal(response.status,200);
-response=await call('/api/tourist?id=tourist','');assert.equal(response.status,200);const card=response.data.profile;assert.equal(card.name,'Ирина Новая');assert.equal(card.excursions,2);assert.equal(card.transfers,1);assert.ok(Date.parse(card.joinedAt)<=Date.now());for(const secret of ['email','phone','bookings','bookingCode'])assert.equal(card[secret],undefined);
+response=await call('/api/tourist?id='+touristPublicId,'');assert.equal(response.status,200);const card=response.data.profile;assert.equal(card.name,'Ирина Новая');assert.equal(card.id,touristPublicId);assert.equal(card.excursions,undefined,'trip counts are private');assert.equal(card.transfers,undefined,'trip counts are private');assert.ok(Date.parse(card.joinedAt)<=Date.now());for(const secret of ['email','phone','bookings','bookingCode'])assert.equal(card[secret],undefined);
 response=await call('/api/tourist?id=nonexistent','');assert.equal(response.status,404);
-for(const viewer of ['','other','owner']){response=await call('/api/tourist?id=tourist',viewer);assert.equal(response.data.profile.canEdit,false)}
-response=await call('/api/tourist?id=tourist','tourist');assert.equal(response.data.profile.canEdit,true);
+for(const viewer of ['','other']){response=await call('/api/tourist?id=tourist',viewer);assert.equal(response.status,404,'internal IDs do not open other people\'s cards')}
+for(const viewer of ['','other','owner']){response=await call('/api/tourist?id='+touristPublicId,viewer);assert.equal(response.data.profile.canEdit,false)}
+response=await call('/api/tourist?id=tourist','owner');assert.equal(response.status,200);assert.equal(response.data.profile.excursions,2,'order staff see trip counts');assert.equal(response.data.profile.transfers,1);
+response=await call('/api/tourist?id=tourist','tourist');assert.equal(response.data.profile.canEdit,true);assert.equal(response.data.profile.excursions,2,'the person sees their own counts');assert.equal(response.data.profile.transfers,1);
 response=await call('/api/profile','other','PUT',{id:'tourist',name:'Чужое изменение',city:'Другой город'});assert.equal(response.status,200);assert.equal(response.data.user.id,'other');
 response=await call('/api/state','tourist');assert.equal(response.data.user.name,'Ирина Новая');assert.notEqual(response.data.user.city,'Другой город');
 // Temporary invitation sessions never verify email or grant administrator privileges.

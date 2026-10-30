@@ -1117,3 +1117,7 @@ html body #app .account-settings-actions{display:flex;gap:8px;flex-wrap:wrap}
 }
 html body #app .account-dashboard-nav svg{width:22px;height:22px;flex:none}
 html body #app .account-dashboard-mobile svg{width:24px;height:24px;flex:none}
+/* build 166: larger invisible tap areas for small controls, only as far as the gap to the neighbouring control allows. */
+.header-actions>.btn.small::after{content:'';position:absolute;inset:-4px -1px}
+.v4-head a{position:relative}.v4-head a::after{content:'';position:absolute;inset:-8px -6px}
+.footer-links a,.footer-contact a{position:relative}.footer-links a::after{content:'';position:absolute;inset:-2px -4px}.footer-contact a::after{content:'';position:absolute;inset:-2px 0}

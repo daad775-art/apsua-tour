@@ -34,7 +34,7 @@
 }
 ```
 
-Для трансфера (`"kind": "transfers"`) вместо экскурсии приходят `direction` (`arrival` | `departure`), `terminal` (`sochi`, `adler`, `sukhum` и др.), `city`, `route`, `flight`, `class`, `pax`, `childSeat`.
+Для трансфера (`"kind": "transfers"`) вместо экскурсии приходят `direction` (`arrival` | `departure`), `terminal` (`sochi`, `adler`, `sukhum` и др.), `city`, `route`, `flight`, `format` (`individual` | `group`), `formatName` («Индивидуальный» | «Групповой» — для показа людям), `pax`, `childSeat`, `price` (рассчитана сервером, ₽; `null` — цена по запросу) и устаревшее поле `class`. С сборки 166 у трансфера два формата: индивидуальный — цена за автомобиль по маршруту, групповой — цена за пассажира × число пассажиров. `class` повторяет `format`; классы автомобилей (`comfort`, `standard`, `van`) не передаются. У заявок, созданных раньше, прежний класс переводится в формат: `comfort`/`standard`/`van` → `individual`, `group` → `group`.
 
 Отмена туристом (возможна только до оплаты): `"event": "cancelled"`, в `request` — `siteCode`, `kind`, `dispatchNumber`, `cancelledAt`.
 

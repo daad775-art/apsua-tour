@@ -1,6 +1,6 @@
 # Апсуа Тур — инструкция для разработки
 
-Это актуальный исходный код опубликованной версии 151 сайта «Апсуа Тур».
+Исходный код сайта «Апсуа Тур». Номер сборки в коде — 166: метки `?v=166` в `lib/site-shell.ts` и последняя запись `SITE_CHANGELOG` (23.9). Номер публикации Sites фиксирует Codex при публикации; сверяйте его с `BUILD-IDENTITY.txt`.
 
 - Рабочий сайт: https://apsua-tour-design.rkviii.chatgpt.site
 - Проект Sites: `apsua-tour-design`
@@ -34,6 +34,7 @@ node tests/telegram-key-cache.mjs
 node tests/telegram-web.mjs
 node tests/account-ui.mjs
 node tests/account-moderation.mjs
+node tests/audit-privacy.mjs
 node tests/order-notify.mjs
 node tests/theme.mjs
 node tests/control-appearance.mjs
